@@ -24,8 +24,8 @@ uv run python main.py
 
 ## Deploy on Vercel
 
-The site runs on Vercel as one Python function: `api/index.py` loads the FastHTML app from
-`main.py`, and `vercel.json` sends every path to it.
+Vercel detects the **FastHTML** preset and runs `main.py` directly (its top-level `app`).
+Pushing to `main` on GitHub redeploys automatically. Or from the command line:
 
 ```bash
 npx vercel login          # once
@@ -39,6 +39,5 @@ Environment variables (Vercel → Project → Settings → Environment Variables
 - `SESSION_SECRET` (optional): any long random string, for stable sessions across instances.
 
 On Vercel, audit and beta form submissions are **not stored on disk** (the server's disk is
-temporary). The page opens a pre-filled email to dandigital1688@gmail.com instead. If you add or
-change Python packages, refresh `requirements.txt` with:
-`uv export --no-hashes --no-dev --no-emit-project --format requirements-txt -o requirements.txt`.
+temporary). The page opens a pre-filled email to dandigital1688@gmail.com instead.
+Dependencies come from `uv.lock` (`uv add <package>` updates it).

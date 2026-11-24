@@ -38,12 +38,14 @@ INDEX = ROOT / "index.html"
 ON_VERCEL = bool(os.environ.get("VERCEL"))
 
 # static_path points at public/ so project files (CLAUDE.md, data/, etc.) are never served.
-app, rt = fast_app(
+# Plain `app = ...` (not tuple unpacking) so Vercel's FastHTML preset can find the entry point.
+app = fast_app(
     static_path=str(ROOT / "public"),
     pico=False,
     secret_key=os.environ.get("SESSION_SECRET"),
     key_fname="/tmp/.sesskey" if ON_VERCEL else ".sesskey",
-)
+)[0]
+rt = app.route
 
 EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 APPS = {"Kalamooo", "Folingoo", "Roostart", "Owolot", "Otaroo"}
