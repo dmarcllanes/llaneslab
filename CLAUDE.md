@@ -51,6 +51,7 @@ Do **not** invent unverified user counts, download numbers, or revenue claims. M
 * **Primary Email (Client Audits & App Beta Invites):** `dandigital1688@gmail.com`
 * **Secondary Email:** `llanesdanmarc@gmail.com`[cite: 1]
 * **Phone / WhatsApp / Viber:** `(+63) 965-817-4121`[cite: 1]
+* **Website:** `https://danmarcllanes.vercel.app` (canonical URL and share tags in `<head>`; link-preview image `public/og.jpg`, 1200×630, regenerate if the headline changes)
 * **LinkedIn:** `https://linkedin.com/in/dan-marc-llanes-729416243`[cite: 1]
 * **GitHub:** `https://github.com/dmarcllanes`[cite: 1]
 * **Credentials:** AWS Certified Cloud Practitioner | BS in Information Technology (Jose Rizal University)[cite: 2]
