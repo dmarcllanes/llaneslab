@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+data/
+.sesskey
+.vercel/
+.env*
+.DS_Store
