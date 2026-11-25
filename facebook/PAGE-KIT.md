@@ -7,12 +7,12 @@ All copy follows CLAUDE.md: international English, AI building first, audiences 
 
 | File | Use | Size |
 | :--- | :--- | :--- |
-| `profile.png` | Profile picture (Facebook shows it as a circle) | 720×720 |
+| `profile.png` | Profile picture: the LlanesLab logo on the nebula background (Facebook shows it as a circle) | 720×720 |
 | `cover.png` | Cover photo | 1640×624 |
 | `post-1-welcome.png` | Launch post 1: who LlanesLab helps | 1080×1350 |
 | `post-2-approval.png` | Launch post 2: approval-first AI | 1080×1350 |
 | `post-3-start-small.png` | Launch post 3: the 4-step process | 1080×1350 |
-| `src/` | HTML sources. Edit them and re-render with headless Chrome (command at the bottom). | |
+| `src/` | HTML sources (nebula theme in `base.css`; logo from `assets/logo/`). Edit them and re-render with headless Chrome (command at the bottom). | |
 
 The cover keeps all text in the centre 60%. Facebook crops the sides on mobile, and on desktop the profile photo covers the bottom-left corner.
 
@@ -219,7 +219,7 @@ Never post user counts, download numbers, revenue, prices or delivery timelines,
 cd facebook/src
 CH="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 r(){ "$CH" --headless=new --disable-gpu --hide-scrollbars --force-device-scale-factor=1 \
-  --virtual-time-budget=8000 --window-size=$2 --screenshot="$PWD/../$1.png" "file://$PWD/$1.html"; }
+  --allow-file-access-from-files --virtual-time-budget=8000 --window-size=$2 --screenshot="$PWD/../$1.png" "file://$PWD/$1.html"; }
 r cover 1640,624; r profile 720,720
 r post-1-welcome 1080,1350; r post-2-approval 1080,1350; r post-3-start-small 1080,1350
 ```

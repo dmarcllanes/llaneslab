@@ -6,8 +6,18 @@ h1{font-size:84px}
 .row{display:flex;gap:14px}
 .chip{font-size:19px;color:#CFE0FA}
 .chip b{color:#60A5FA;font-family:'JetBrains Mono'}
-.glow{position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,#3B82F6,#38BDF8,transparent)}
-</style></head><body><div class="canvas"><div class="stars"></div>
+.glow{position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,#3B82F6,#A78BFA,#F472B6,transparent)}
+</style></head><body><div class="canvas"><div class="stars"></div><svg style="position:absolute;right:-70px;top:120px;width:300px;opacity:.9" viewBox="0 0 260 260"><defs>
+<radialGradient id="b" cx="38%" cy="32%" r="70%"><stop offset="0" stop-color="#F5D0FE"/><stop offset=".35" stop-color="#C026D3"/><stop offset=".75" stop-color="#6D28D9"/><stop offset="1" stop-color="#1E1048"/></radialGradient>
+<radialGradient id="sd" cx="80%" cy="80%" r="75%"><stop offset=".35" stop-color="#04060F" stop-opacity="0"/><stop offset="1" stop-color="#04060F" stop-opacity=".85"/></radialGradient>
+<linearGradient id="rg" x1="0" x2="1"><stop offset="0" stop-color="#38BDF8" stop-opacity=".1"/><stop offset=".5" stop-color="#E9D5FF" stop-opacity=".85"/><stop offset="1" stop-color="#F472B6" stop-opacity=".15"/></linearGradient>
+<clipPath id="fr"><rect x="0" y="130" width="260" height="130"/></clipPath></defs>
+<g transform="rotate(-18 130 130)"><ellipse cx="130" cy="130" rx="124" ry="30" fill="none" stroke="url(#rg)" stroke-width="7"/><circle cx="130" cy="130" r="74" fill="url(#b)"/><circle cx="130" cy="130" r="74" fill="url(#sd)"/><ellipse cx="130" cy="130" rx="124" ry="30" fill="none" stroke="url(#rg)" stroke-width="7" clip-path="url(#fr)"/></g></svg><svg style="position:absolute;left:70px;top:90px;width:190px;transform:rotate(-12deg);filter:drop-shadow(0 0 14px rgba(56,189,248,.5))" viewBox="0 0 130 50"><defs>
+<linearGradient id="h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E2E8F0"/><stop offset=".55" stop-color="#94A3B8"/><stop offset="1" stop-color="#475569"/></linearGradient>
+<linearGradient id="f" x1="1" x2="0"><stop offset="0" stop-color="#E0F2FE"/><stop offset=".3" stop-color="#38BDF8"/><stop offset=".7" stop-color="#8B5CF6" stop-opacity=".5"/><stop offset="1" stop-color="#8B5CF6" stop-opacity="0"/></linearGradient></defs>
+<path d="M0 25 Q14 19 32 21 L32 29 Q14 31 0 25Z" fill="url(#f)"/><path d="M56 18 L44 3 L72 16Z" fill="#64748B"/><path d="M54 32 L38 47 L74 34Z" fill="#475569"/><rect x="29" y="19.5" width="8" height="11" rx="2.5" fill="#334155"/>
+<path d="M34 25 C46 14 86 12 120 22 Q127 25 120 28 C86 38 46 36 34 25Z" fill="url(#h)"/><path d="M44 27 C66 31 92 30 114 26" stroke="#3B82F6" stroke-width="2" fill="none"/>
+<ellipse cx="96" cy="22.5" rx="12" ry="4.2" fill="#38BDF8" opacity=".9"/><circle cx="45" cy="5" r="1.6" fill="#F87171"/><circle cx="40" cy="45" r="1.6" fill="#34D399"/></svg>
 <div class="wrap">
  <div class="mono" style="font-size:18px;color:#60A5FA">LlanesLab · AI, apps &amp; digital transformation</div>
  <h1 class="display" style="font-size:74px;white-space:nowrap">AI &amp; apps for local business<span class="p">,</span><br><span class="outline">made simple<span class="p">.</span></span></h1>

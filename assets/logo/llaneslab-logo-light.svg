@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024" role="img" aria-label="LlanesLab logo"><defs><linearGradient id="ll-ov" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5B9CF7"/><stop offset="1" stop-color="#2563EB"/></linearGradient>
+<linearGradient id="ll-oh" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1E40AF"/><stop offset=".55" stop-color="#2563EB"/><stop offset="1" stop-color="#3B82F6"/></linearGradient>
+<linearGradient id="ll-iv" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#BAE6FD"/><stop offset=".3" stop-color="#38BDF8"/><stop offset="1" stop-color="#22D3EE"/></linearGradient>
+<linearGradient id="ll-ih" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#0284C7"/><stop offset=".55" stop-color="#38BDF8"/><stop offset="1" stop-color="#22D3EE"/></linearGradient></defs><rect width="1024" height="1024" fill="#F8FAFC"/><g><polygon points="216,312 312,216 312,712 216,808" fill="url(#ll-ov)"/>
+<polygon points="216,808 312,712 808,712 712,808" fill="url(#ll-oh)"/>
+<polygon points="368,312 464,216 464,560 368,656" fill="url(#ll-iv)"/>
+<polygon points="368,656 464,560 808,560 712,656" fill="url(#ll-ih)"/><path d="M216 808 L312 712" stroke="#93C5FD" stroke-width="3"/><path d="M368 656 L464 560" stroke="#E0F2FE" stroke-width="3"/></g></svg>
