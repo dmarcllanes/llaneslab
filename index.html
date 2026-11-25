@@ -114,11 +114,11 @@
       9%   { opacity: .9; }
       12%  { transform: translate3d(42vw, 36vh, 0) rotate(-16deg); opacity: 0; }
       100% { transform: translate3d(42vw, 36vh, 0) rotate(-16deg); opacity: 0; } }
-    .ship { position: absolute; left: 0; top: 0; width: 96px; will-change: transform; transform: translate3d(-20vw, 70vh, 0);
-      filter: drop-shadow(0 0 10px rgba(56,189,248,.45)); animation: fly 40s linear 3s infinite; }
+    .ship { position: absolute; left: 0; top: 0; width: 150px; will-change: transform; transform: translate3d(-20vw, 70vh, 0);
+      filter: drop-shadow(0 0 14px rgba(56,189,248,.5)); animation: fly 20s linear 1s infinite; }
     @keyframes fly {
       0%   { transform: translate3d(-14vw, 74vh, 0) rotate(-12deg); }
-      40%  { transform: translate3d(112vw, 22vh, 0) rotate(-12deg); }
+      55%  { transform: translate3d(112vw, 22vh, 0) rotate(-12deg); }
       100% { transform: translate3d(112vw, 22vh, 0) rotate(-12deg); } }
     .ship .flame { transform-origin: 100% 50%; animation: flame .12s ease-in-out infinite alternate; }
     @keyframes flame { from { transform: scaleX(.85); opacity: .8; } to { transform: scaleX(1.1); opacity: 1; } }
@@ -128,10 +128,10 @@
     @media (max-width: 767px) {
       .planet.p-ring { width: 140px; right: -64px; bottom: 12vh; opacity: .5; }
       .planet.p-moon { display: none; }
-      .ship { width: 64px; }
+      .ship { width: 100px; }
       @keyframes fly {
         0%   { transform: translate3d(-24vw, 62vh, 0) rotate(-17deg); }
-        40%  { transform: translate3d(118vw, 40vh, 0) rotate(-17deg); }
+        55%  { transform: translate3d(118vw, 40vh, 0) rotate(-17deg); }
         100% { transform: translate3d(118vw, 40vh, 0) rotate(-17deg); } }
       .ast.ast-x { display: none; }
     }
