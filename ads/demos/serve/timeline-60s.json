@@ -1,0 +1,142 @@
+{
+ "app": "ServeFlow",
+ "accent": "#F59E0B",
+ "icon": "☕",
+ "audience": "For cafés & restaurants",
+ "tagline": "Online ordering with table QR codes. 0% commission.",
+ "steps": [
+  {
+   "type": "intro",
+   "text": "ServeFlow: online ordering for cafés and restaurants, with table QR codes and 0% commission.",
+   "say": "Serve Flow. Online ordering for cafés and restaurants, with table Q R codes, and zero commission.",
+   "voice": "voice-60s/00.wav",
+   "voice_len": 6.569,
+   "start": 0.0,
+   "dur": 8.999
+  },
+  {
+   "role": "customer",
+   "title": "Scan the table QR",
+   "text": "Customers scan the QR code on their table. The table number is filled in for them.",
+   "say": "Customers scan the Q R code on their table. The table number is filled in for them.",
+   "frames": [
+    "menu",
+    "menu-scrolled"
+   ],
+   "voice": "voice-60s/01.wav",
+   "voice_len": 4.718,
+   "start": 8.999,
+   "dur": 7.148
+  },
+  {
+   "type": "explain",
+   "role": "customer",
+   "title": "Your AI menu helper",
+   "text": "Not sure what to order? The AI menu helper checks your live menu and suggests what to add.",
+   "rows": [
+    {
+     "icon": "💬",
+     "who": "Customer asks",
+     "head": "In their own words",
+     "quote": "Something iced and sweet under ₱170?"
+    },
+    {
+     "icon": "🔎",
+     "who": "AI menu helper",
+     "head": "Checks your live menu",
+     "sub": "Prices, options and what's still available today."
+    },
+    {
+     "icon": "🧋",
+     "who": "AI suggests",
+     "head": "Matching items, ready to add",
+     "sub": "The customer taps + to add. It also answers questions about hours, delivery and payment."
+    }
+   ],
+   "voice": "voice-60s/02.wav",
+   "voice_len": 5.41,
+   "start": 16.147,
+   "dur": 7.84
+  },
+  {
+   "role": "customer",
+   "title": "Order & pay",
+   "text": "They pick their options, and pay by GCash, bank transfer or at the counter.",
+   "say": "They pick their options, and pay by G Cash, bank transfer, or at the counter.",
+   "frames": [
+    "item-picked",
+    "checkout-pay"
+   ],
+   "voice": "voice-60s/03.wav",
+   "voice_len": 4.189,
+   "start": 23.987,
+   "dur": 6.619
+  },
+  {
+   "role": "owner",
+   "title": "Kitchen board",
+   "text": "In the kitchen, verify the payment, then mark it ready.",
+   "frames": [
+    "k-verify",
+    "k-preparing"
+   ],
+   "voice": "voice-60s/04.wav",
+   "voice_len": 2.963,
+   "start": 30.606,
+   "dur": 5.93
+  },
+  {
+   "role": "customer",
+   "title": "Live order tracking",
+   "text": "Your customer sees it's ready, right on their phone.",
+   "frames": [
+    "customer-ready"
+   ],
+   "voice": "voice-60s/05.wav",
+   "voice_len": 2.663,
+   "start": 36.536,
+   "dur": 5.093
+  },
+  {
+   "type": "explain",
+   "role": "owner",
+   "title": "Your AI kitchen co-pilot",
+   "text": "Running low? The kitchen co-pilot prepares the change, and waits for you to tap Confirm.",
+   "say": "Running low? The kitchen co-pilot prepares the change, and waits for you to tap, Confirm.",
+   "rows": [
+    {
+     "icon": "🧑‍🍳",
+     "who": "You ask",
+     "head": "Type it like a message",
+     "quote": "Set ensaymada to 10 left"
+    },
+    {
+     "icon": "✨",
+     "who": "Kitchen co-pilot",
+     "head": "Prepares the change",
+     "sub": "Classic Ensaymada: 24 → 10 portions left"
+    },
+    {
+     "icon": "✅",
+     "who": "You decide",
+     "head": "Nothing changes until you confirm",
+     "btn": "✓ Confirm",
+     "me": true
+    }
+   ],
+   "voice": "voice-60s/06.wav",
+   "voice_len": 5.098,
+   "start": 41.629,
+   "dur": 7.63
+  },
+  {
+   "type": "outro",
+   "text": "ServeFlow: online ordering, with AI that waits for your approval. Book a free consultation. Message us on Facebook, or email dandigital1688@gmail.com.",
+   "say": "Serve Flow. Book a free consultation. Message us on Facebook, or email dan digital one six eight eight at gmail dot com.",
+   "voice": "voice-60s/07.wav",
+   "voice_len": 8.31,
+   "start": 49.259,
+   "dur": 10.741
+  }
+ ]
+}

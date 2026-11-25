@@ -1,0 +1,94 @@
+{
+ "home": {
+  "src": "shots/home.png"
+ },
+ "home-cats": {
+  "src": "shots/home-cats.png"
+ },
+ "chat-ask": {
+  "src": "shots/chat-ask.png",
+  "tap": [
+   337,
+   123
+  ]
+ },
+ "chat-answer": {
+  "src": "shots/chat-answer.png"
+ },
+ "chat-cart": {
+  "src": "shots/chat-cart.png",
+  "tap": [
+   213,
+   565
+  ]
+ },
+ "checkout-top": {
+  "src": "shots/checkout-top.png"
+ },
+ "checkout-filled": {
+  "src": "shots/checkout-filled.png",
+  "tap": [
+   195,
+   422
+  ]
+ },
+ "order-new": {
+  "src": "shots/order-new.png"
+ },
+ "order-pay": {
+  "src": "shots/order-pay.png"
+ },
+ "proof-chosen": {
+  "src": "shots/proof-chosen.png",
+  "tap": [
+   195,
+   422
+  ]
+ },
+ "proof-sent": {
+  "src": "shots/proof-sent.png"
+ },
+ "admin-orders": {
+  "src": "shots/admin-orders.png"
+ },
+ "admin-verify": {
+  "src": "shots/admin-verify.png",
+  "tap": [
+   195,
+   629
+  ]
+ },
+ "admin-paid": {
+  "src": "shots/admin-paid.png"
+ },
+ "copilot-ask": {
+  "src": "shots/copilot-ask.png",
+  "tap": [
+   337,
+   123
+  ]
+ },
+ "copilot-confirm": {
+  "src": "shots/copilot-confirm.png",
+  "tap": [
+   127,
+   331
+  ]
+ },
+ "copilot-done": {
+  "src": "shots/copilot-done.png"
+ },
+ "admin-ship": {
+  "src": "shots/admin-ship.png",
+  "tap": [
+   195,
+   629
+  ]
+ },
+ "admin-shipped": {
+  "src": "shots/admin-shipped.png"
+ },
+ "customer-progress": {
+  "src": "shots/customer-progress.png"
+ }
+}

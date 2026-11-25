@@ -1,0 +1,71 @@
+{
+ "menu": {
+  "src": "shots/menu.png"
+ },
+ "menu-scrolled": {
+  "src": "shots/menu-scrolled.png"
+ },
+ "menu-tap": {
+  "src": "shots/menu-tap.png",
+  "tap": [
+   96,
+   422
+  ]
+ },
+ "item": {
+  "src": "shots/item.png"
+ },
+ "item-picked": {
+  "src": "shots/item-picked.png",
+  "tap": [
+   261,
+   801
+  ]
+ },
+ "checkout-top": {
+  "src": "shots/checkout-top.png"
+ },
+ "checkout-pay": {
+  "src": "shots/checkout-pay.png",
+  "tap": [
+   195,
+   780
+  ]
+ },
+ "order-new": {
+  "src": "shots/order-new.png"
+ },
+ "proof-chosen": {
+  "src": "shots/proof-chosen.png",
+  "tap": [
+   215,
+   422
+  ]
+ },
+ "proof-sent": {
+  "src": "shots/proof-sent.png"
+ },
+ "k-verify": {
+  "src": "shots/k-verify.png",
+  "tap": [
+   109,
+   644
+  ]
+ },
+ "k-preparing": {
+  "src": "shots/k-preparing.png",
+  "tap": [
+   150,
+   373
+  ]
+ },
+ "k-ready": {
+  "src": "shots/k-ready.png"
+ },
+ "customer-ready": {
+  "src": "shots/customer-ready.png"
+ },
+ "qr": {
+  "src": "shots/qr.png"
+ }
+}

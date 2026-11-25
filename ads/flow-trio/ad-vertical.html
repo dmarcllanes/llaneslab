@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>LlanesLab · ShopFlow, ServeFlow & StayFlow · vertical ad</title>
+<!--
+  1080x1920 ad, ~56s. Every frame is a pure function of time: seek(t) sets all styles.
+  Render with render.py (Playwright steps t at 30fps, ffmpeg encodes).
+  Preview in a browser: open this file, it plays in real time.
+  Text safe zone for Reels/Stories: keep key copy between y=250 and y=1450, away from the right 140px.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; background: #04060F; }
+  #stage { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: Inter, sans-serif; color: #E5ECF8;
+    background:
+      radial-gradient(ellipse 70% 40% at 10% 8%, rgba(37,99,235,.50), rgba(37,99,235,.14) 50%, transparent 75%),
+      radial-gradient(ellipse 65% 38% at 95% 34%, rgba(124,58,237,.42), rgba(124,58,237,.12) 50%, transparent 76%),
+      radial-gradient(ellipse 55% 30% at 80% 78%, rgba(219,39,119,.26), transparent 72%),
+      radial-gradient(ellipse 60% 32% at 0% 96%, rgba(20,184,166,.30), transparent 72%),
+      radial-gradient(ellipse 50% 28% at 100% 100%, rgba(219,39,119,.30), transparent 72%),
+      #04060F; }
+  .abs { position: absolute; }
+  .stars { position: absolute; inset: 0; background-repeat: repeat; }
+  .s1 { opacity: .55; background-size: 320px 320px; background-image:
+    radial-gradient(1.2px 1.2px at 22px 34px, #fff, transparent), radial-gradient(1px 1px at 148px 86px, #C8D7FF, transparent),
+    radial-gradient(1.6px 1.6px at 266px 172px, #fff, transparent), radial-gradient(1px 1px at 94px 226px, #FFECD6, transparent),
+    radial-gradient(1.2px 1.2px at 206px 288px, #fff, transparent), radial-gradient(1px 1px at 300px 20px, #C8D7FF, transparent); }
+  .s2 { background-size: 510px 510px; background-image:
+    radial-gradient(2px 2px at 60px 140px, #fff, transparent), radial-gradient(1.4px 1.4px at 330px 60px, #BFD4FF, transparent),
+    radial-gradient(2.2px 2.2px at 420px 360px, #fff, transparent), radial-gradient(1.4px 1.4px at 180px 450px, #FFE9D0, transparent); }
+
+  .display { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; letter-spacing: -.035em; line-height: 1.02; color: #fff; }
+  .mono { font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: .18em; }
+  .grad { background: linear-gradient(90deg, #60A5FA, #38BDF8 50%, #A78BFA); -webkit-background-clip: text; color: transparent; }
+  .outline { color: rgba(96,165,250,.14); -webkit-text-stroke: 2.5px #60A5FA; }
+
+  /* Top brand bar */
+  #brand { left: 60px; top: 110px; display: flex; align-items: center; gap: 16px; }
+  #brand img { width: 64px; height: 64px; filter: drop-shadow(0 0 12px rgba(56,189,248,.5)); }
+  #brand b { font-family: 'Plus Jakarta Sans'; font-weight: 800; font-size: 34px; color: #fff; letter-spacing: -.02em; }
+  #pill { right: 150px; top: 124px; display: flex; align-items: center; gap: 10px; padding: 10px 18px; border-radius: 999px;
+    background: linear-gradient(#0B1024,#0B1024) padding-box, linear-gradient(90deg,#3B82F6,#38BDF8,#A78BFA,#F472B6) border-box; border: 1.5px solid transparent;
+    font: 700 16px/1 'JetBrains Mono', monospace; letter-spacing: .18em; text-transform: uppercase; color: #93C5FD; box-shadow: 0 0 24px rgba(139,92,246,.35); }
+  #pill i { width: 9px; height: 9px; border-radius: 50%; background: #38BDF8; box-shadow: 0 0 12px #38BDF8; }
+
+  /* Scene text */
+  .scene { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+  .center { left: 70px; right: 70px; text-align: center; }
+
+  /* Phone */
+  .phone { position: absolute; left: 50%; width: 500px; height: 1082px; margin-left: -250px; border-radius: 62px; background: #000;
+    border: 14px solid #121B2E; box-shadow: 0 60px 140px -30px rgba(0,0,0,.9), 0 0 0 2px #1E2B45, 0 0 80px rgba(59,130,246,.25); overflow: hidden; }
+  .phone .scr { position: absolute; inset: 0; background-size: cover; background-position: top center; }
+  .phone .notch { position: absolute; left: 50%; top: 10px; width: 130px; height: 32px; margin-left: -65px; border-radius: 20px; background: #000; z-index: 3; }
+
+  /* Chips */
+  .chips { position: absolute; left: 60px; right: 60px; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+  .chip { padding: 12px 20px; border-radius: 999px; background: rgba(12,19,34,.85); border: 1px solid #2A3A5E; font: 600 22px/1 Inter; color: #DCE6F7; }
+  .chip b { font-family: 'JetBrains Mono'; color: var(--acc); margin-right: 8px; }
+
+  /* Chat + owner cards */
+  .bubble { position: absolute; max-width: 560px; padding: 22px 26px; border-radius: 28px; font: 500 28px/1.35 Inter; box-shadow: 0 24px 60px -18px rgba(0,0,0,.8); }
+  .b-cust { background: #F1F5F9; color: #0F172A; border-bottom-right-radius: 8px; }
+  .b-ai { background: #0C1322; color: #E5ECF8; border: 1.5px solid rgba(96,165,250,.45); border-bottom-left-radius: 8px; box-shadow: 0 24px 60px -18px rgba(0,0,0,.8), 0 0 40px rgba(56,189,248,.18); }
+  .b-ai .who { font: 700 17px/1 'JetBrains Mono'; letter-spacing: .14em; text-transform: uppercase; color: #38BDF8; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .b-ai .who i { width: 9px; height: 9px; border-radius: 50%; background: #38BDF8; box-shadow: 0 0 10px #38BDF8; }
+  .b-cust .who { font: 700 17px/1 'JetBrains Mono'; letter-spacing: .14em; text-transform: uppercase; color: #64748B; margin-bottom: 10px; }
+  .btn { display: inline-flex; align-items: center; gap: 10px; margin-top: 18px; padding: 14px 24px; border-radius: 16px; font: 700 24px/1 Inter; }
+  .btn-blue { background: #2563EB; color: #fff; }
+  .btn-green { background: #10B981; color: #03150E; }
+  .btn-ghost { border: 1.5px solid #2A3A5E; color: #C3CBD9; }
+  .dots { display: flex; gap: 8px; padding: 6px 2px; }
+  .dots i { width: 12px; height: 12px; border-radius: 50%; background: #60A5FA; }
+  .owner { position: absolute; width: 600px; padding: 26px 28px; border-radius: 28px; background: #0C1322; border: 1.5px solid #2A3A5E;
+    box-shadow: 0 30px 80px -20px rgba(0,0,0,.9), 0 0 50px rgba(16,185,129,.15); }
+  .owner .k { font: 700 17px/1 'JetBrains Mono'; letter-spacing: .14em; text-transform: uppercase; color: #FBBF24; display: flex; justify-content: space-between; }
+  .owner .k span:last-child { color: #8C9BB8; }
+  .owner h4 { font: 800 34px/1.15 'Plus Jakarta Sans'; color: #fff; margin-top: 14px; letter-spacing: -.02em; }
+  .owner p { font: 500 24px/1.4 Inter; color: #AEB9CC; margin-top: 8px; }
+  .owner .ok { margin-top: 12px; font: 600 22px/1.3 Inter; color: #34D399; }
+  .tap { position: absolute; width: 70px; height: 70px; border-radius: 50%; border: 3px solid rgba(255,255,255,.9); background: rgba(255,255,255,.18); pointer-events: none; }
+
+  .steps { display: flex; gap: 10px; margin-top: 18px; }
+  .steps span { flex: 1; text-align: center; padding: 12px 0; border-radius: 12px; font: 700 19px/1 Inter; background: #121B2E; color: #64748B; border: 1px solid #1E2B45; }
+  .steps span.on { background: rgba(16,185,129,.16); color: #34D399; border-color: rgba(52,211,153,.5); }
+  .steps span.cur { background: #10B981; color: #03150E; border-color: #10B981; }
+
+  .appcard { position: absolute; left: 90px; right: 90px; height: 170px; border-radius: 32px; background: rgba(12,19,34,.9); border: 1.5px solid #2A3A5E;
+    display: flex; align-items: center; gap: 28px; padding: 0 36px; box-shadow: 0 30px 70px -25px rgba(0,0,0,.8); }
+  .appcard .ic { width: 104px; height: 104px; border-radius: 28px; display: grid; place-items: center; font-size: 56px; }
+  .appcard h3 { font: 800 50px/1 'Plus Jakarta Sans'; color: #fff; letter-spacing: -.03em; }
+  .appcard p { font: 500 26px/1.3 Inter; color: #AEB9CC; margin-top: 8px; }
+
+  .apptitle { left: 60px; right: 60px; top: 270px; text-align: center; }
+  .apptitle .tag { display: inline-flex; align-items: center; gap: 12px; font: 700 20px/1 'JetBrains Mono'; letter-spacing: .2em; text-transform: uppercase; padding: 10px 18px; border-radius: 999px; }
+  .apptitle h2 { font-size: 96px; margin-top: 20px; }
+  .apptitle p { font: 500 34px/1.3 Inter; color: #C3CBD9; margin-top: 14px; }
+
+  #ship { left: 0; top: 0; width: 300px; filter: drop-shadow(0 0 18px rgba(56,189,248,.55)); }
+  #planet { right: -120px; width: 440px; opacity: .9; }
+  .contact { display: flex; justify-content: center; align-items: center; gap: 18px; font: 600 36px/1 Inter; color: #E5ECF8; }
+  .contact b { color: #93C5FD; font-weight: 700; }
+  .contact .cic { width: 58px; height: 58px; border-radius: 50%; display: grid; place-items: center; color: #fff; font: 800 34px/1 'Plus Jakarta Sans'; flex: none; }
+  #flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
+  #cta-btn { display: inline-flex; align-items: center; gap: 16px; padding: 30px 54px; border-radius: 999px; background: #2563EB; color: #fff;
+    font: 800 46px/1 'Plus Jakarta Sans'; letter-spacing: -.02em; box-shadow: 0 20px 60px -10px rgba(37,99,235,.7), 0 0 0 1px rgba(255,255,255,.15) inset; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="stars s1"></div><div class="stars s2" id="tw"></div>
+
+  <!-- ringed planet -->
+  <svg id="planet" class="abs" viewBox="0 0 260 260"><defs>
+    <radialGradient id="pb" cx="38%" cy="32%" r="70%"><stop offset="0" stop-color="#F5D0FE"/><stop offset=".35" stop-color="#C026D3"/><stop offset=".75" stop-color="#6D28D9"/><stop offset="1" stop-color="#1E1048"/></radialGradient>
+    <radialGradient id="ps" cx="80%" cy="80%" r="75%"><stop offset=".35" stop-color="#04060F" stop-opacity="0"/><stop offset="1" stop-color="#04060F" stop-opacity=".85"/></radialGradient>
+    <linearGradient id="pr" x1="0" x2="1"><stop offset="0" stop-color="#38BDF8" stop-opacity=".1"/><stop offset=".5" stop-color="#E9D5FF" stop-opacity=".85"/><stop offset="1" stop-color="#F472B6" stop-opacity=".15"/></linearGradient>
+    <clipPath id="pf"><rect x="0" y="130" width="260" height="130"/></clipPath></defs>
+    <g transform="rotate(-18 130 130)"><ellipse cx="130" cy="130" rx="124" ry="30" fill="none" stroke="url(#pr)" stroke-width="7"/><circle cx="130" cy="130" r="74" fill="url(#pb)"/><circle cx="130" cy="130" r="74" fill="url(#ps)"/><ellipse cx="130" cy="130" rx="124" ry="30" fill="none" stroke="url(#pr)" stroke-width="7" clip-path="url(#pf)"/></g></svg>
+
+  <!-- starship (original design) -->
+  <svg id="ship" class="abs" viewBox="0 0 130 50"><defs>
+    <linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E2E8F0"/><stop offset=".55" stop-color="#94A3B8"/><stop offset="1" stop-color="#475569"/></linearGradient>
+    <linearGradient id="sf" x1="1" x2="0"><stop offset="0" stop-color="#E0F2FE"/><stop offset=".3" stop-color="#38BDF8"/><stop offset=".7" stop-color="#8B5CF6" stop-opacity=".5"/><stop offset="1" stop-color="#8B5CF6" stop-opacity="0"/></linearGradient></defs>
+    <path id="flame" d="M0 25 Q14 19 32 21 L32 29 Q14 31 0 25Z" fill="url(#sf)" style="transform-origin:32px 25px"/>
+    <path d="M56 18 L44 3 L72 16Z" fill="#64748B"/><path d="M54 32 L38 47 L74 34Z" fill="#475569"/><rect x="29" y="19.5" width="8" height="11" rx="2.5" fill="#334155"/>
+    <path d="M34 25 C46 14 86 12 120 22 Q127 25 120 28 C86 38 46 36 34 25Z" fill="url(#sh)"/><path d="M44 27 C66 31 92 30 114 26" stroke="#3B82F6" stroke-width="2" fill="none"/>
+    <ellipse cx="96" cy="22.5" rx="12" ry="4.2" fill="#38BDF8" opacity=".9"/><circle id="navl" cx="45" cy="5" r="1.6" fill="#F87171"/><circle id="navr" cx="40" cy="45" r="1.6" fill="#34D399"/></svg>
+
+  <div id="brand" class="abs"><img src="../../assets/logo/llaneslab-logo.svg" alt=""><b>LlanesLab</b></div>
+  <div id="pill" class="abs"><i></i>AI adoption</div>
+
+  <!-- S1: hook -->
+  <div id="s1" class="scene">
+    <div id="h1a" class="abs center display" style="top:640px;font-size:98px">Still taking orders in</div>
+    <div id="h1b" class="abs center display" style="top:760px;font-size:98px"><span class="outline">chats, notebooks</span></div>
+    <div id="h1c" class="abs center display" style="top:880px;font-size:98px">&amp; spreadsheets?</div>
+    <div id="h1d" class="abs center" style="top:1080px;font:600 44px/1.3 Inter;color:#C3CBD9">There's a simpler way.</div>
+  </div>
+
+  <!-- S2: intro -->
+  <div id="s2" class="scene">
+    <div id="h2a" class="abs center mono" style="top:300px;font-size:26px;color:#93C5FD">3 apps · built for local business</div>
+    <div id="h2b" class="abs center display" style="top:360px;font-size:92px">The AI prepares.</div>
+    <div id="h2c" class="abs center display grad" style="top:466px;font-size:92px;padding-bottom:10px">You approve.</div>
+    <div id="ac1" class="appcard" style="top:680px"><div class="ic" style="background:rgba(16,185,129,.15)">🛍️</div><div><h3>ShopFlow</h3><p>Online store + AI shop assistant</p></div></div>
+    <div id="ac2" class="appcard" style="top:880px"><div class="ic" style="background:rgba(245,158,11,.15)">☕</div><div><h3>ServeFlow</h3><p>Food ordering + AI menu helper</p></div></div>
+    <div id="ac3" class="appcard" style="top:1080px"><div class="ic" style="background:rgba(139,92,246,.18)">🛏️</div><div><h3>StayFlow</h3><p>Direct bookings + AI booking agent</p></div></div>
+  </div>
+
+  <!-- Product scenes are filled by JS from APPS -->
+  <div id="products"></div>
+
+  <!-- S6: CTA -->
+  <div id="s6" class="scene">
+    <div id="h6a" class="abs center display" style="top:250px;font-size:84px">Shops. Restaurants.<br>Stays.</div>
+    <div id="h6b" class="abs center" style="top:465px;font:600 38px/1.35 Inter;color:#C3CBD9">AI that fits the way you already work.<br>No tech team needed.</div>
+    <div id="fan" class="abs" style="left:0;right:0;top:610px;height:620px"></div>
+    <div id="h6c" class="abs center" style="top:1270px"><span id="cta-btn">Book a free consultation →</span></div>
+    <div id="h6e" class="abs center contact" style="top:1410px"><span class="cic" style="background:#1877F2">f</span><span>Message us on Facebook <b>· LlanesLab</b></span></div>
+    <div id="h6f" class="abs center contact" style="top:1500px"><span class="cic" style="background:#10B981">✉</span><span>Email <b>dandigital1688@gmail.com</b></span></div>
+    <div id="h6d" class="abs center mono" style="top:1610px;font-size:24px;color:#7D8FB3">danmarcllanes.vercel.app</div>
+  </div>
+
+  <div id="flash"></div>
+</div>
+
+<script>
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const easeOut = x => 1 - Math.pow(1 - x, 3);
+const easeIO = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+const back = x => { const c = 1.6; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };
+// fade+rise in over [a,a+d], out over [b,b+d]
+function inout(t, a, b, d = .5) { return Math.min(easeOut(prog(t, a, a + d)), 1 - easeIO(prog(t, b, b + d))); }
+function show(el, o, dy = 0, sc = 1) { el.style.opacity = o; el.style.transform = `translateY(${(1 - o) * dy}px) scale(${sc})`; el.style.visibility = o <= 0.001 ? 'hidden' : 'visible'; }
+
+const DUR = 61;
+const SCENES = { s1: [0, 5.4], s2: [5.4, 9.4], shop: [9.4, 22.4], serve: [22.4, 35.4], stay: [35.4, 48.4], s6: [48.4, 61] };
+
+/* ---------- product scenes ---------- */
+const APPS = [
+  { key: 'shop', name: 'ShopFlow', acc: '#10B981', tagBg: 'rgba(16,185,129,.14)', icon: '🛍️', kicker: 'For shops & small businesses',
+    line: 'Your own online store,<br>with an AI shop assistant.',
+    chips: ['Online store', 'AI shop assistant', 'GCash · Bank · COD', 'Live stock'],
+    screens: ['shots/shop-home.png', 'shots/shop-product.png'],
+    cust: 'Do you have the linen shirt in size M?',
+    ai: 'Yes! <b>Linen Button-Down Shirt</b>, M / White: 6 in stock, ₱890.', aiBtn: 'Add to cart',
+    owner: { k: 'Check payment', h: 'New order · Linen Shirt (M)', p: 'GCash screenshot uploaded by the customer.', btn: 'Payment received', ok: '✓ Stock updated automatically' } },
+  { key: 'serve', name: 'ServeFlow', acc: '#F59E0B', tagBg: 'rgba(245,158,11,.14)', icon: '☕', kicker: 'For cafés & restaurants',
+    line: 'Online ordering with table QR.<br>0% commission.',
+    chips: ['Table QR ordering', 'AI menu helper', 'Dine-in · Pickup · Delivery', 'Kitchen board'],
+    screens: ['shots/serve-home.png', 'shots/serve-menu.png'],
+    cust: 'What\'s your best seller?',
+    ai: 'Our <b>Ube Spanish Latte</b>, ₱145. A customer favourite!', aiBtn: 'Add to order',
+    owner: { k: 'Kitchen board', h: 'Table 5 · Ube Spanish Latte', p: 'The customer tracks every step on their phone.', steps: true } },
+  { key: 'stay', name: 'StayFlow', acc: '#A78BFA', tagBg: 'rgba(139,92,246,.16)', icon: '🛏️', kicker: 'For hotels, resorts & rentals',
+    line: 'Direct bookings, with an<br>AI booking agent.',
+    chips: ['Live availability', 'AI booking agent', 'No double bookings', 'Downpayment slips'],
+    screens: ['shots/stay-home.png', 'shots/stay-room.png'],
+    cust: 'A room for 4 this Saturday?',
+    ai: 'The <b>Barkada Loft</b> is free: up to 6 guests, ₱4,500 / night.', aiBtn: 'Send request',
+    owner: { k: 'New stay request', h: 'Barkada Loft · Sat to Sun', p: '4 guests · request from the AI chat', btn: 'Approve', btn2: 'Decline', ok: '✓ No clash with other bookings' } },
+];
+
+const prodRoot = $('#products');
+APPS.forEach(a => {
+  const s = document.createElement('div');
+  s.className = 'scene'; s.id = 'sc-' + a.key; s.style.setProperty('--acc', a.acc);
+  const o = a.owner;
+  s.innerHTML = `
+    <div class="abs apptitle" data-r="title">
+      <span class="tag" style="background:${a.tagBg};color:${a.acc}">${a.icon} ${a.kicker}</span>
+      <h2 class="display">${a.name}</h2>
+      <p>${a.line}</p>
+    </div>
+    <div class="phone" data-r="phone" style="top:760px">
+      <div class="notch"></div>
+      ${a.screens.map((src, i) => `<div class="scr" data-r="scr${i}" style="background-image:url(${src})"></div>`).join('')}
+    </div>
+    <div class="bubble b-cust" data-r="cust" style="right:96px;top:900px;max-width:470px"><div class="who">Customer</div>${a.cust}</div>
+    <div class="bubble b-ai" data-r="typing" style="left:70px;top:1080px"><div class="who"><i></i>${a.name} AI</div><div class="dots"><i></i><i></i><i></i></div></div>
+    <div class="bubble b-ai" data-r="ai" style="left:70px;top:1080px;max-width:620px"><div class="who"><i></i>${a.name} AI</div>${a.ai}<br><span class="btn btn-blue" data-r="aibtn">${a.aiBtn}</span></div>
+    <div class="owner" data-r="owner" style="left:240px;top:1150px">
+      <div class="k"><span>${o.k}</span><span>Owner</span></div>
+      <h4>${o.h}</h4><p>${o.p}</p>
+      ${o.steps ? `<div class="steps"><span data-st="0">Paid</span><span data-st="1">Preparing</span><span data-st="2">Ready</span><span data-st="3">Done</span></div>`
+               : `<span class="btn btn-green" data-r="obtn">${o.btn}</span>${o.btn2 ? ` <span class="btn btn-ghost">${o.btn2}</span>` : ''}<div class="ok" data-r="ook">${o.ok}</div>`}
+    </div>
+    <div class="tap" data-r="tap"></div>
+    <div class="chips" data-r="chips" style="top:640px">${a.chips.map(c => `<span class="chip"><b>✦</b>${c}</span>`).join('')}</div>`;
+  prodRoot.appendChild(s);
+});
+
+/* CTA fan of three phones */
+const fan = $('#fan');
+[['shots/shop-home.png', -14, -300], ['shots/serve-menu.png', 0, 0], ['shots/stay-room.png', 14, 300]].forEach(([src, rot, x], i) => {
+  const p = document.createElement('div');
+  p.className = 'phone'; p.dataset.i = i; p.dataset.rot = rot; p.dataset.x = x;
+  p.style.cssText = `top:0;width:280px;height:600px;margin-left:-140px;border-width:10px;border-radius:44px`;
+  p.innerHTML = `<div class="scr" style="background-image:url(${src})"></div>`;
+  fan.appendChild(p);
+});
+
+function r(scene, name) { return scene.querySelector(`[data-r="${name}"]`); }
+
+function productScene(a, t0, t) {
+  const sc = $('#sc-' + a.key), u = t - t0, len = 13;
+  const vis = t >= t0 - .1 && t <= t0 + len + .1;
+  sc.style.display = vis ? 'block' : 'none';
+  if (!vis) return;
+  const out = 1 - easeIO(prog(u, len - .6, len));
+  // title + chips
+  const ti = easeOut(prog(u, 0, .7));
+  show(r(sc, 'title'), ti * out, 40);
+  const ch = r(sc, 'chips');
+  [...ch.children].forEach((c, i) => { const v = easeOut(prog(u, .4 + i * .12, .9 + i * .12)) * out; c.style.opacity = v; c.style.transform = `translateY(${(1 - v) * 20}px)`; });
+  // phone: slide up, gentle float
+  const ph = r(sc, 'phone'), pi = easeOut(prog(u, .2, 1.2));
+  ph.style.opacity = pi * out;
+  ph.style.transform = `translateY(${(1 - pi) * 260 + Math.sin(u * 1.2) * 6}px) rotate(${(1 - pi) * 4}deg)`;
+  // screen switch at 6.2s: slide
+  const sw = easeIO(prog(u, 6.2, 6.9));
+  r(sc, 'scr0').style.transform = `translateX(${-sw * 100}%)`;
+  r(sc, 'scr1').style.transform = `translateX(${(1 - sw) * 100}%)`;
+  // chat
+  const cu = back(prog(u, 1.8, 2.3)) * (1 - prog(u, 6.6, 7.0));
+  show(r(sc, 'cust'), clamp(cu) * out, 30, .9 + .1 * clamp(cu));
+  const ty = prog(u, 2.6, 2.8) * (1 - prog(u, 3.7, 3.8));
+  const typ = r(sc, 'typing'); show(typ, ty * out, 20);
+  typ.querySelectorAll('.dots i').forEach((d, i) => { d.style.opacity = .35 + .65 * Math.max(0, Math.sin(u * 9 - i * .9)); });
+  const ai = back(prog(u, 3.75, 4.25)) * (1 - prog(u, 6.6, 7.0));
+  show(r(sc, 'ai'), clamp(ai) * out, 30, .9 + .1 * clamp(ai));
+  const ab = r(sc, 'aibtn'), press = prog(u, 5.0, 5.15) * (1 - prog(u, 5.3, 5.5));
+  ab.style.transform = `scale(${1 - press * .08})`;
+  ab.style.boxShadow = `0 0 ${30 * prog(u, 4.6, 5.2)}px rgba(59,130,246,.8)`;
+  // owner card
+  const ow = back(prog(u, 7.4, 8.0));
+  show(r(sc, 'owner'), clamp(ow) * out, 60, .9 + .1 * clamp(ow));
+  const obtn = r(sc, 'obtn'), ook = r(sc, 'ook');
+  const press2 = prog(u, 9.3, 9.45) * (1 - prog(u, 9.6, 9.8));
+  if (obtn) { obtn.style.transform = `scale(${1 - press2 * .08})`; obtn.style.boxShadow = `0 0 ${34 * prog(u, 8.8, 9.4)}px rgba(16,185,129,.8)`; }
+  if (ook) { const k = easeOut(prog(u, 9.7, 10.2)); ook.style.opacity = k; ook.style.transform = `translateY(${(1 - k) * 10}px)`; }
+  sc.querySelectorAll('[data-st]').forEach(el => {
+    const i = +el.dataset.st, at = 8.4 + i * .9;
+    el.className = u >= at + .9 && i < 3 ? 'on' : (u >= at ? 'cur' : '');
+  });
+  // tap indicator: on AI button (5.0s) and owner button (9.3s)
+  const tap = r(sc, 'tap');
+  const t1 = prog(u, 4.8, 5.5), t2 = prog(u, 9.1, 9.8);
+  let tx = null, ty2 = null, tp = 0;
+  if (t1 > 0 && t1 < 1) { const b = ab.getBoundingClientRect(); tx = b.left + b.width / 2; ty2 = b.top + b.height / 2; tp = t1; }
+  else if (obtn && t2 > 0 && t2 < 1) { const b = obtn.getBoundingClientRect(); tx = b.left + b.width / 2; ty2 = b.top + b.height / 2; tp = t2; }
+  if (tx !== null) { tap.style.display = 'block'; tap.style.left = (tx - 35) + 'px'; tap.style.top = (ty2 - 35) + 'px';
+    tap.style.opacity = Math.sin(tp * Math.PI); tap.style.transform = `scale(${.6 + tp * .8})`; } else tap.style.display = 'none';
+}
+
+/* ---------- master timeline ---------- */
+function seek(t) {
+  // background drift
+  $('#tw').style.opacity = .35 + .35 * Math.sin(t * .9);
+  const pl = $('#planet'); pl.style.top = (1420 + Math.sin(t * .4) * 14) + 'px'; pl.style.transform = `rotate(${Math.sin(t * .3) * 3}deg)`;
+  // ship: passes in S1 (0.4-4.8s), S2->shop transition, and in CTA
+  const ship = $('#ship');
+  const passes = [[0.3, 4.6, -380, 1520, 1180, 1300, -6], [21.6, 23.6, 1200, 1500, -420, 1250, 6], [48.8, 52.2, -380, 1780, 1180, 1700, -4]];
+  let shown = false;
+  for (const [a, b, x0, y0, x1, y1, rot] of passes) {
+    if (t >= a && t <= b) { const k = easeIO(prog(t, a, b)); const flip = x1 < x0 ? -1 : 1;
+      ship.style.transform = `translate(${x0 + (x1 - x0) * k}px, ${y0 + (y1 - y0) * k}px) rotate(${rot}deg) scaleX(${flip})`; shown = true; }
+  }
+  ship.style.opacity = shown ? 1 : 0;
+  $('#flame').style.transform = `scaleX(${.85 + .25 * Math.abs(Math.sin(t * 40))})`;
+  $('#navl').style.opacity = Math.floor(t * 1.4) % 2 ? .2 : 1; $('#navr').style.opacity = Math.floor(t * 1.4 + .5) % 2 ? .2 : 1;
+
+  // brand bar always on (fades in)
+  const bi = easeOut(prog(t, 0, .6)); show($('#brand'), bi, -20); show($('#pill'), bi, -20);
+
+  // S1
+  const [a1, b1] = SCENES.s1; $('#s1').style.display = t < b1 + .1 ? 'block' : 'none';
+  show($('#h1a'), inout(t, .2, b1 - .6), 50);
+  show($('#h1b'), inout(t, .55, b1 - .6), 50);
+  show($('#h1c'), inout(t, .9, b1 - .6), 50);
+  show($('#h1d'), inout(t, 2.4, b1 - .6), 30);
+
+  // S2
+  const [a2, b2] = SCENES.s2; $('#s2').style.display = t > a2 - .1 && t < b2 + .1 ? 'block' : 'none';
+  show($('#h2a'), inout(t, a2, b2 - .5), 30);
+  show($('#h2b'), inout(t, a2 + .2, b2 - .5), 40);
+  show($('#h2c'), inout(t, a2 + .5, b2 - .5), 40);
+  ['#ac1', '#ac2', '#ac3'].forEach((id, i) => { const v = inout(t, a2 + 1.0 + i * .35, b2 - .5); const el = $(id);
+    el.style.opacity = v; el.style.transform = `translateX(${(1 - v) * (i % 2 ? 120 : -120)}px)`; });
+
+  // products
+  productScene(APPS[0], SCENES.shop[0], t);
+  productScene(APPS[1], SCENES.serve[0], t);
+  productScene(APPS[2], SCENES.stay[0], t);
+
+  // S6
+  const [a6] = SCENES.s6; $('#s6').style.display = t > a6 - .1 ? 'block' : 'none';
+  show($('#h6a'), easeOut(prog(t, a6, a6 + .6)), 40);
+  show($('#h6b'), easeOut(prog(t, a6 + .4, a6 + 1)), 30);
+  fan.querySelectorAll('.phone').forEach(p => { const i = +p.dataset.i, v = easeOut(prog(t, a6 + .6 + i * .2, a6 + 1.4 + i * .2));
+    p.style.opacity = v; p.style.transform = `translate(${p.dataset.x * v}px, ${(1 - v) * 200 + (i === 1 ? -20 : 30) + Math.sin(t * 1.3 + i) * 6}px) rotate(${p.dataset.rot * v}deg)`; p.style.zIndex = i === 1 ? 2 : 1; });
+  const cb = back(prog(t, a6 + 1.8, a6 + 2.4)); show($('#h6c'), clamp(cb), 30, .85 + .15 * clamp(cb));
+  $('#cta-btn').style.boxShadow = `0 20px 60px -10px rgba(37,99,235,.7), 0 0 ${20 + 30 * Math.abs(Math.sin(t * 2.2))}px rgba(56,189,248,.55)`;
+  show($('#h6e'), back(prog(t, a6 + 6.4, a6 + 6.9)) > 0 ? clamp(back(prog(t, a6 + 6.4, a6 + 6.9))) : 0, 30);
+  show($('#h6f'), clamp(back(prog(t, a6 + 6.8, a6 + 7.3))), 30);
+  show($('#h6d'), easeOut(prog(t, a6 + 7.4, a6 + 8)), 20);
+
+  // white flash on scene cuts
+  const cuts = [SCENES.s2[0], SCENES.shop[0], SCENES.serve[0], SCENES.stay[0], SCENES.s6[0]];
+  let f = 0; cuts.forEach(c => { f = Math.max(f, .14 * (1 - Math.abs(t - c) / .18)); });
+  $('#flash').style.opacity = Math.max(0, f);
+}
+window.seek = seek; window.DUR = DUR;
+
+/* Real-time preview when opened normally (render.py sets ?render=1) */
+if (!location.search.includes('render')) {
+  const start = performance.now();
+  (function loop() { seek(((performance.now() - start) / 1000) % DUR); requestAnimationFrame(loop); })();
+} else seek(0);
+</script>
+</body>
+</html>

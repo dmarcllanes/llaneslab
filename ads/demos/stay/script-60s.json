@@ -1,0 +1,91 @@
+{
+  "app": "StayFlow",
+  "accent": "#A78BFA",
+  "icon": "🛏️",
+  "audience": "For hotels, resorts & rentals",
+  "tagline": "Direct bookings, with an AI booking agent.",
+  "steps": [
+    {
+      "type": "intro",
+      "text": "StayFlow: direct bookings for hotels, resorts and rentals, with an AI booking agent.",
+      "say": "Stay Flow. Direct bookings for hotels, resorts and rentals, with an AI booking agent."
+    },
+    {
+      "role": "customer",
+      "title": "Your own booking website",
+      "text": "Guests book on your own website, and see which rooms are free for their dates.",
+      "frames": [
+        "home",
+        "rooms"
+      ]
+    },
+    {
+      "role": "customer",
+      "title": "Request a stay",
+      "text": "They send a request. Nothing is charged, and nothing is booked yet.",
+      "frames": [
+        "req-send",
+        "req-sent"
+      ]
+    },
+    {
+      "type": "explain",
+      "role": "customer",
+      "title": "Your AI booking agent",
+      "text": "Prefer to chat? The AI booking agent checks availability and prepares the request for you to approve.",
+      "rows": [
+        {
+          "icon": "💬",
+          "who": "Guest asks",
+          "head": "Any time, in their own words",
+          "quote": "A room for 4 this Saturday?"
+        },
+        {
+          "icon": "📅",
+          "who": "AI booking agent",
+          "head": "Checks live availability",
+          "sub": "Quotes the total and prepares the stay request. The guest taps Send request."
+        },
+        {
+          "icon": "✅",
+          "who": "You decide",
+          "head": "Nothing is booked until you approve",
+          "btn": "✓ Approve",
+          "me": true
+        }
+      ]
+    },
+    {
+      "role": "owner",
+      "title": "Approve with one tap",
+      "text": "On your dashboard, check the dates and tap Approve.",
+      "frames": [
+        "admin-approve",
+        "admin-approved"
+      ]
+    },
+    {
+      "role": "customer",
+      "title": "Booking page & downpayment",
+      "text": "Your guest's page shows the confirmed stay and how to pay the downpayment.",
+      "frames": [
+        "stay-page"
+      ]
+    },
+    {
+      "role": "customer",
+      "title": "No double bookings",
+      "text": "Same room, same dates? StayFlow stops it.",
+      "say": "Same room, same dates? Stay Flow stops it.",
+      "frames": [
+        "clash-send",
+        "clash-blocked"
+      ]
+    },
+    {
+      "type": "outro",
+      "text": "StayFlow: direct bookings, with AI that waits for your approval. Book a free consultation. Message us on Facebook, or email dandigital1688@gmail.com.",
+      "say": "Stay Flow. Book a free consultation. Message us on Facebook, or email dan digital one six eight eight at gmail dot com."
+    }
+  ]
+}

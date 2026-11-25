@@ -1,0 +1,13 @@
+# start_seconds | max_seconds | spoken line (spelled the way it should be said)
+0.4  | 3.5 | Still taking orders in chats, notebooks, and spreadsheets?
+3.9  | 1.5 | There's a simpler way.
+5.6  | 3.8 | Three apps for local business. The AI prepares. You approve.
+9.7  | 4.1 | Shop Flow. Your own online store, with an AI shop assistant.
+14.0 | 7.6 | It answers customers and checks the stock. You confirm the payment, and the stock updates by itself.
+22.6 | 4.6 | Serve Flow. Online ordering with table Q R codes, and zero commission.
+27.4 | 7.2 | The AI suggests your best sellers, and the kitchen board keeps every order moving.
+35.7 | 4.1 | Stay Flow. Direct bookings, with an AI booking agent.
+40.0 | 7.6 | It checks availability and prepares the request. You approve it, with no double bookings.
+48.5 | 4.4 | Shops. Restaurants. Stays. AI that fits the way you already work.
+53.1 | 2.0 | Book your free consultation today.
+55.0 | 5.8 | Message us on Facebook, or email dan digital one six eight eight at gmail dot com.

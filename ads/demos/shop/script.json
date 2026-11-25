@@ -1,0 +1,58 @@
+{
+  "app": "ShopFlow",
+  "accent": "#10B981",
+  "icon": "🛍️",
+  "audience": "For shops & small businesses",
+  "tagline": "Your own online store, with an AI shop assistant.",
+  "steps": [
+    { "type": "intro",
+      "text": "This is ShopFlow: your own online store, with an AI shop assistant. Let's follow one order, from your customer's phone to your dashboard.",
+      "say": "This is Shop Flow. Your own online store, with an AI shop assistant. Let's follow one order, from your customer's phone, to your dashboard." },
+
+    { "role": "customer", "title": "Your store, your link",
+      "text": "Your customers open your store link, browse by category, and see what's in stock right now.",
+      "frames": ["home", "home-cats"] },
+
+    { "role": "customer", "title": "Ask the AI shop assistant",
+      "text": "Not sure what to buy? They ask the AI shop assistant. It checks your real stock before it answers.",
+      "frames": ["chat-ask", "chat-answer"] },
+
+    { "role": "customer", "title": "The AI prepares the cart",
+      "text": "It prepares the cart for them. One tap, and the item is in.",
+      "frames": ["chat-cart"] },
+
+    { "role": "customer", "title": "Simple checkout",
+      "text": "At checkout, they choose delivery, cash on delivery or store pickup, and enter their address.",
+      "frames": ["checkout-top", "checkout-filled"] },
+
+    { "role": "customer", "title": "Pay by GCash or bank",
+      "text": "The order page shows how to pay by GCash or bank transfer, with a reference number.",
+      "say": "The order page shows how to pay, by G Cash or bank transfer, with a reference number.",
+      "frames": ["order-new", "order-pay"] },
+
+    { "role": "customer", "title": "Upload the payment screenshot",
+      "text": "They upload their payment screenshot right here. No more digging through chats.",
+      "frames": ["proof-chosen", "proof-sent"] },
+
+    { "role": "owner", "title": "Check the payment",
+      "text": "On your side, the order waits under Check payment. Compare the screenshot, then tap Payment received.",
+      "frames": ["admin-verify", "admin-paid"] },
+
+    { "role": "owner", "title": "Your AI store co-pilot",
+      "text": "Or just ask your store co-pilot: mark this order as packed. It prepares the change, and nothing happens until you tap Confirm.",
+      "say": "Or just ask your store co-pilot. Mark this order as packed. It prepares the change, and nothing happens until you tap, Confirm.",
+      "frames": ["copilot-ask", "copilot-confirm", "copilot-done"] },
+
+    { "role": "owner", "title": "Ship it",
+      "text": "Add the courier and tracking number, then tap Ship.",
+      "frames": ["admin-ship", "admin-shipped"] },
+
+    { "role": "customer", "title": "Your customer stays updated",
+      "text": "Your customer sees every step on their order page, with the tracking number. No need to message you.",
+      "frames": ["customer-progress"] },
+
+    { "type": "outro",
+      "text": "ShopFlow: your store, with AI that waits for your approval. Book a free consultation. Message us on Facebook, or email dandigital1688@gmail.com.",
+      "say": "Shop Flow. Your store, with AI that waits for your approval. Book a free consultation. Message us on Facebook, or email dan digital one six eight eight at gmail dot com." }
+  ]
+}

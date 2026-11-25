@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" fill="none">
+  <!-- Pure 100% solid continuous black edition, transparent background, zero gap -->
+  <polygon points="108,156 156,108 156,356 404,356 356,404 108,404" fill="#000000"/>
+  <polygon points="184,156 232,108 232,280 404,280 356,328 184,328" fill="#000000"/>
+</svg>

@@ -1,0 +1,158 @@
+{
+ "app": "ShopFlow",
+ "accent": "#10B981",
+ "icon": "🛍️",
+ "audience": "For shops & small businesses",
+ "tagline": "Your own online store, with an AI shop assistant.",
+ "steps": [
+  {
+   "type": "intro",
+   "text": "This is ShopFlow: your own online store, with an AI shop assistant. Let's follow one order, from your customer's phone to your dashboard.",
+   "say": "This is Shop Flow. Your own online store, with an AI shop assistant. Let's follow one order, from your customer's phone, to your dashboard.",
+   "voice": "voice/00.wav",
+   "voice_len": 8.59,
+   "start": 0.0,
+   "dur": 9.89
+  },
+  {
+   "role": "customer",
+   "title": "Your store, your link",
+   "text": "Your customers open your store link, browse by category, and see what's in stock right now.",
+   "frames": [
+    "home",
+    "home-cats"
+   ],
+   "voice": "voice/01.wav",
+   "voice_len": 5.085,
+   "start": 9.89,
+   "dur": 6.385
+  },
+  {
+   "role": "customer",
+   "title": "Ask the AI shop assistant",
+   "text": "Not sure what to buy? They ask the AI shop assistant. It checks your real stock before it answers.",
+   "frames": [
+    "chat-ask",
+    "chat-answer"
+   ],
+   "voice": "voice/02.wav",
+   "voice_len": 5.776,
+   "start": 16.275,
+   "dur": 7.076
+  },
+  {
+   "role": "customer",
+   "title": "The AI prepares the cart",
+   "text": "It prepares the cart for them. One tap, and the item is in.",
+   "frames": [
+    "chat-cart"
+   ],
+   "voice": "voice/03.wav",
+   "voice_len": 3.421,
+   "start": 23.351,
+   "dur": 4.721
+  },
+  {
+   "role": "customer",
+   "title": "Simple checkout",
+   "text": "At checkout, they choose delivery, cash on delivery or store pickup, and enter their address.",
+   "frames": [
+    "checkout-top",
+    "checkout-filled"
+   ],
+   "voice": "voice/04.wav",
+   "voice_len": 5.025,
+   "start": 28.072,
+   "dur": 6.325
+  },
+  {
+   "role": "customer",
+   "title": "Pay by GCash or bank",
+   "text": "The order page shows how to pay by GCash or bank transfer, with a reference number.",
+   "say": "The order page shows how to pay, by G Cash or bank transfer, with a reference number.",
+   "frames": [
+    "order-new",
+    "order-pay"
+   ],
+   "voice": "voice/05.wav",
+   "voice_len": 4.991,
+   "start": 34.397,
+   "dur": 6.291
+  },
+  {
+   "role": "customer",
+   "title": "Upload the payment screenshot",
+   "text": "They upload their payment screenshot right here. No more digging through chats.",
+   "frames": [
+    "proof-chosen",
+    "proof-sent"
+   ],
+   "voice": "voice/06.wav",
+   "voice_len": 3.93,
+   "start": 40.688,
+   "dur": 5.23
+  },
+  {
+   "role": "owner",
+   "title": "Check the payment",
+   "text": "On your side, the order waits under Check payment. Compare the screenshot, then tap Payment received.",
+   "frames": [
+    "admin-verify",
+    "admin-paid"
+   ],
+   "voice": "voice/07.wav",
+   "voice_len": 5.705,
+   "start": 45.918,
+   "dur": 7.005
+  },
+  {
+   "role": "owner",
+   "title": "Your AI store co-pilot",
+   "text": "Or just ask your store co-pilot: mark this order as packed. It prepares the change, and nothing happens until you tap Confirm.",
+   "say": "Or just ask your store co-pilot. Mark this order as packed. It prepares the change, and nothing happens until you tap, Confirm.",
+   "frames": [
+    "copilot-ask",
+    "copilot-confirm",
+    "copilot-done"
+   ],
+   "voice": "voice/08.wav",
+   "voice_len": 7.612,
+   "start": 52.923,
+   "dur": 8.912
+  },
+  {
+   "role": "owner",
+   "title": "Ship it",
+   "text": "Add the courier and tracking number, then tap Ship.",
+   "frames": [
+    "admin-ship",
+    "admin-shipped"
+   ],
+   "voice": "voice/09.wav",
+   "voice_len": 2.486,
+   "start": 61.835,
+   "dur": 4.8
+  },
+  {
+   "role": "customer",
+   "title": "Your customer stays updated",
+   "text": "Your customer sees every step on their order page, with the tracking number. No need to message you.",
+   "frames": [
+    "customer-progress"
+   ],
+   "voice": "voice/10.wav",
+   "voice_len": 5.381,
+   "start": 66.635,
+   "dur": 6.681
+  },
+  {
+   "type": "outro",
+   "text": "ShopFlow: your store, with AI that waits for your approval. Book a free consultation. Message us on Facebook, or email dandigital1688@gmail.com.",
+   "say": "Shop Flow. Your store, with AI that waits for your approval. Book a free consultation. Message us on Facebook, or email dan digital one six eight eight at gmail dot com.",
+   "voice": "voice/11.wav",
+   "voice_len": 11.158,
+   "start": 73.316,
+   "dur": 12.458
+  }
+ ]
+}

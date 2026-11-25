@@ -1,0 +1,56 @@
+{
+ "home": {
+  "src": "shots/home.png"
+ },
+ "home-2": {
+  "src": "shots/home-2.png"
+ },
+ "rooms": {
+  "src": "shots/rooms.png"
+ },
+ "room": {
+  "src": "shots/room.png"
+ },
+ "req-form": {
+  "src": "shots/req-form.png"
+ },
+ "req-send": {
+  "src": "shots/req-send.png",
+  "tap": [
+   195,
+   422
+  ]
+ },
+ "req-sent": {
+  "src": "shots/req-sent.png"
+ },
+ "admin": {
+  "src": "shots/admin.png"
+ },
+ "admin-approve": {
+  "src": "shots/admin-approve.png",
+  "tap": [
+   215,
+   697
+  ]
+ },
+ "admin-approved": {
+  "src": "shots/admin-approved.png"
+ },
+ "slip": {
+  "src": "shots/slip.png"
+ },
+ "stay-page": {
+  "src": "shots/stay-page.png"
+ },
+ "clash-send": {
+  "src": "shots/clash-send.png",
+  "tap": [
+   195,
+   522
+  ]
+ },
+ "clash-blocked": {
+  "src": "shots/clash-blocked.png"
+ }
+}

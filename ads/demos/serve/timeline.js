@@ -1,0 +1,267 @@
+window.DEMO = {
+ "app": "ServeFlow",
+ "accent": "#F59E0B",
+ "icon": "☕",
+ "audience": "For cafés & restaurants",
+ "tagline": "Online ordering with table QR codes. 0% commission.",
+ "steps": [
+  {
+   "type": "intro",
+   "text": "This is ServeFlow: online ordering for cafés and restaurants, with table QR codes and zero commission. Let's follow one order, from the table to the kitchen.",
+   "say": "This is Serve Flow. Online ordering for cafés and restaurants, with table Q R codes, and zero commission. Let's follow one order, from the table, to the kitchen.",
+   "voice": "voice/00.wav",
+   "voice_len": 10.228,
+   "start": 0.0,
+   "dur": 11.528
+  },
+  {
+   "role": "customer",
+   "title": "Scan the table QR",
+   "text": "Your customer scans the QR code on Table 5. The menu opens, with the table number already filled in.",
+   "say": "Your customer scans the Q R code on table five. The menu opens, with the table number already filled in.",
+   "frames": [
+    "menu",
+    "menu-scrolled"
+   ],
+   "voice": "voice/01.wav",
+   "voice_len": 6.635,
+   "start": 11.528,
+   "dur": 7.935
+  },
+  {
+   "type": "explain",
+   "role": "customer",
+   "title": "Your AI menu helper",
+   "text": "Not sure what to order? Customers ask the AI menu helper in their own words. It checks your live menu, suggests matching items, and they tap plus to add.",
+   "rows": [
+    {
+     "icon": "💬",
+     "who": "Customer asks",
+     "head": "In their own words",
+     "quote": "Something iced and sweet under ₱170?"
+    },
+    {
+     "icon": "🔎",
+     "who": "AI menu helper",
+     "head": "Checks your live menu",
+     "sub": "Prices, options and what's still available today."
+    },
+    {
+     "icon": "🧋",
+     "who": "AI suggests",
+     "head": "Matching items, ready to add",
+     "sub": "The customer taps + to add. It also answers questions about hours, delivery and payment."
+    }
+   ],
+   "voice": "voice/02.wav",
+   "voice_len": 9.705,
+   "start": 19.463,
+   "dur": 11.005
+  },
+  {
+   "role": "customer",
+   "title": "Make it their way",
+   "text": "They pick the size, the milk and any extras. The price updates as they go.",
+   "frames": [
+    "menu-tap",
+    "item",
+    "item-picked"
+   ],
+   "voice": "voice/03.wav",
+   "voice_len": 4.49,
+   "start": 30.468,
+   "dur": 7.2
+  },
+  {
+   "role": "customer",
+   "title": "Check out in seconds",
+   "text": "Dine-in at Table 5 is already selected. They pay by GCash, bank transfer, or at the counter.",
+   "say": "Dine-in at table five is already selected. They pay by G Cash, bank transfer, or at the counter.",
+   "frames": [
+    "checkout-top",
+    "checkout-pay"
+   ],
+   "voice": "voice/04.wav",
+   "voice_len": 5.959,
+   "start": 37.668,
+   "dur": 7.259
+  },
+  {
+   "role": "customer",
+   "title": "Send the payment screenshot",
+   "text": "For GCash, they upload the payment screenshot. Their order page updates by itself.",
+   "say": "For G Cash, they upload the payment screenshot. Their order page updates by itself.",
+   "frames": [
+    "order-new",
+    "proof-chosen",
+    "proof-sent"
+   ],
+   "voice": "voice/05.wav",
+   "voice_len": 5.031,
+   "start": 44.927,
+   "dur": 7.2
+  },
+  {
+   "role": "owner",
+   "title": "Kitchen board: verify",
+   "text": "In the kitchen, the order appears under Payments. Check the screenshot, then tap Verify payment.",
+   "frames": [
+    "k-verify"
+   ],
+   "voice": "voice/06.wav",
+   "voice_len": 5.577,
+   "start": 52.127,
+   "dur": 6.877
+  },
+  {
+   "role": "owner",
+   "title": "Preparing, then ready",
+   "text": "The order moves to Preparing. When it's done, tap Mark ready.",
+   "frames": [
+    "k-preparing",
+    "k-ready"
+   ],
+   "voice": "voice/07.wav",
+   "voice_len": 3.478,
+   "start": 59.004,
+   "dur": 4.8
+  },
+  {
+   "role": "customer",
+   "title": "Live order tracking",
+   "text": "Your customer sees it's ready, right on their phone. No more calling out order numbers.",
+   "frames": [
+    "customer-ready"
+   ],
+   "voice": "voice/08.wav",
+   "voice_len": 4.72,
+   "start": 63.804,
+   "dur": 6.02
+  },
+  {
+   "type": "explain",
+   "role": "owner",
+   "title": "Your AI kitchen co-pilot",
+   "text": "Running low? Tell the kitchen co-pilot: set ensaymada to 10 left. It prepares the change, and nothing happens until you tap Confirm.",
+   "say": "Running low? Tell the kitchen co-pilot. Set ensaymada to ten left. It prepares the change, and nothing happens until you tap, Confirm.",
+   "rows": [
+    {
+     "icon": "🧑‍🍳",
+     "who": "You ask",
+     "head": "Type it like a message",
+     "quote": "Set ensaymada to 10 left"
+    },
+    {
+     "icon": "✨",
+     "who": "Kitchen co-pilot",
+     "head": "Prepares the change",
+     "sub": "Classic Ensaymada: 24 → 10 portions left"
+    },
+    {
+     "icon": "✅",
+     "who": "You decide",
+     "head": "Nothing changes until you confirm",
+     "btn": "✓ Confirm",
+     "me": true
+    }
+   ],
+   "voice": "voice/09.wav",
+   "voice_len": 8.454,
+   "start": 69.824,
+   "dur": 9.754
+  },
+  {
+   "role": "owner",
+   "title": "QR codes for every table",
+   "text": "Print a QR code for every table, and share your store link on Facebook, Instagram and Messenger.",
+   "say": "Print a Q R code for every table, and share your store link on Facebook, Instagram, and Messenger.",
+   "frames": [
+    "qr"
+   ],
+   "voice": "voice/10.wav",
+   "voice_len": 5.836,
+   "start": 79.578,
+   "dur": 7.136
+  },
+  {
+   "type": "outro",
+   "text": "ServeFlow: online ordering, with AI that waits for your approval. Book a free consultation. Message us on Facebook, or email dandigital1688@gmail.com.",
+   "say": "Serve Flow. Online ordering, with AI that waits for your approval. Book a free consultation. Message us on Facebook, or email dan digital one six eight eight at gmail dot com.",
+   "voice": "voice/11.wav",
+   "voice_len": 11.911,
+   "start": 86.714,
+   "dur": 13.211
+  }
+ ],
+ "shots": {
+  "menu": {
+   "src": "shots/menu.png"
+  },
+  "menu-scrolled": {
+   "src": "shots/menu-scrolled.png"
+  },
+  "menu-tap": {
+   "src": "shots/menu-tap.png",
+   "tap": [
+    96,
+    422
+   ]
+  },
+  "item": {
+   "src": "shots/item.png"
+  },
+  "item-picked": {
+   "src": "shots/item-picked.png",
+   "tap": [
+    261,
+    801
+   ]
+  },
+  "checkout-top": {
+   "src": "shots/checkout-top.png"
+  },
+  "checkout-pay": {
+   "src": "shots/checkout-pay.png",
+   "tap": [
+    195,
+    780
+   ]
+  },
+  "order-new": {
+   "src": "shots/order-new.png"
+  },
+  "proof-chosen": {
+   "src": "shots/proof-chosen.png",
+   "tap": [
+    215,
+    422
+   ]
+  },
+  "proof-sent": {
+   "src": "shots/proof-sent.png"
+  },
+  "k-verify": {
+   "src": "shots/k-verify.png",
+   "tap": [
+    109,
+    644
+   ]
+  },
+  "k-preparing": {
+   "src": "shots/k-preparing.png",
+   "tap": [
+    150,
+    373
+   ]
+  },
+  "k-ready": {
+   "src": "shots/k-ready.png"
+  },
+  "customer-ready": {
+   "src": "shots/customer-ready.png"
+  },
+  "qr": {
+   "src": "shots/qr.png"
+  }
+ }
+};

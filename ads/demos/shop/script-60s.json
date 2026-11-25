@@ -1,0 +1,77 @@
+{
+  "app": "ShopFlow",
+  "accent": "#10B981",
+  "icon": "🛍️",
+  "audience": "For shops & small businesses",
+  "tagline": "Your own online store, with an AI shop assistant.",
+  "steps": [
+    {
+      "type": "intro",
+      "text": "ShopFlow: your own online store, with an AI shop assistant. Here's one order, start to finish.",
+      "say": "Shop Flow. Your own online store, with an AI shop assistant. Here's one order, start to finish."
+    },
+    {
+      "role": "customer",
+      "title": "Ask the AI shop assistant",
+      "text": "Customers ask the AI shop assistant. It checks your real stock and prepares the cart.",
+      "frames": [
+        "chat-ask",
+        "chat-answer",
+        "chat-cart"
+      ]
+    },
+    {
+      "role": "customer",
+      "title": "Check out & pay",
+      "text": "They check out, then pay by GCash or bank transfer, or cash on delivery.",
+      "say": "They check out, then pay by G Cash or bank transfer, or cash on delivery.",
+      "frames": [
+        "checkout-filled",
+        "order-pay"
+      ]
+    },
+    {
+      "role": "customer",
+      "title": "Upload the payment screenshot",
+      "text": "Then they upload the payment screenshot.",
+      "frames": [
+        "proof-chosen",
+        "proof-sent"
+      ]
+    },
+    {
+      "role": "owner",
+      "title": "Check the payment",
+      "text": "You compare it, and tap Payment received.",
+      "frames": [
+        "admin-verify",
+        "admin-paid"
+      ]
+    },
+    {
+      "role": "owner",
+      "title": "Your AI store co-pilot",
+      "text": "Your co-pilot prepares changes like \"mark as packed\". Nothing happens until you tap Confirm.",
+      "say": "Your co-pilot prepares changes, like, mark as packed. Nothing happens until you tap, Confirm.",
+      "frames": [
+        "copilot-ask",
+        "copilot-confirm",
+        "copilot-done"
+      ]
+    },
+    {
+      "role": "customer",
+      "title": "Ship & track",
+      "text": "Add the tracking number, and your customer follows every step.",
+      "frames": [
+        "admin-ship",
+        "customer-progress"
+      ]
+    },
+    {
+      "type": "outro",
+      "text": "ShopFlow: your store, with AI that waits for your approval. Book a free consultation. Message us on Facebook, or email dandigital1688@gmail.com.",
+      "say": "Shop Flow. Book a free consultation. Message us on Facebook, or email dan digital one six eight eight at gmail dot com."
+    }
+  ]
+}

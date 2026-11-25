@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>LlanesLab · product demo</title>
+<!--
+  Generic product-demo player. demo.html?app=shop loads shop/timeline.js (written by build.py),
+  which sets window.DEMO = { ...script.json, shots, steps[i].start/dur }.
+  Every frame is a pure function of time: seek(t). Add &render=1 for frame-by-frame rendering.
+-->
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; background: #04060F; }
+  #stage { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: Inter, sans-serif; color: #E5ECF8;
+    background:
+      radial-gradient(ellipse 70% 40% at 10% 8%, rgba(37,99,235,.45), rgba(37,99,235,.12) 50%, transparent 75%),
+      radial-gradient(ellipse 65% 38% at 95% 34%, rgba(124,58,237,.38), rgba(124,58,237,.10) 50%, transparent 76%),
+      radial-gradient(ellipse 55% 30% at 80% 80%, rgba(219,39,119,.22), transparent 72%),
+      radial-gradient(ellipse 60% 32% at 0% 96%, rgba(20,184,166,.28), transparent 72%),
+      #04060F; }
+  .abs { position: absolute; }
+  .stars { position: absolute; inset: 0; }
+  .s1 { opacity: .5; background-size: 320px 320px; background-image:
+    radial-gradient(1.2px 1.2px at 22px 34px, #fff, transparent), radial-gradient(1px 1px at 148px 86px, #C8D7FF, transparent),
+    radial-gradient(1.6px 1.6px at 266px 172px, #fff, transparent), radial-gradient(1px 1px at 94px 226px, #FFECD6, transparent),
+    radial-gradient(1.2px 1.2px at 206px 288px, #fff, transparent), radial-gradient(1px 1px at 300px 20px, #C8D7FF, transparent); }
+  .s2 { background-size: 510px 510px; background-image:
+    radial-gradient(2px 2px at 60px 140px, #fff, transparent), radial-gradient(1.4px 1.4px at 330px 60px, #BFD4FF, transparent),
+    radial-gradient(2.2px 2.2px at 420px 360px, #fff, transparent); }
+  .display { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; letter-spacing: -.035em; line-height: 1.04; color: #fff; }
+  .mono { font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: .18em; }
+
+  #brand { left: 60px; top: 70px; display: flex; align-items: center; gap: 14px; }
+  #brand img { width: 54px; height: 54px; filter: drop-shadow(0 0 12px rgba(56,189,248,.5)); }
+  #brand b { font: 800 30px/1 'Plus Jakarta Sans'; color: #fff; letter-spacing: -.02em; }
+  #apppill { right: 60px; top: 80px; padding: 10px 18px; border-radius: 999px; font: 700 17px/1 'JetBrains Mono'; letter-spacing: .16em; text-transform: uppercase;
+    background: #0B1024; border: 1.5px solid var(--acc); color: var(--acc); box-shadow: 0 0 24px color-mix(in srgb, var(--acc) 35%, transparent); }
+  #bar { left: 0; top: 0; height: 6px; background: linear-gradient(90deg, #3B82F6, var(--acc)); }
+
+  /* step header */
+  .hdr { left: 70px; right: 70px; top: 175px; text-align: center; }
+  .hdr .k { font: 700 20px/1 'JetBrains Mono'; letter-spacing: .2em; text-transform: uppercase; display: inline-flex; align-items: center; gap: 12px;
+    padding: 10px 18px; border-radius: 999px; }
+  .hdr .k.customer { color: #7DD3FC; background: rgba(56,189,248,.12); border: 1px solid rgba(56,189,248,.35); }
+  .hdr .k.owner { color: #FCD34D; background: rgba(251,191,36,.12); border: 1px solid rgba(251,191,36,.35); }
+  .hdr h2 { font-size: 70px; margin-top: 22px; }
+
+  /* phone */
+  #phone { position: absolute; left: 50%; top: 395px; width: 560px; height: 1179px; margin-left: -280px; border-radius: 64px; background: #000;
+    border: 14px solid #121B2E; box-shadow: 0 60px 140px -30px rgba(0,0,0,.9), 0 0 0 2px #1E2B45, 0 0 90px color-mix(in srgb, var(--acc) 22%, transparent); overflow: hidden; }
+  #phone .notch { position: absolute; left: 50%; top: 10px; width: 120px; height: 30px; margin-left: -60px; border-radius: 20px; background: #000; z-index: 5; }
+  #screens { position: absolute; inset: 0; overflow: hidden; border-radius: 50px; }
+  #screens img { position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; will-change: transform, opacity; }
+  #tap { position: absolute; width: 84px; height: 84px; margin: -42px 0 0 -42px; border-radius: 50%; border: 4px solid #fff; background: rgba(255,255,255,.25);
+    box-shadow: 0 0 0 6px rgba(0,0,0,.18), 0 0 30px rgba(255,255,255,.6); z-index: 6; pointer-events: none; }
+  #role { left: 50%; top: 340px; transform: translateX(-50%); display: none; }
+
+  /* subtitles */
+  #sub { left: 60px; right: 60px; top: 1598px; text-align: center; }
+  #sub span { display: inline; padding: 6px 14px; line-height: 1.75; font: 600 34px/1.75 Inter; color: #F1F5F9; background: rgba(6,10,20,.82);
+    -webkit-box-decoration-break: clone; box-decoration-break: clone; border-radius: 10px; }
+
+  .hdr .k.ai { color: #C4B5FD; background: rgba(139,92,246,.14); border: 1px solid rgba(167,139,250,.45); }
+  /* "How the AI works" scene: an explainer, not a screen recording */
+  .ex { position: absolute; left: 90px; right: 90px; top: 430px; }
+  .ex .row { position: relative; display: flex; gap: 30px; align-items: flex-start; padding: 30px 34px; border-radius: 30px; background: rgba(12,19,34,.92);
+    border: 1.5px solid #24345A; box-shadow: 0 30px 70px -30px rgba(0,0,0,.9); margin-bottom: 44px; }
+  .ex .row.me { border-color: rgba(16,185,129,.6); box-shadow: 0 30px 70px -30px rgba(0,0,0,.9), 0 0 50px rgba(16,185,129,.18); }
+  .ex .row:not(:last-child)::after { content: ''; position: absolute; left: 77px; bottom: -46px; width: 4px; height: 48px;
+    background: linear-gradient(#3B82F6, #A78BFA); border-radius: 2px; }
+  .ex .ico { flex: none; width: 88px; height: 88px; border-radius: 26px; display: grid; place-items: center; font-size: 46px; background: #121B2E; border: 1px solid #2A3A5E; }
+  .ex .who { font: 700 18px/1 'JetBrains Mono'; letter-spacing: .16em; text-transform: uppercase; color: #93C5FD; }
+  .ex .row.me .who { color: #34D399; }
+  .ex h3 { font: 800 38px/1.18 'Plus Jakarta Sans'; color: #fff; letter-spacing: -.02em; margin-top: 10px; }
+  .ex p { font: 500 28px/1.38 Inter; color: #AEB9CC; margin-top: 8px; }
+  .ex .q { display: inline-block; margin-top: 12px; padding: 12px 20px; border-radius: 20px 20px 20px 6px; background: #F1F5F9; color: #0F172A; font: 600 27px/1.3 Inter; }
+  .ex .btn { display: inline-block; margin-top: 14px; padding: 12px 24px; border-radius: 14px; background: #10B981; color: #03150E; font: 800 26px/1 Inter; }
+  /* dots */
+  #dots { left: 0; right: 0; top: 1835px; display: flex; justify-content: center; gap: 10px; }
+  #dots i { width: 12px; height: 12px; border-radius: 50%; background: #1E2B45; }
+  #dots i.on { background: var(--acc); box-shadow: 0 0 10px var(--acc); width: 34px; border-radius: 8px; }
+  #dots i.done { background: #3B4A6B; }
+
+  /* intro / outro */
+  .card { position: absolute; left: 0; right: 0; text-align: center; }
+  .icon { width: 190px; height: 190px; border-radius: 52px; margin: 0 auto; display: grid; place-items: center; font-size: 104px;
+    background: color-mix(in srgb, var(--acc) 16%, #0C1322); border: 2px solid color-mix(in srgb, var(--acc) 55%, transparent);
+    box-shadow: 0 0 80px color-mix(in srgb, var(--acc) 35%, transparent); }
+  .aud { display: inline-block; margin-top: 46px; font: 700 22px/1 'JetBrains Mono'; letter-spacing: .2em; text-transform: uppercase; color: var(--acc); }
+  .bigname { font-size: 150px; margin-top: 22px; }
+  .tag { font: 600 44px/1.3 Inter; color: #C3CBD9; margin: 26px auto 0; max-width: 860px; }
+  .demo-pill { display: inline-block; margin-top: 50px; padding: 16px 30px; border-radius: 999px; font: 700 24px/1 'JetBrains Mono'; letter-spacing: .2em;
+    text-transform: uppercase; color: #E0E7FF; border: 1.5px solid #3B4A7B; background: rgba(12,19,34,.8); }
+  #cta-btn { display: inline-flex; padding: 30px 54px; border-radius: 999px; background: #2563EB; color: #fff; font: 800 46px/1 'Plus Jakarta Sans';
+    letter-spacing: -.02em; box-shadow: 0 20px 60px -10px rgba(37,99,235,.7); margin-top: 60px; }
+  .contact { display: flex; justify-content: center; align-items: center; gap: 18px; font: 600 38px/1 Inter; color: #E5ECF8; margin-top: 44px; }
+  .contact b { color: #93C5FD; }
+  .contact .cic { width: 62px; height: 62px; border-radius: 50%; display: grid; place-items: center; color: #fff; font: 800 36px/1 'Plus Jakarta Sans'; }
+
+  /* ---------- landscape layout (demo.html?layout=landscape): text left, phone right ---------- */
+  html.land, html.land body, html.land #stage { width: 1920px; height: 1080px; }
+  html.land #brand { left: 80px; top: 50px; }
+  html.land #apppill { right: 80px; top: 60px; }
+  html.land .hdr { left: 120px; right: auto; width: 880px; top: 230px; text-align: left; }
+  html.land .hdr h2 { font-size: 80px; }
+  html.land #sub { left: 120px; right: auto; width: 860px; top: 580px; text-align: left; }
+  html.land #sub span { font-size: 38px; }
+  html.land #dots { left: 120px; right: auto; top: 920px; justify-content: flex-start; }
+  html.land #phone { left: 1400px; top: 100px; width: 420px; height: 876px; margin-left: -210px; border-radius: 54px; border-width: 12px; }
+  html.land #screens { border-radius: 42px; }
+  html.land .ex { left: 1000px; right: 110px; top: 150px; }
+  html.land .ex .row { margin-bottom: 36px; padding: 24px 30px; }
+  html.land .ex .row:not(:last-child)::after { bottom: -38px; height: 40px; left: 73px; }
+  html.land .ex h3 { font-size: 34px; }
+  html.land .ex p { font-size: 25px; }
+  html.land #intro { top: 190px !important; }
+  html.land #outro { top: 90px !important; }
+  html.land .bigname { font-size: 130px; }
+  html.land #outro .bigname { font-size: 104px !important; }
+  html.land #outro .icon { width: 150px; height: 150px; font-size: 80px; border-radius: 42px; }
+  html.land #cta-btn { margin-top: 40px; }
+  html.land .contact { margin-top: 30px; }
+</style>
+</head>
+<body>
+<script>if (new URLSearchParams(location.search).get('layout') === 'landscape') document.documentElement.classList.add('land');</script>
+<div id="stage">
+  <div class="stars s1"></div><div class="stars s2" id="tw"></div>
+  <div id="bar" class="abs"></div>
+  <div id="brand" class="abs"><img src="../../assets/logo/llaneslab-logo.svg" alt=""><b>LlanesLab</b></div>
+  <div id="apppill" class="abs"></div>
+
+  <div id="hdrA" class="abs hdr"><span class="k"></span><h2 class="display"></h2></div>
+  <div id="hdrB" class="abs hdr"><span class="k"></span><h2 class="display"></h2></div>
+
+  <div id="phone"><div class="notch"></div><div id="screens"></div><div id="tap"></div></div>
+
+  <div id="explain"></div>
+  <div id="sub" class="abs"><span></span></div>
+  <div id="dots" class="abs"></div>
+
+  <div id="intro" class="card" style="top:470px">
+    <div class="icon" id="i-icon"></div>
+    <div class="aud" id="i-aud"></div>
+    <div class="display bigname" id="i-name"></div>
+    <div class="tag" id="i-tag"></div>
+    <div class="demo-pill">Product demo · How it works</div>
+  </div>
+
+  <div id="outro" class="card" style="top:380px">
+    <div class="icon" id="o-icon"></div>
+    <div class="display bigname" id="o-name" style="font-size:120px"></div>
+    <div class="tag">AI that waits for your approval.<br>No tech team needed.</div>
+    <div id="o-cta"><span id="cta-btn">Book a free consultation →</span></div>
+    <div class="contact" id="o-fb"><span class="cic" style="background:#1877F2">f</span><span>Message us on Facebook <b>· LlanesLab</b></span></div>
+    <div class="contact" id="o-mail" style="margin-top:30px"><span class="cic" style="background:#10B981">✉</span><span>Email <b>dandigital1688@gmail.com</b></span></div>
+  </div>
+</div>
+
+<script>
+const params = new URLSearchParams(location.search);
+const APP = params.get('app') || 'shop';
+document.write(`<script src="${APP}/${params.get('tl') || 'timeline.js'}"><\/script>`);
+</script>
+<script>
+const D = window.DEMO;
+const $ = s => document.querySelector(s);
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const easeOut = x => 1 - Math.pow(1 - x, 3);
+const easeIO = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+const back = x => { const c = 1.5; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };
+
+document.documentElement.style.setProperty('--acc', D.accent);
+document.title = `LlanesLab · ${D.app} demo`;
+$('#apppill').textContent = `${D.app} · demo`;
+$('#i-icon').textContent = $('#o-icon').textContent = D.icon;
+$('#i-aud').textContent = D.audience; $('#i-name').textContent = D.app; $('#o-name').textContent = D.app; $('#i-tag').textContent = D.tagline;
+
+const S = D.steps;
+const DUR = S[S.length - 1].start + S[S.length - 1].dur;
+const appSteps = S.filter(s => s.type !== 'intro' && s.type !== 'outro');
+const frameSteps = S.filter(s => !s.type);
+const exSteps = S.filter(s => s.type === 'explain');
+exSteps.forEach(s => {
+  const el = document.createElement('div'); el.className = 'ex';
+  el.innerHTML = s.rows.map(r => `<div class="row${r.me ? ' me' : ''}"><div class="ico">${r.icon}</div><div><div class="who">${r.who}</div><h3>${r.head}</h3>${r.sub ? `<p>${r.sub}</p>` : ''}${r.quote ? `<span class="q">${r.quote}</span>` : ''}${r.btn ? `<br><span class="btn">${r.btn}</span>` : ''}</div></div>`).join('');
+  $('#explain').appendChild(el); s.el = el;
+});
+const exVis = (t, s) => Math.min(easeOut(prog(t, s.start - .1, s.start + .45)), 1 - easeIO(prog(t, s.start + s.dur - .4, s.start + s.dur + .05)));
+appSteps.forEach(() => $('#dots').appendChild(document.createElement('i')));
+
+/* frame slots: each app step's frames split its time evenly */
+const SLOTS = [];
+S.forEach((s, si) => {
+  if (s.type) return;
+  const n = s.frames.length, d = s.dur / n;
+  s.frames.forEach((f, k) => {
+    const shot = D.shots[f];
+    const img = document.createElement('img'); img.src = `${APP}/${shot.src}`;
+    $('#screens').appendChild(img);
+    SLOTS.push({ si, start: s.start + k * d, end: s.start + (k + 1) * d, tap: shot.tap, img, first: k === 0 });
+  });
+});
+const SCALE = document.getElementById('screens').clientWidth / 390;   // CSS px of the app -> px on the phone screen
+
+function stepAt(t) { let i = 0; S.forEach((s, k) => { if (t >= s.start) i = k; }); return i; }
+
+let shownHdr = { A: -1, B: -1 };
+function fillHdr(el, s) {
+  const k = el.querySelector('.k'), idx = appSteps.indexOf(s) + 1;
+  k.className = 'k ' + (s.type === 'explain' ? 'ai' : s.role);
+  k.textContent = s.type === 'explain' ? `✨ How the AI works · Step ${idx} of ${appSteps.length}` : `${s.role === 'owner' ? 'Owner' : 'Customer'} · Step ${idx} of ${appSteps.length}`;
+  el.querySelector('h2').textContent = s.title;
+}
+
+function seek(t) {
+  $('#tw').style.opacity = .35 + .35 * Math.sin(t * .9);
+  $('#bar').style.width = (t / DUR * 100) + '%';
+  const si = stepAt(t), s = S[si], u = t - s.start;
+
+  /* header: crossfade between two slots so text changes cleanly */
+  const isApp = s.type !== 'intro' && s.type !== 'outro';
+  const slot = si % 2 ? 'B' : 'A', other = slot === 'A' ? 'B' : 'A';
+  const elIn = $('#hdr' + slot), elOut = $('#hdr' + other);
+  if (isApp && shownHdr[slot] !== si) { fillHdr(elIn, s); shownHdr[slot] = si; }
+  const hin = isApp ? easeOut(prog(u, 0, .45)) * (1 - easeIO(prog(u, s.dur - .3, s.dur))) : 0;
+  elIn.style.opacity = hin; elIn.style.transform = `translateY(${(1 - hin) * 24}px)`;
+  elOut.style.opacity = 0;
+
+  /* phone visibility */
+  const firstApp = frameSteps[0], lastApp = frameSteps[frameSteps.length - 1];
+  const pin = easeOut(prog(t, firstApp.start - .2, firstApp.start + .6));
+  const pout = 1 - easeIO(prog(t, lastApp.start + lastApp.dur - .4, lastApp.start + lastApp.dur + .2));
+  const ev = exSteps.reduce((m, e) => Math.max(m, exVis(t, e)), 0);
+  const pv = Math.min(pin, pout) * (1 - ev);
+  exSteps.forEach(e => { const v = exVis(t, e); e.el.style.opacity = v; e.el.style.visibility = v > 0 ? 'visible' : 'hidden';
+    const rows = [...e.el.children], n = rows.length, u2 = t - e.start;
+    rows.forEach((r, k) => { const at = .45 + k * Math.max(.9, (e.dur - 1.6) / n); const rv = clamp(back(prog(u2, at, at + .55)));
+      r.style.opacity = rv; r.style.transform = `translateY(${(1 - rv) * 40}px) scale(${.96 + .04 * rv})`; }); });
+  const ph = $('#phone'); ph.style.opacity = pv; ph.style.transform = `translateY(${(1 - pv) * 220 + Math.sin(t * 1.1) * 5}px)`;
+
+  /* screens */
+  let j = -1; SLOTS.forEach((sl, k) => { if (t >= sl.start) j = k; });
+  SLOTS.forEach((sl, k) => {
+    let o = 0, tr = '';
+    if (k === j) { const p = easeIO(prog(t, sl.start, sl.start + .45)); o = 1; tr = k === 0 ? '' : (sl.first ? `translateX(${(1 - p) * 100}%)` : `translateY(${(1 - p) * 100}%)`); }
+    else if (k === j - 1) { const nx = SLOTS[j], p = easeIO(prog(t, nx.start, nx.start + .45)); o = p < 1 ? 1 : 0; tr = nx.first ? `translateX(${-p * 35}%)` : `translateY(${-p * 25}%)`; sl.img.style.filter = `brightness(${1 - p * .5})`; }
+    sl.img.style.opacity = o; sl.img.style.transform = tr; if (k === j) sl.img.style.filter = '';
+    sl.img.style.zIndex = k === j ? 2 : 1;
+  });
+
+  /* tap: just before the slot ends */
+  const tap = $('#tap'); const cur = SLOTS[j];
+  if (cur && cur.tap) {
+    const tt = cur.end - .75, tp = prog(t, tt, tt + .6);
+    if (tp > 0 && tp < 1) { tap.style.display = 'block'; tap.style.left = cur.tap[0] * SCALE + 'px'; tap.style.top = cur.tap[1] * SCALE + 'px';
+      tap.style.opacity = Math.sin(tp * Math.PI); tap.style.transform = `scale(${.55 + tp * .75})`; } else tap.style.display = 'none';
+  } else tap.style.display = 'none';
+
+  /* subtitles */
+  const sub = $('#sub'), sv = isApp ? easeOut(prog(u, .25, .6)) * (1 - easeIO(prog(u, s.dur - .3, s.dur))) : 0;
+  if (sub.dataset.si != si) { sub.querySelector('span').textContent = s.text; sub.dataset.si = si; }
+  sub.style.opacity = sv;
+
+  /* dots */
+  const ai = appSteps.indexOf(s);
+  [...$('#dots').children].forEach((d, k) => d.className = k === ai ? 'on' : (k < ai ? 'done' : ''));
+  $('#dots').style.opacity = Math.max(pv, ev);
+
+  /* intro */
+  const intro = $('#intro'), first = S[0];
+  const iv = first.type === 'intro' ? Math.min(easeOut(prog(t, .1, .8)), 1 - easeIO(prog(t, first.dur - .5, first.dur))) : 0;
+  intro.style.opacity = iv; intro.style.transform = `translateY(${(1 - iv) * 40}px)`; intro.style.visibility = iv > 0 ? 'visible' : 'hidden';
+  $('#i-icon').style.transform = `scale(${.85 + .15 * clamp(back(prog(t, .1, .7)))}) rotate(${Math.sin(t * 1.5) * 3}deg)`;
+
+  /* outro */
+  const last = S[S.length - 1], ov = last.type === 'outro' ? easeOut(prog(t, last.start, last.start + .6)) : 0;
+  const outro = $('#outro'); outro.style.opacity = ov; outro.style.visibility = ov > 0 ? 'visible' : 'hidden';
+  outro.style.transform = `translateY(${(1 - ov) * 40}px)`;
+  const ou = t - last.start;
+  [['#o-cta', 1.2], ['#o-fb', last.dur * .5], ['#o-mail', last.dur * .5 + .5]].forEach(([id, at]) => {
+    const v = clamp(back(prog(ou, at, at + .5))); const el = $(id); el.style.opacity = v; el.style.transform = `translateY(${(1 - v) * 24}px)`; });
+  $('#cta-btn').style.boxShadow = `0 20px 60px -10px rgba(37,99,235,.7), 0 0 ${20 + 30 * Math.abs(Math.sin(t * 2.2))}px rgba(56,189,248,.5)`;
+}
+window.seek = seek; window.DUR = DUR;
+if (!params.has('render')) { const t0 = performance.now(); (function loop() { seek(((performance.now() - t0) / 1000) % DUR); requestAnimationFrame(loop); })(); }
+else seek(0);
+</script>
+</body>
+</html>
