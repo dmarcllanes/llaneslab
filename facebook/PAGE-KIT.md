@@ -93,25 +93,27 @@ The cover keeps all text in the centre 60%. Facebook crops the sides on mobile, 
 
 ## 3. Pinned post (post first, then pin it)
 
-Image: `post-1-welcome.png`
+Image: `post-1-welcome.png`. Facebook doesn't render **bold**, so the caption is plain text.
 
 > 👋 Welcome to LlanesLab.
 >
 > Most small businesses don't need a big IT project. They need one tool that gives them back a few hours every week.
 >
-> That's what I build: custom AI assistants and simple apps that fit the way you already work.
+> That's what I build: custom AI assistants and simple apps that fit the way you already work. I help local businesses adopt AI and go digital, one small, useful step at a time.
 >
-> 💬 **Customer messages:** answer the same questions 24/7, and approve anything important
-> 📅 **Bookings & appointments:** one calendar, automatic reminders, no double bookings
-> 📦 **Sales, stock & records:** log by voice, see clean daily reports
+> 💬 Customer messages: answer the same questions 24/7, and approve anything important
+> 📅 Bookings & appointments: one calendar, automatic reminders, no double bookings
+> 📦 Sales, stock & records: log by voice, see clean daily reports
 >
 > Whether you run a shop, café, salon, rental or clinic, it starts with one small, useful tool.
 >
-> My one rule: **the AI prepares, you decide.** Nothing is sent or saved until you approve it.
+> My one rule: the AI prepares, you decide. Nothing is sent or saved until you approve it.
 >
 > I'm Dan, and I build every project myself. Message me for a free consultation (no cost, no obligation), or visit danmarcllanes.vercel.app
 >
-> #AIforSmallBusiness #DigitalTransformation #SmallBusiness #LlanesLab
+> 🌍 Based in Taguig City, Philippines. Available worldwide & remote.
+>
+> #AIAdoption #AIforSmallBusiness #DigitalTransformation #SmallBusiness #LlanesLab
 
 ---
 
