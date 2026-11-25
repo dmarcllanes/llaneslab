@@ -93,6 +93,49 @@
       radial-gradient(1.6px 1.6px at 60px 140px, #fff, transparent), radial-gradient(1.2px 1.2px at 330px 60px, #BFD4FF, transparent),
       radial-gradient(1.8px 1.8px at 420px 360px, #fff, transparent), radial-gradient(1.2px 1.2px at 180px 450px, #FFE9D0, transparent); }
     @keyframes twinkle { from { opacity: .2; } to { opacity: .75; } }
+    /* ---------- Celestial objects: planets, asteroids, comet, starship ----------
+       Inline SVG inside .space. Transform/opacity animations only. Planets sit at the
+       screen edges; the ship is small and passes now and then. Hidden or static for
+       reduced motion. */
+    .celestial { position: absolute; inset: 0; will-change: transform; }
+    .planet { position: absolute; will-change: transform; }
+    .planet.p-ring { right: -70px; bottom: 6vh; width: 260px; opacity: .85; animation: pfloat 16s ease-in-out infinite alternate; }
+    .planet.p-moon { left: 4vw; top: 20vh; width: 58px; opacity: .8; animation: pfloat 11s ease-in-out infinite alternate-reverse; }
+    .planet.p-far  { right: 16vw; top: 15vh; width: 20px; opacity: .85; animation: pfloat 9s ease-in-out infinite alternate; }
+    @keyframes pfloat { from { transform: translate3d(0, -8px, 0) rotate(-2deg); } to { transform: translate3d(0, 10px, 0) rotate(2deg); } }
+    .ast { position: absolute; left: 0; will-change: transform; animation: astdrift linear infinite; opacity: .65; }
+    @keyframes astdrift { from { transform: translate3d(-8vw, 0, 0) rotate(0deg); } to { transform: translate3d(108vw, -6vh, 0) rotate(540deg); } }
+    .comet { position: absolute; left: 0; top: 0; width: 160px; height: 2px; border-radius: 2px; opacity: 0; will-change: transform, opacity;
+      background: linear-gradient(90deg, #fff, rgba(196,181,253,.8) 12%, rgba(56,189,248,.35) 45%, transparent);
+      box-shadow: 0 0 8px rgba(196,181,253,.6); animation: comet 23s ease-in 6s infinite; }
+    @keyframes comet {
+      0%   { transform: translate3d(102vw, 6vh, 0) rotate(-16deg); opacity: 0; }
+      1.5% { opacity: 1; }
+      9%   { opacity: .9; }
+      12%  { transform: translate3d(42vw, 36vh, 0) rotate(-16deg); opacity: 0; }
+      100% { transform: translate3d(42vw, 36vh, 0) rotate(-16deg); opacity: 0; } }
+    .ship { position: absolute; left: 0; top: 0; width: 96px; will-change: transform; transform: translate3d(-20vw, 70vh, 0);
+      filter: drop-shadow(0 0 10px rgba(56,189,248,.45)); animation: fly 40s linear 3s infinite; }
+    @keyframes fly {
+      0%   { transform: translate3d(-14vw, 74vh, 0) rotate(-12deg); }
+      40%  { transform: translate3d(112vw, 22vh, 0) rotate(-12deg); }
+      100% { transform: translate3d(112vw, 22vh, 0) rotate(-12deg); } }
+    .ship .flame { transform-origin: 100% 50%; animation: flame .12s ease-in-out infinite alternate; }
+    @keyframes flame { from { transform: scaleX(.85); opacity: .8; } to { transform: scaleX(1.1); opacity: 1; } }
+    .ship .nav-l { animation: blink 1.4s steps(1) infinite; }
+    .ship .nav-r { animation: blink 1.4s steps(1) .7s infinite; }
+    @keyframes blink { 50% { opacity: .15; } }
+    @media (max-width: 767px) {
+      .planet.p-ring { width: 140px; right: -64px; bottom: 12vh; opacity: .5; }
+      .planet.p-moon { display: none; }
+      .ship { width: 64px; }
+      @keyframes fly {
+        0%   { transform: translate3d(-24vw, 62vh, 0) rotate(-17deg); }
+        40%  { transform: translate3d(118vw, 40vh, 0) rotate(-17deg); }
+        100% { transform: translate3d(118vw, 40vh, 0) rotate(-17deg); } }
+      .ast.ast-x { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) { .ship, .comet { display: none; } }
     /* Thin glowing divider at the top of each main section */
     main > section + section::before { content: ''; display: block; height: 1px; margin: -2rem auto 3rem; max-width: 72rem;
       background: linear-gradient(90deg, transparent, rgba(96,165,250,.35), transparent); }
@@ -307,7 +350,27 @@
     </nav>
   </header>
 
-  <div class="space" aria-hidden="true"><div class="neb-wrap"><div class="neb n1"></div><div class="neb n2"></div><div class="neb n3"></div><div class="neb n4"></div><div class="neb n5"></div></div><div class="stars s1"></div><div class="stars s2"></div></div>
+  <div class="space" aria-hidden="true"><div class="neb-wrap"><div class="neb n1"></div><div class="neb n2"></div><div class="neb n3"></div><div class="neb n4"></div><div class="neb n5"></div></div><div class="stars s1"></div><div class="stars s2"></div><div class="celestial"><svg class="planet p-far" viewBox="0 0 20 20" aria-hidden="true"><defs><radialGradient id="pf-body" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#FED7AA"/><stop offset=".5" stop-color="#F97316"/><stop offset="1" stop-color="#431407"/></radialGradient></defs><circle cx="10" cy="10" r="9" fill="url(#pf-body)"/></svg><svg class="planet p-moon" viewBox="0 0 60 60" aria-hidden="true"><defs>
+<radialGradient id="pm-body" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#A7F3D0"/><stop offset=".45" stop-color="#14B8A6"/><stop offset="1" stop-color="#0B2A3A"/></radialGradient></defs>
+<circle cx="30" cy="30" r="28" fill="url(#pm-body)"/><circle cx="22" cy="24" r="5" fill="#0F766E" opacity=".45"/><circle cx="38" cy="36" r="7" fill="#0F766E" opacity=".35"/><circle cx="34" cy="17" r="3" fill="#0F766E" opacity=".4"/>
+<circle cx="30" cy="30" r="28" fill="none" stroke="#5EEAD4" stroke-opacity=".35"/></svg><svg class="planet p-ring" viewBox="0 0 260 260" aria-hidden="true"><defs>
+<radialGradient id="pr-body" cx="38%" cy="32%" r="70%"><stop offset="0" stop-color="#F5D0FE"/><stop offset=".35" stop-color="#C026D3"/><stop offset=".75" stop-color="#6D28D9"/><stop offset="1" stop-color="#1E1048"/></radialGradient>
+<radialGradient id="pr-shade" cx="80%" cy="80%" r="75%"><stop offset=".35" stop-color="#04060F" stop-opacity="0"/><stop offset="1" stop-color="#04060F" stop-opacity=".85"/></radialGradient>
+<linearGradient id="pr-ring" x1="0" x2="1"><stop offset="0" stop-color="#38BDF8" stop-opacity=".1"/><stop offset=".5" stop-color="#E9D5FF" stop-opacity=".85"/><stop offset="1" stop-color="#F472B6" stop-opacity=".15"/></linearGradient>
+<clipPath id="pr-front"><rect x="0" y="130" width="260" height="130"/></clipPath></defs>
+<g transform="rotate(-18 130 130)"><ellipse cx="130" cy="130" rx="124" ry="30" fill="none" stroke="url(#pr-ring)" stroke-width="7"/>
+<circle cx="130" cy="130" r="74" fill="url(#pr-body)"/><path d="M60 112 Q130 98 200 112" stroke="#F0ABFC" stroke-opacity=".25" stroke-width="6" fill="none"/><path d="M58 140 Q130 128 202 140" stroke="#312E81" stroke-opacity=".35" stroke-width="9" fill="none"/>
+<circle cx="130" cy="130" r="74" fill="url(#pr-shade)"/>
+<ellipse cx="130" cy="130" rx="124" ry="30" fill="none" stroke="url(#pr-ring)" stroke-width="7" clip-path="url(#pr-front)"/></g></svg></div><svg class="ast" style="top:12vh;width:14px;animation-duration:140s;animation-delay:-30s" viewBox="0 0 20 20" aria-hidden="true"><polygon points="3,8 8,2 15,4 18,10 14,17 6,16" fill="#475569" stroke="#94A3B8" stroke-opacity=".35"/></svg><svg class="ast" style="top:58vh;width:9px;animation-duration:110s;animation-delay:-70s" viewBox="0 0 20 20" aria-hidden="true"><polygon points="2,9 7,3 14,5 17,12 11,17 4,15" fill="#334155" stroke="#94A3B8" stroke-opacity=".35"/></svg><svg class="ast" style="top:84vh;width:18px;animation-duration:170s;animation-delay:-120s" viewBox="0 0 20 20" aria-hidden="true"><polygon points="4,6 10,2 17,6 18,13 12,18 5,15" fill="#3F3F5A" stroke="#94A3B8" stroke-opacity=".35"/></svg><svg class="ast ast-x" style="top:34vh;width:7px;animation-duration:95s;animation-delay:-10s" viewBox="0 0 20 20" aria-hidden="true"><polygon points="3,7 9,2 16,6 15,14 8,17 2,13" fill="#475569" stroke="#94A3B8" stroke-opacity=".35"/></svg><svg class="ast ast-x" style="top:72vh;width:11px;animation-duration:125s;animation-delay:-55s" viewBox="0 0 20 20" aria-hidden="true"><polygon points="2,10 6,3 13,2 18,9 13,17 6,16" fill="#3B3B55" stroke="#94A3B8" stroke-opacity=".35"/></svg><div class="comet"></div><svg class="ship" viewBox="0 0 130 50" aria-hidden="true"><defs>
+<linearGradient id="sh-hull" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E2E8F0"/><stop offset=".55" stop-color="#94A3B8"/><stop offset="1" stop-color="#475569"/></linearGradient>
+<linearGradient id="sh-flame" x1="1" x2="0"><stop offset="0" stop-color="#E0F2FE"/><stop offset=".3" stop-color="#38BDF8"/><stop offset=".7" stop-color="#8B5CF6" stop-opacity=".5"/><stop offset="1" stop-color="#8B5CF6" stop-opacity="0"/></linearGradient></defs>
+<path class="flame" d="M0 25 Q14 19 32 21 L32 29 Q14 31 0 25Z" fill="url(#sh-flame)"/>
+<path d="M56 18 L44 3 L72 16Z" fill="#64748B"/><path d="M54 32 L38 47 L74 34Z" fill="#475569"/>
+<rect x="29" y="19.5" width="8" height="11" rx="2.5" fill="#334155"/>
+<path d="M34 25 C46 14 86 12 120 22 Q127 25 120 28 C86 38 46 36 34 25Z" fill="url(#sh-hull)"/>
+<path d="M44 27 C66 31 92 30 114 26" stroke="#3B82F6" stroke-width="2" fill="none"/>
+<ellipse cx="96" cy="22.5" rx="12" ry="4.2" fill="#38BDF8" opacity=".9"/><ellipse cx="99" cy="21.5" rx="5" ry="1.6" fill="#E0F2FE" opacity=".8"/>
+<circle class="nav-l" cx="45" cy="5" r="1.6" fill="#F87171"/><circle class="nav-r" cx="40" cy="45" r="1.6" fill="#34D399"/></svg></div>
   <main id="top">
 
     <!-- ================= HERO ================= -->
@@ -1686,7 +1749,7 @@
 
     // Progress bar, header state and glow parallax: one rAF-throttled scroll handler
     (() => {
-      const bar = $('#progress'), head = $('header.sticky'), glow = $('.neb-wrap');
+      const bar = $('#progress'), head = $('header.sticky'), glow = $('.neb-wrap'), cel = $('.celestial');
       let ticking = false;
       const update = () => {
         ticking = false;
@@ -1694,6 +1757,7 @@
         if (bar) bar.style.transform = `scaleX(${max > 0 ? y / max : 0})`;
         if (head) head.classList.toggle('scrolled', y > 8);
         if (glow && motionOK) glow.style.transform = `translate3d(0, ${-Math.min(y * 0.04, 110)}px, 0)`;   // clouds drift up a little as you scroll
+        if (cel && motionOK) cel.style.transform = `translate3d(0, ${-Math.min(y * 0.09, 240)}px, 0)`;     // planets move a bit faster: depth
       };
       addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
       update();
