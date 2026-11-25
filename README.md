@@ -38,6 +38,6 @@ Environment variables (Vercel → Project → Settings → Environment Variables
 - `ANTHROPIC_API_KEY`: turns on live chatbot answers. Without it the chat uses the offline FAQ.
 - `SESSION_SECRET` (optional): any long random string, for stable sessions across instances.
 
-On Vercel, audit and beta form submissions are **not stored on disk** (the server's disk is
+On Vercel, consultation (`/api/audit`) and beta form submissions are **not stored on disk** (the server's disk is
 temporary). The page opens a pre-filled email to dandigital1688@gmail.com instead.
 Dependencies come from `uv.lock` (`uv add <package>` updates it).

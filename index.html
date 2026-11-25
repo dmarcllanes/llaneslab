@@ -39,6 +39,8 @@
             brand: { DEFAULT: '#3B82F6', soft: '#60A5FA', strong: '#2563EB' },
             sky2: '#38BDF8',
             emerald2: '#10B981',
+            // Lifted greys: readable on the nebula background
+            zinc: { 400: '#C3CBD9', 500: '#9DA8BB', 600: '#7D889C' },
           },
           fontFamily: {
             display: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
@@ -55,24 +57,47 @@
     body { background: #060A14; -webkit-tap-highlight-color: transparent; }
     ::selection { background: rgba(59, 130, 246, .35); }
 
-    /* ---------- Deep-space background ----------
-       #sky   : painted once (Milky Way glow, star dust, far stars)
-       #stars : only the near, twinkling stars + shooting stars, 60fps
-       .neb   : nebula clouds, transform-only drift (GPU), no blend modes */
-    body { background: #03050C; }
+    /* ---------- Nebula background ----------
+       Fixed layer behind everything. Clouds sit toward the screen edges so the
+       centre (where text is) stays dark. Clouds drift with transform only; stars
+       are static CSS dots (one layer fades in and out). No canvas, no per-frame JS. */
+    body { background: #04060F; }
     .space { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; contain: strict;
-      background: radial-gradient(120% 80% at 50% 0%, #0A1128 0%, #050817 45%, #03050C 100%); }
-    .space .neb { position: absolute; border-radius: 9999px; will-change: transform; backface-visibility: hidden; }
-    .space .n1 { width: 75vmax; height: 55vmax; left: -25vmax; top: -22vmax; background: radial-gradient(closest-side, rgba(37,99,235,.34), rgba(37,99,235,.10) 45%, transparent); animation: drift1 40s ease-in-out infinite alternate; }
-    .space .n2 { width: 60vmax; height: 45vmax; right: -22vmax; top: 10vh; background: radial-gradient(closest-side, rgba(124,58,237,.26), rgba(124,58,237,.08) 50%, transparent); animation: drift2 48s ease-in-out infinite alternate; }
-    .space .n3 { width: 65vmax; height: 45vmax; left: -10vw; bottom: -25vmax; background: radial-gradient(closest-side, rgba(219,39,119,.12), rgba(56,189,248,.06) 50%, transparent); animation: drift3 56s ease-in-out infinite alternate; }
-    .space canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
-    @keyframes drift1 { to { transform: translate3d(10vw, 8vh, 0) scale(1.08); } }
-    @keyframes drift2 { to { transform: translate3d(-12vw, 14vh, 0) scale(.92); } }
-    @keyframes drift3 { to { transform: translate3d(8vw, -12vh, 0) scale(1.1); } }
+      background: radial-gradient(120% 90% at 50% 40%, #070C1C 0%, #04060F 70%); }
+    .neb-wrap { position: absolute; inset: -12vh 0; will-change: transform; }
+    .neb { position: absolute; border-radius: 50%; will-change: transform; backface-visibility: hidden; }
+    .neb.n1 { width: 72vmax; height: 56vmax; left: -30vmax; top: -18vmax; animation: nd1 60s ease-in-out infinite alternate;
+      background: radial-gradient(closest-side at 50% 50%, rgba(37,99,235,.48), rgba(37,99,235,.17) 45%, transparent 75%),
+                  radial-gradient(closest-side at 72% 68%, rgba(56,189,248,.26), transparent 70%); }
+    .neb.n2 { width: 62vmax; height: 50vmax; right: -26vmax; top: 4vh; animation: nd2 72s ease-in-out infinite alternate;
+      background: radial-gradient(closest-side at 50% 45%, rgba(124,58,237,.45), rgba(124,58,237,.15) 50%, transparent 76%),
+                  radial-gradient(closest-side at 30% 70%, rgba(219,39,119,.26), transparent 70%); }
+    .neb.n3 { width: 58vmax; height: 46vmax; left: -20vmax; bottom: -20vmax; animation: nd3 80s ease-in-out infinite alternate;
+      background: radial-gradient(closest-side at 55% 45%, rgba(20,184,166,.30), rgba(20,184,166,.09) 50%, transparent 75%),
+                  radial-gradient(closest-side at 75% 30%, rgba(59,130,246,.20), transparent 70%); }
+    .neb.n4 { width: 54vmax; height: 42vmax; right: -18vmax; bottom: -16vmax; animation: nd4 68s ease-in-out infinite alternate;
+      background: radial-gradient(closest-side at 45% 55%, rgba(219,39,119,.28), rgba(219,39,119,.09) 50%, transparent 75%),
+                  radial-gradient(closest-side at 25% 30%, rgba(139,92,246,.24), transparent 70%); }
+    .neb.n5 { width: 46vmax; height: 30vmax; left: 30vw; top: 38vh; animation: nd2 90s ease-in-out infinite alternate-reverse;
+      background: radial-gradient(closest-side, rgba(79,70,229,.10), transparent 75%); }
+    @keyframes nd1 { to { transform: translate3d(9vw, 7vh, 0) scale(1.08) rotate(6deg); } }
+    @keyframes nd2 { to { transform: translate3d(-10vw, 10vh, 0) scale(.94) rotate(-8deg); } }
+    @keyframes nd3 { to { transform: translate3d(8vw, -9vh, 0) scale(1.1) rotate(5deg); } }
+    @keyframes nd4 { to { transform: translate3d(-7vw, -8vh, 0) scale(1.06) rotate(-6deg); } }
+    .stars { position: absolute; inset: 0; background-repeat: repeat; }
+    .stars.s1 { opacity: .6; background-size: 320px 320px; background-image:
+      radial-gradient(1px 1px at 22px 34px, #fff, transparent), radial-gradient(1px 1px at 148px 86px, #C8D7FF, transparent),
+      radial-gradient(1.4px 1.4px at 266px 172px, #fff, transparent), radial-gradient(1px 1px at 94px 226px, #FFECD6, transparent),
+      radial-gradient(1px 1px at 206px 288px, #fff, transparent), radial-gradient(1px 1px at 300px 20px, #C8D7FF, transparent); }
+    .stars.s2 { background-size: 510px 510px; animation: twinkle 7s ease-in-out infinite alternate; background-image:
+      radial-gradient(1.6px 1.6px at 60px 140px, #fff, transparent), radial-gradient(1.2px 1.2px at 330px 60px, #BFD4FF, transparent),
+      radial-gradient(1.8px 1.8px at 420px 360px, #fff, transparent), radial-gradient(1.2px 1.2px at 180px 450px, #FFE9D0, transparent); }
+    @keyframes twinkle { from { opacity: .2; } to { opacity: .75; } }
     /* Thin glowing divider at the top of each main section */
     main > section + section::before { content: ''; display: block; height: 1px; margin: -2rem auto 3rem; max-width: 72rem;
       background: linear-gradient(90deg, transparent, rgba(96,165,250,.35), transparent); }
+    @media (min-width: 1280px) { main > section + section::before { max-width: 80rem; } }
+    @media (min-width: 1536px) { main > section + section::before { max-width: 88rem; } }
     .card { background: #0C1322; border: 1px solid #1E2B45; border-radius: 1.25rem; }
     .text-gradient { background: linear-gradient(90deg, #3B82F6, #60A5FA 40%, #22D3EE); -webkit-background-clip: text; background-clip: text; color: transparent; }
 
@@ -119,7 +144,7 @@
     #sheet.open #sheet-panel { transform: none; }
 
     /* ---------- Editorial layer ---------- */
-    .text-outline { color: transparent; -webkit-text-stroke: 1.5px #60A5FA; }
+    .text-outline { color: rgba(96,165,250,.14); -webkit-text-stroke: 2px #60A5FA; }
     @supports not (-webkit-text-stroke: 1px #000) { .text-outline { color: #60A5FA; } }
     .marquee { overflow: hidden; }
     .marquee-track { display: flex; width: max-content; animation: marquee 32s linear infinite; }
@@ -127,11 +152,66 @@
     @keyframes marquee { to { transform: translateX(-50%); } }
     .marquee:hover .marquee-track, .marquee:focus-within .marquee-track { animation-play-state: paused; }
     .topbar .marquee-track { animation-duration: 45s; }
+    /* ---------- Top announcement ticker ("NOW" signal bar) ---------- */
+    .topbar { position: relative; z-index: 40; display: flex; align-items: stretch; height: 40px; overflow: hidden;
+      background:
+        radial-gradient(60% 220% at 18% 0%, rgba(37,99,235,.38), transparent 70%),
+        radial-gradient(50% 220% at 55% 100%, rgba(124,58,237,.34), transparent 70%),
+        radial-gradient(45% 220% at 88% 0%, rgba(219,39,119,.30), transparent 70%),
+        #070818;
+      color: #E2E6F3; font-size: 12.5px; font-weight: 500;
+      border-bottom: 1px solid rgba(167,139,250,.28); }
+    .tb-label { position: relative; z-index: 2; flex: none; display: flex; align-items: center; gap: 9px; padding: 0 26px 0 14px;
+      background: linear-gradient(120deg, #2563EB, #7C3AED 55%, #DB2777); color: #fff; font: 700 10.5px/1 'JetBrains Mono', monospace; letter-spacing: .22em; text-transform: uppercase;
+      clip-path: polygon(0 0, 100% 0, calc(100% - 14px) 100%, 0 100%); box-shadow: 0 0 28px rgba(139,92,246,.55); }
+    .tb-pulse { position: relative; width: 7px; height: 7px; border-radius: 50%; background: #fff; }
+    .tb-pulse::after { content: ''; position: absolute; inset: 0; border-radius: 50%; background: #fff; animation: tbpulse 1.8s ease-out infinite; }
+    @keyframes tbpulse { from { transform: scale(1); opacity: .8; } to { transform: scale(3.2); opacity: 0; } }
+    .tb-ticker { flex: 1; min-width: 0; display: flex; align-items: center; margin-left: -6px;
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 48px, #000 calc(100% - 64px), transparent);
+              mask-image: linear-gradient(90deg, transparent, #000 48px, #000 calc(100% - 64px), transparent); }
+    .tb-item { display: inline-flex; align-items: center; gap: 9px; color: #D6DEEC; transition: color .2s; }
+    a.tb-item:hover, button.tb-item:hover { color: #fff; }
+    .tb-text { padding-bottom: 1px; background: linear-gradient(90deg, #60A5FA, #A78BFA, #F472B6) no-repeat 0 100% / 0 1px; transition: background-size .35s ease; }
+    a.tb-item:hover .tb-text, button.tb-item:hover .tb-text, .tb-item:focus-visible .tb-text { background-size: 100% 1px; }
+    .tb-kick { font: 700 9.5px/1 'JetBrains Mono', monospace; letter-spacing: .16em; text-transform: uppercase; padding: 4px 7px; border-radius: 6px; border: 1px solid; }
+    .k-free { color: #34D399; border-color: rgba(52,211,153,.45); background: rgba(16,185,129,.10); }
+    .k-live { color: #60A5FA; border-color: rgba(96,165,250,.45); background: rgba(59,130,246,.10); }
+    .k-beta { color: #FBBF24; border-color: rgba(251,191,36,.40); background: rgba(251,191,36,.08); }
+    .k-ask  { color: #C4B5FD; border-color: rgba(196,181,253,.40); background: rgba(139,92,246,.10); }
+    .k-base { color: #9DA8BB; border-color: rgba(157,168,187,.35); background: rgba(157,168,187,.06); }
+    .tb-ic { width: 20px; height: 20px; border-radius: 6px; box-shadow: 0 0 0 1.5px #0B0A22; }
+    .tb-sep { color: #6D5BB8; font: 700 12px/1 'JetBrains Mono', monospace; }
+    .tb-scan { position: absolute; left: 0; bottom: -1px; width: 28%; height: 1px; pointer-events: none;
+      background: linear-gradient(90deg, transparent, #38BDF8, #A78BFA, #fff, #F472B6, transparent); animation: tbscan 7s linear infinite; }
+    @keyframes tbscan { from { transform: translateX(-100%); } to { transform: translateX(460%); } }
     .sticker { box-shadow: 0 10px 30px -8px rgba(0,0,0,.7); }
     @keyframes bob { 50% { transform: translateY(-6px) rotate(var(--r, 0deg)); } }
     .bob { transform: rotate(var(--r, 0deg)); animation: bob 4.5s ease-in-out infinite; }
     .reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1); }
     .reveal.in { opacity: 1; transform: none; }
+
+    /* ---------- Scroll & action effects (transform/opacity only; all off for reduced motion) ---------- */
+    /* Reading progress bar under the sticky header */
+    #progress { position: fixed; left: 0; right: 0; top: 0; height: 3px; z-index: 70; pointer-events: none;
+      background: linear-gradient(90deg, #2563EB, #38BDF8, #10B981); transform-origin: 0 50%; transform: scaleX(0); }
+    /* Header firms up once you scroll */
+    header.sticky { transition: background-color .3s, box-shadow .3s; }
+    header.sticky.scrolled { background-color: rgba(6,10,20,.94); box-shadow: 0 10px 30px -12px rgba(0,0,0,.8); }
+    /* Section heads: the rule line draws in, the headline rises */
+    .sec-head .h-px { transform-origin: 0 50%; }
+    .fx .sec-head:not(.drawn) .h-px { transform: scaleX(0); }
+    .sec-head .h-px { transition: transform 1s cubic-bezier(.2,.7,.2,1) .15s; }
+    /* Cards lift and glow on hover (desktop) */
+    @media (hover: hover) and (pointer: fine) {
+      .detail-card { transition: border-color .25s, box-shadow .3s, transform .25s ease-out; }
+      .detail-card:hover { border-color: rgba(96,165,250,.55); box-shadow: 0 18px 50px -20px rgba(37,99,235,.55), 0 0 0 1px rgba(96,165,250,.15); }
+    }
+    /* Tap / click ripple on buttons */
+    .rip-host { position: absolute; inset: 0; border-radius: inherit; overflow: hidden; pointer-events: none; }
+    .rip { position: absolute; border-radius: 50%; background: rgba(255,255,255,.35); transform: scale(0); animation: rip .6s ease-out forwards; }
+    @keyframes rip { to { transform: scale(1); opacity: 0; } }
+    /* Hero glows drift slightly as you scroll */
     .work-thumb { background: radial-gradient(circle at 80% 0%, rgba(59,130,246,.18), transparent 55%), #080E1B; border: 1px solid #1E2B45; }
     .detail-card:hover .arrow { transform: translate(3px, -3px); color: #fff; }
     .arrow { transition: transform .25s, color .25s; }
@@ -168,44 +248,49 @@
 </head>
 
 <body class="font-sans text-zinc-300 antialiased pb-24 md:pb-0">
+  <div id="progress" aria-hidden="true"></div>
 
   <!-- ================= TOP ANNOUNCEMENT BANNER (moving) ================= -->
-  <div class="topbar marquee relative z-40 border-b border-white/10 bg-gradient-to-r from-brand-strong via-brand to-sky-500 text-white" role="region" aria-label="Announcements">
-    <div class="marquee-track whitespace-nowrap py-2 text-[13px] font-medium">
-      <div class="flex shrink-0 items-center gap-6 pr-6">
-          <a href="#contact" class="inline-flex items-center gap-2 hover:underline"><span class="rounded-full bg-white px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-brand-strong">Free</span>AI audit for local businesses — book yours →</a>
-          <span class="text-white/40" aria-hidden="true">✦</span>
-          <a href="#apps" class="inline-flex items-center gap-2 hover:underline"><img data-icon="Kalamooo" alt="" class="h-5 w-5 rounded-md" />Kalamooo is live on the App Store &amp; Google Play</a>
-          <span class="text-white/40" aria-hidden="true">✦</span>
-          <a href="#apps" class="inline-flex items-center gap-2 hover:underline"><img data-icon="Folingoo" alt="" class="h-5 w-5 rounded-md" /><img data-icon="Roostart" alt="" class="-ml-1 h-5 w-5 rounded-md" />Folingoo &amp; Roostart are live on the App Store</a>
-          <span class="text-white/40" aria-hidden="true">✦</span>
-          <a href="#apps" class="inline-flex items-center gap-2 hover:underline"><img data-icon="Owolot" alt="" class="h-5 w-5 rounded-md" /><img data-icon="Otaroo" alt="" class="-ml-1 h-5 w-5 rounded-md" />Owolot &amp; Otaroo are in open beta — join now</a>
-          <span class="text-white/40" aria-hidden="true">✦</span>
-          <button type="button" data-open-chat class="inline-flex items-center gap-2 hover:underline">💬 Questions? Ask Dan's AI assistant</button>
-          <span class="text-white/40" aria-hidden="true">✦</span>
-          <span class="inline-flex items-center gap-2">🌏 Based in Taguig City, Philippines · working with clients worldwide</span>
-          <span class="text-white/40" aria-hidden="true">✦</span>
-      </div>
-      <div class="flex shrink-0 items-center gap-6 pr-6" aria-hidden="true" inert>
-          <a href="#contact" class="inline-flex items-center gap-2 hover:underline"><span class="rounded-full bg-white px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-brand-strong">Free</span>AI audit for local businesses — book yours →</a>
-          <span class="text-white/40" aria-hidden="true">✦</span>
-          <a href="#apps" class="inline-flex items-center gap-2 hover:underline"><img data-icon="Kalamooo" alt="" class="h-5 w-5 rounded-md" />Kalamooo is live on the App Store &amp; Google Play</a>
-          <span class="text-white/40" aria-hidden="true">✦</span>
-          <a href="#apps" class="inline-flex items-center gap-2 hover:underline"><img data-icon="Folingoo" alt="" class="h-5 w-5 rounded-md" /><img data-icon="Roostart" alt="" class="-ml-1 h-5 w-5 rounded-md" />Folingoo &amp; Roostart are live on the App Store</a>
-          <span class="text-white/40" aria-hidden="true">✦</span>
-          <a href="#apps" class="inline-flex items-center gap-2 hover:underline"><img data-icon="Owolot" alt="" class="h-5 w-5 rounded-md" /><img data-icon="Otaroo" alt="" class="-ml-1 h-5 w-5 rounded-md" />Owolot &amp; Otaroo are in open beta — join now</a>
-          <span class="text-white/40" aria-hidden="true">✦</span>
-          <button type="button" data-open-chat class="inline-flex items-center gap-2 hover:underline">💬 Questions? Ask Dan's AI assistant</button>
-          <span class="text-white/40" aria-hidden="true">✦</span>
-          <span class="inline-flex items-center gap-2">🌏 Based in Taguig City, Philippines · working with clients worldwide</span>
-          <span class="text-white/40" aria-hidden="true">✦</span>
+  <div class="topbar" role="region" aria-label="Announcements">
+    <span class="tb-label"><span class="tb-pulse" aria-hidden="true"></span>Now</span>
+    <div class="marquee tb-ticker">
+      <div class="marquee-track whitespace-nowrap">
+        <div class="flex shrink-0 items-center gap-5 pr-5">
+          <a href="#contact" class="tb-item"><span class="tb-kick k-free">Free</span><span class="tb-text">AI consultation for local businesses — book yours →</span></a>
+          <span class="tb-sep" aria-hidden="true">//</span>
+          <a href="#apps" class="tb-item"><span class="tb-kick k-live">Live</span><img data-icon="Kalamooo" alt="" class="tb-ic" /><span class="tb-text">Kalamooo is live on the App Store &amp; Google Play</span></a>
+          <span class="tb-sep" aria-hidden="true">//</span>
+          <a href="#apps" class="tb-item"><span class="tb-kick k-live">Live</span><span class="flex"><img data-icon="Folingoo" alt="" class="tb-ic" /><img data-icon="Roostart" alt="" class="tb-ic -ml-1.5" /><img data-icon="Owolot" alt="" class="tb-ic -ml-1.5" /></span><span class="tb-text">Folingoo, Roostart &amp; Owolot are live on the App Store</span></a>
+          <span class="tb-sep" aria-hidden="true">//</span>
+          <a href="#apps" class="tb-item"><span class="tb-kick k-beta">Beta</span><img data-icon="Otaroo" alt="" class="tb-ic" /><span class="tb-text">Otaroo is in open beta — join now →</span></a>
+          <span class="tb-sep" aria-hidden="true">//</span>
+          <button type="button" data-open-chat class="tb-item"><span class="tb-kick k-ask">Ask</span><span class="tb-text">Questions? Ask Dan's AI assistant</span></button>
+          <span class="tb-sep" aria-hidden="true">//</span>
+          <span class="tb-item"><span class="tb-kick k-base">Based</span><span>Taguig City, Philippines · working with clients worldwide</span></span>
+          <span class="tb-sep" aria-hidden="true">//</span>
+        </div>
+        <div class="flex shrink-0 items-center gap-5 pr-5" aria-hidden="true" inert>
+          <a href="#contact" class="tb-item"><span class="tb-kick k-free">Free</span><span class="tb-text">AI consultation for local businesses — book yours →</span></a>
+          <span class="tb-sep" aria-hidden="true">//</span>
+          <a href="#apps" class="tb-item"><span class="tb-kick k-live">Live</span><img data-icon="Kalamooo" alt="" class="tb-ic" /><span class="tb-text">Kalamooo is live on the App Store &amp; Google Play</span></a>
+          <span class="tb-sep" aria-hidden="true">//</span>
+          <a href="#apps" class="tb-item"><span class="tb-kick k-live">Live</span><span class="flex"><img data-icon="Folingoo" alt="" class="tb-ic" /><img data-icon="Roostart" alt="" class="tb-ic -ml-1.5" /><img data-icon="Owolot" alt="" class="tb-ic -ml-1.5" /></span><span class="tb-text">Folingoo, Roostart &amp; Owolot are live on the App Store</span></a>
+          <span class="tb-sep" aria-hidden="true">//</span>
+          <a href="#apps" class="tb-item"><span class="tb-kick k-beta">Beta</span><img data-icon="Otaroo" alt="" class="tb-ic" /><span class="tb-text">Otaroo is in open beta — join now →</span></a>
+          <span class="tb-sep" aria-hidden="true">//</span>
+          <button type="button" data-open-chat class="tb-item"><span class="tb-kick k-ask">Ask</span><span class="tb-text">Questions? Ask Dan's AI assistant</span></button>
+          <span class="tb-sep" aria-hidden="true">//</span>
+          <span class="tb-item"><span class="tb-kick k-base">Based</span><span>Taguig City, Philippines · working with clients worldwide</span></span>
+          <span class="tb-sep" aria-hidden="true">//</span>
+        </div>
       </div>
     </div>
+    <span class="tb-scan" aria-hidden="true"></span>
   </div>
 
   <!-- ================= TOP NAV (desktop) ================= -->
   <header class="sticky top-0 z-40 border-b border-obsidian-line/70 bg-obsidian/80 backdrop-blur">
-    <nav class="mx-auto flex max-w-6xl items-center justify-between px-5 py-3">
+    <nav class="mx-auto flex max-w-6xl xl:max-w-7xl 2xl:max-w-[88rem] items-center justify-between px-5 py-3">
       <a href="#top" class="flex items-center gap-2 font-display text-lg font-extrabold text-white">
         <img src="data:image/webp;base64,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" alt="" id="me-face" width="36" height="36" class="h-9 w-9 rounded-full object-cover ring-2 ring-brand/50" />
         Dan Marc Llanes
@@ -216,21 +301,21 @@
         <a href="#llaneslab" class="hover:text-white">LlanesLab</a>
         <a href="#apps" class="hover:text-white">My Apps</a>
         <a href="#about" class="hover:text-white">About</a>
-        <a href="#contact" class="press inline-flex items-center gap-2 rounded-full bg-brand-strong px-4 py-2 font-semibold text-white hover:bg-brand"><span class="h-2 w-2 animate-pulse rounded-full bg-emerald-300"></span>Free Audit</a>
+        <a href="#contact" class="press inline-flex items-center gap-2 rounded-full bg-brand-strong px-4 py-2 font-semibold text-white hover:bg-brand"><span class="h-2 w-2 animate-pulse rounded-full bg-emerald-300"></span>Free Consultation</a>
       </div>
-      <a href="#contact" class="press rounded-full bg-brand-strong px-4 py-2.5 text-sm font-semibold text-white md:hidden">Free Audit</a>
+      <a href="#contact" class="press rounded-full bg-brand-strong px-4 py-2.5 text-sm font-semibold text-white md:hidden whitespace-nowrap">Free Consult</a>
     </nav>
   </header>
 
-  <div class="space" aria-hidden="true"><div class="neb n1"></div><div class="neb n2"></div><div class="neb n3"></div><canvas id="sky"></canvas><canvas id="stars"></canvas></div>
+  <div class="space" aria-hidden="true"><div class="neb-wrap"><div class="neb n1"></div><div class="neb n2"></div><div class="neb n3"></div><div class="neb n4"></div><div class="neb n5"></div></div><div class="stars s1"></div><div class="stars s2"></div></div>
   <main id="top">
 
     <!-- ================= HERO ================= -->
-    <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-5 pt-10 font-mono text-[11px] uppercase tracking-widest text-zinc-500">
+    <div class="mx-auto flex max-w-6xl xl:max-w-7xl 2xl:max-w-[88rem] flex-wrap items-center justify-between gap-3 px-5 pt-10 font-mono text-[11px] uppercase tracking-widest text-zinc-500">
       <span>AI adoption · Digital transformation</span>
       <span class="inline-flex items-center gap-2"><span class="h-2 w-2 animate-pulse rounded-full bg-emerald2"></span>Taguig City, PH · Available worldwide</span>
     </div>
-    <section class="mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 px-5 pb-16 pt-8 md:pt-12 lg:grid-cols-[1.05fr_1fr] [&>*]:min-w-0">
+    <section class="mx-auto grid max-w-6xl xl:max-w-7xl 2xl:max-w-[88rem] grid-cols-1 items-center gap-12 px-5 pb-16 pt-8 md:pt-12 lg:grid-cols-[1.05fr_1fr] [&>*]:min-w-0">
       <div>
         <h1 class="font-display text-5xl font-extrabold leading-[.98] tracking-tight text-white sm:text-6xl lg:text-[4.4rem]">
           AI and apps <span class="whitespace-nowrap">for local</span> businesses,<br class="hidden sm:block" /> <span class="text-gradient">made</span> <span class="text-outline">simple.</span>
@@ -316,10 +401,10 @@
     </section>
 
     <!-- Stats strip -->
-    <div class="mx-auto max-w-6xl px-5">
+    <div class="mx-auto max-w-6xl xl:max-w-7xl 2xl:max-w-[88rem] px-5">
       <dl class="grid grid-cols-2 border-y border-obsidian-line md:grid-cols-4">
         <div class="flex flex-col-reverse border-obsidian-line py-6 pr-4 md:border-r"><dt class="mt-1 text-xs text-zinc-500">Apps built solo, from scratch</dt><dd class="font-display text-4xl font-extrabold text-white sm:text-5xl">5</dd></div>
-        <div class="flex flex-col-reverse border-l border-obsidian-line py-6 pl-5 md:border-r"><dt class="mt-1 text-xs text-zinc-500">Live on the Apple App Store</dt><dd class="font-display text-4xl font-extrabold text-white sm:text-5xl">3</dd></div>
+        <div class="flex flex-col-reverse border-l border-obsidian-line py-6 pl-5 md:border-r"><dt class="mt-1 text-xs text-zinc-500">Live on the Apple App Store</dt><dd class="font-display text-4xl font-extrabold text-white sm:text-5xl">4</dd></div>
         <div class="flex flex-col-reverse border-t border-obsidian-line py-6 pr-4 md:border-r md:border-t-0 md:pl-5"><dt class="mt-1 text-xs text-zinc-500">Years of data engineering in enterprise teams</dt><dd class="font-display text-4xl font-extrabold text-white sm:text-5xl">3<span class="text-brand-soft">yrs</span></dd></div>
         <div class="flex flex-col-reverse border-l border-t border-obsidian-line py-6 pl-5 md:border-t-0"><dt class="mt-1 text-xs text-zinc-500">Builder, from first call to launch</dt><dd class="font-display text-4xl font-extrabold text-white sm:text-5xl">1</dd></div>
       </dl>
@@ -342,7 +427,7 @@
     </div>
 
     <!-- ================= SERVICES ================= -->
-    <section id="services" class="mx-auto max-w-6xl scroll-mt-20 px-5 py-20">
+    <section id="services" class="mx-auto max-w-6xl xl:max-w-7xl 2xl:max-w-[88rem] scroll-mt-20 px-5 py-20">
       <div class="sec-head">
         <div class="flex items-center gap-4 font-mono text-xs uppercase tracking-widest"><span class="text-brand-soft">(01)</span><span class="h-px flex-1 bg-gradient-to-r from-obsidian-line to-transparent"></span><span class="text-zinc-500">What I build</span></div>
         <h2 class="mt-6 font-display text-4xl font-extrabold leading-[1.02] tracking-tight text-white sm:text-5xl lg:text-6xl">AI first. <span class="text-outline">Apps that keep</span> working offline.</h2>
@@ -391,7 +476,7 @@
     </section>
 
     <!-- ================= INDUSTRIES ================= -->
-    <section id="industries" class="mx-auto max-w-6xl scroll-mt-20 px-5 py-20">
+    <section id="industries" class="mx-auto max-w-6xl xl:max-w-7xl 2xl:max-w-[88rem] scroll-mt-20 px-5 py-20">
       <div class="sec-head">
         <div class="flex items-center gap-4 font-mono text-xs uppercase tracking-widest"><span class="text-sky2">(02)</span><span class="h-px flex-1 bg-gradient-to-r from-obsidian-line to-transparent"></span><span class="text-zinc-500">Who I help</span></div>
         <h2 class="mt-6 font-display text-4xl font-extrabold leading-[1.02] tracking-tight text-white sm:text-5xl lg:text-6xl">Built for three <span class="text-outline">kinds of busy.</span></h2>
@@ -433,7 +518,7 @@
     </section>
 
     <!-- ================= LLANESLAB ================= -->
-    <section id="llaneslab" class="mx-auto max-w-6xl scroll-mt-20 px-5 py-20">
+    <section id="llaneslab" class="mx-auto max-w-6xl xl:max-w-7xl 2xl:max-w-[88rem] scroll-mt-20 px-5 py-20">
       <div>
         <div>
           <div class="sec-head">
@@ -489,7 +574,7 @@
       <div class="mt-16">
         <h3 class="font-display text-2xl font-extrabold tracking-tight text-white sm:text-3xl">How we'll work together</h3>
         <ol class="mt-6 grid gap-px overflow-hidden rounded-2xl border border-obsidian-line bg-obsidian-line sm:grid-cols-2 lg:grid-cols-4">
-          <li class="bg-obsidian-2 p-5"><span class="font-display text-3xl font-extrabold text-outline">01</span><p class="mt-3 font-display font-bold text-white">Free audit</p><p class="mt-1 text-sm text-zinc-400">We look at where your week goes.</p></li>
+          <li class="bg-obsidian-2 p-5"><span class="font-display text-3xl font-extrabold text-outline">01</span><p class="mt-3 font-display font-bold text-white">Free consultation</p><p class="mt-1 text-sm text-zinc-400">We look at where your week goes.</p></li>
           <li class="bg-obsidian-2 p-5"><span class="font-display text-3xl font-extrabold text-outline">02</span><p class="mt-3 font-display font-bold text-white">Working draft</p><p class="mt-1 text-sm text-zinc-400">A small version you can try early.</p></li>
           <li class="bg-obsidian-2 p-5"><span class="font-display text-3xl font-extrabold text-outline">03</span><p class="mt-3 font-display font-bold text-white">You approve</p><p class="mt-1 text-sm text-zinc-400">Nothing goes live until you're happy.</p></li>
           <li class="bg-obsidian-2 p-5"><span class="font-display text-3xl font-extrabold text-outline">04</span><p class="mt-3 font-display font-bold text-white">Launch &amp; improve</p><p class="mt-1 text-sm text-zinc-400">I set it up with your team and refine it.</p></li>
@@ -526,16 +611,16 @@
                 <div class="rounded-xl bg-obsidian p-3"><div id="save-year" class="font-mono text-2xl font-bold text-brand-soft">0</div><div class="mt-1 text-[11px] text-zinc-500">h / year</div></div>
               </div>
               <p class="mt-5 text-sm text-zinc-300"><span class="text-zinc-500">Suggested fix:</span> <span id="fix-text" class="font-medium text-white"></span></p>
-              <p class="mt-3 text-[11px] leading-relaxed text-zinc-600">A rough estimate based on typical results for this kind of task. Your free audit gives you a real number.</p>
+              <p class="mt-3 text-[11px] leading-relaxed text-zinc-600">A rough estimate based on typical results for this kind of task. Your free consultation gives you a real number.</p>
             </div>
-            <button id="calc-to-form" class="press min-h-[52px] w-full rounded-xl bg-brand-strong font-semibold text-white hover:bg-brand">Use this in my free audit request →</button>
+            <button id="calc-to-form" class="press min-h-[52px] w-full rounded-xl bg-brand-strong font-semibold text-white hover:bg-brand">Use this in my free consultation request →</button>
           </div>
         </div>
       </div>
     </section>
 
     <!-- ================= 5-APP VENTURE ================= -->
-    <section id="apps" class="mx-auto max-w-6xl scroll-mt-20 px-5 py-20">
+    <section id="apps" class="mx-auto max-w-6xl xl:max-w-7xl 2xl:max-w-[88rem] scroll-mt-20 px-5 py-20">
       <div class="sec-head">
         <div class="flex items-center gap-4 font-mono text-xs uppercase tracking-widest"><span class="text-sky2">(04)</span><span class="h-px flex-1 bg-gradient-to-r from-obsidian-line to-transparent"></span><span class="text-zinc-500">Pillar 2 · 5-App Product Venture</span></div>
         <h2 class="mt-6 font-display text-4xl font-extrabold leading-[1.02] tracking-tight text-white sm:text-5xl lg:text-6xl">Five apps, built solo <span class="text-outline">from scratch.</span></h2>
@@ -560,7 +645,7 @@
     </section>
 
     <!-- ================= ABOUT ================= -->
-    <section id="about" class="mx-auto max-w-6xl scroll-mt-20 px-5 py-20">
+    <section id="about" class="mx-auto max-w-6xl xl:max-w-7xl 2xl:max-w-[88rem] scroll-mt-20 px-5 py-20">
       <blockquote class="mb-14 font-display text-3xl font-extrabold leading-[1.1] tracking-tight text-zinc-500 sm:text-5xl">
         “AI should save you time <span class="text-white">without taking away your control.</span>”
       </blockquote>
@@ -599,8 +684,8 @@
       </div>
     </section>
 
-    <!-- ================= CONTACT / AUDIT FORM ================= -->
-    <section id="contact" class="mx-auto max-w-6xl scroll-mt-20 px-5 py-20">
+    <!-- ================= CONTACT / FREE CONSULTATION FORM (ids keep the old 'audit' name) ================= -->
+    <section id="contact" class="mx-auto max-w-6xl xl:max-w-7xl 2xl:max-w-[88rem] scroll-mt-20 px-5 py-20">
       <div class="sec-head mb-10">
         <div class="flex items-center gap-4 font-mono text-xs uppercase tracking-widest"><span class="text-brand-soft">(06)</span><span class="h-px flex-1 bg-gradient-to-r from-obsidian-line to-transparent"></span><span class="text-zinc-500">Contact</span></div>
         <h2 class="mt-6 font-display text-5xl font-extrabold leading-[.95] tracking-tight text-white sm:text-7xl lg:text-8xl">Let's work <span class="text-outline">together.</span></h2>
@@ -608,11 +693,11 @@
       </div>
       <div class="card grid grid-cols-1 overflow-hidden lg:grid-cols-5">
         <div class="border-b border-obsidian-line bg-obsidian-3/60 p-6 sm:p-8 lg:col-span-2 lg:border-b-0 lg:border-r">
-          <p class="font-mono text-xs uppercase tracking-widest text-brand-soft">Free audit</p>
+          <p class="font-mono text-xs uppercase tracking-widest text-brand-soft">Free consultation</p>
           <h2 class="mt-3 font-display text-3xl font-bold text-white">Tell me what slows you down.</h2>
           <p class="mt-3 text-sm text-zinc-400">I'll reply with where AI or a simple app could save you the most time. No cost, no obligation.</p>
           <dl class="mt-8 space-y-2 text-sm">
-            <div><dt class="font-mono text-[11px] uppercase tracking-wider text-zinc-500">Email (audits &amp; beta invites)</dt><dd><a class="inline-flex min-h-[44px] items-center break-all text-white hover:text-brand-soft" href="mailto:dandigital1688@gmail.com">dandigital1688@gmail.com</a></dd></div>
+            <div><dt class="font-mono text-[11px] uppercase tracking-wider text-zinc-500">Email (consultations &amp; beta invites)</dt><dd><a class="inline-flex min-h-[44px] items-center break-all text-white hover:text-brand-soft" href="mailto:dandigital1688@gmail.com">dandigital1688@gmail.com</a></dd></div>
             <div><dt class="font-mono text-[11px] uppercase tracking-wider text-zinc-500">Secondary email</dt><dd><a class="inline-flex min-h-[44px] items-center break-all text-white hover:text-brand-soft" href="mailto:llanesdanmarc@gmail.com">llanesdanmarc@gmail.com</a></dd></div>
             <div><dt class="font-mono text-[11px] uppercase tracking-wider text-zinc-500">Phone · WhatsApp · Viber</dt><dd><a class="inline-flex min-h-[44px] items-center text-white hover:text-brand-soft" href="tel:+639658174121">(+63) 965-817-4121</a></dd></div>
           </dl>
@@ -641,14 +726,14 @@
           </label>
           <input name="website" tabindex="-1" autocomplete="off" aria-hidden="true" class="absolute -left-[9999px] h-0 w-0 opacity-0" />
           <p id="form-note" class="text-xs text-zinc-500 sm:col-span-2" aria-live="polite">I reply within one business day.</p>
-          <button type="submit" class="press min-h-[52px] rounded-xl bg-brand-strong font-semibold text-white hover:bg-brand sm:col-span-2">Request my free audit</button>
+          <button type="submit" class="press min-h-[52px] rounded-xl bg-brand-strong font-semibold text-white hover:bg-brand sm:col-span-2">Request my free consultation</button>
         </form>
       </div>
     </section>
   </main>
 
   <footer class="overflow-hidden border-t border-obsidian-line pt-12">
-    <div class="mx-auto flex max-w-6xl flex-col gap-6 px-5 text-sm text-zinc-500 md:flex-row md:items-start md:justify-between">
+    <div class="mx-auto flex max-w-6xl xl:max-w-7xl 2xl:max-w-[88rem] flex-col gap-6 px-5 text-sm text-zinc-500 md:flex-row md:items-start md:justify-between">
       <div>
         <p class="text-white">© <span id="year"></span> Dan Marc Llanes · LlanesLab</p>
         <p class="mt-1 text-xs text-zinc-600">AI builder &amp; app developer for small businesses, hotels &amp; rentals, and clinics.<br />Taguig City, Metro Manila, Philippines</p>
@@ -686,7 +771,7 @@
         <textarea id="chat-input" rows="1" maxlength="800" placeholder="Ask me anything about Dan…" class="max-h-28 min-h-[48px] flex-1 resize-none rounded-xl border border-obsidian-line bg-obsidian px-4 py-3 text-[15px] text-white outline-none placeholder:text-zinc-600 focus:border-brand"></textarea>
         <button id="chat-send" type="submit" class="press grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-brand-strong text-lg font-bold text-white hover:bg-brand disabled:opacity-40" aria-label="Send">↑</button>
       </div>
-      <p class="mt-2 text-center text-[10px] text-zinc-600">AI answers can make mistakes. For a quote, <a href="#contact" data-chat-go class="text-brand-soft underline-offset-2 hover:underline">request a free audit</a>.</p>
+      <p class="mt-2 text-center text-[10px] text-zinc-600">AI answers can make mistakes. For a quote, <a href="#contact" data-chat-go class="text-brand-soft underline-offset-2 hover:underline">request a free consultation</a>.</p>
     </form>
   </section>
 
@@ -697,7 +782,7 @@
       <a href="#services" class="press flex min-h-[60px] flex-col items-center justify-center gap-0.5 text-[11px] text-zinc-400"><span class="text-lg">✦</span>Services</a>
       <a href="#llaneslab" class="press flex min-h-[60px] flex-col items-center justify-center gap-0.5 text-[11px] text-zinc-400"><span class="text-lg">◧</span>Work</a>
       <a href="#apps" class="press flex min-h-[60px] flex-col items-center justify-center gap-0.5 text-[11px] text-zinc-400"><span class="text-lg">▣</span>Apps</a>
-      <a href="#contact" class="press flex min-h-[60px] flex-col items-center justify-center gap-0.5 text-[11px] font-semibold text-brand-soft"><span class="text-lg">✉</span>Audit</a>
+      <a href="#contact" class="press flex min-h-[60px] flex-col items-center justify-center gap-0.5 text-[11px] font-semibold text-brand-soft"><span class="text-lg">✉</span>Consult</a>
     </div>
   </nav>
 
@@ -1001,7 +1086,7 @@
       note.textContent = 'Sending…'; note.className = 'text-xs text-zinc-500 sm:col-span-2';
       try {
         if (await postJSON('/api/audit', payload)) {
-          note.textContent = '✓ Thanks! Your audit request is in. I reply within one business day.';
+          note.textContent = '✓ Thanks! Your consultation request is in. I reply within one business day.';
           note.className = 'text-xs text-emerald2 sm:col-span-2';
           f.reset();
           return;
@@ -1010,7 +1095,7 @@
         note.textContent = err.message; note.className = 'text-xs text-red-300 sm:col-span-2';
         return;
       }
-      mailto('Free Audit Request — ' + f.industry.value, body);
+      mailto('Free Consultation Request — ' + f.industry.value, body);
       note.textContent = '✓ Opening your email app…';
       note.className = 'text-xs text-emerald2 sm:col-span-2';
     });
@@ -1050,7 +1135,7 @@
               <div class="mt-2.5 flex items-center gap-3 rounded-xl ${d ? 'bg-yellow-400/20' : 'bg-white/5'} px-3 py-2.5 text-xs"><span>${i}</span><span class="flex-1 ${d ? 'line-through opacity-60' : ''}">${t}</span><span class="grid h-5 w-5 place-items-center rounded-full ${d ? 'bg-yellow-400 text-black' : 'border border-white/30'} text-[10px]">${d ? '✓' : ''}</span></div>`).join('')}
             <div class="mt-auto rounded-2xl bg-white/5 p-3 text-center text-[11px] text-white/60">Missed a day? That's fine. Pick up where you left off.</div>
           </div>` },
-      { name: 'Owolot', cat: 'AI-Assisted Budget & Bill Planner', ios: 'Open Beta', android: 'Open Beta', color: '#9B4DF5',
+      { name: 'Owolot', cat: 'AI-Assisted Budget & Bill Planner', ios: 'Live', android: 'Open Beta', color: '#9B4DF5',
         screen: () => `
           <div class="flex h-full flex-col bg-[#100A1C] p-4 pt-9 text-white">
             <b class="font-display">November</b>
@@ -1338,7 +1423,7 @@
       sBody.innerHTML = html;
       sBody.scrollTop = 0;
       const a = d.cta.type === 'beta' ? APPS[d.cta.app] : null;
-      sCta.textContent = a ? (a.ios !== 'Live' || a.android !== 'Live' ? `Join the ${a.name} beta` : `Ask about ${a.name}`) : 'Get a free audit for this →';
+      sCta.textContent = a ? (a.ios !== 'Live' || a.android !== 'Live' ? `Join the ${a.name} beta` : `Ask about ${a.name}`) : 'Get a free consultation for this →';
     }
 
     function openSheet(key, push = true) {
@@ -1428,19 +1513,19 @@
       const appLine = a => `- **${a.name}** (${a.cat}): App Store ${a.ios}, Google Play ${a.android}`;
       const FAQ = [
         { k: /\b(hi|hello|hey|good (morning|afternoon|evening))\b/, a: () => "Hi! I can tell you about Dan's services, his experience and his five apps. What would you like to know?" },
-        { k: /price|cost|rate|budget|quote|how much|fee|charge|expensive|cheap/, a: () => "Dan doesn't publish fixed prices, because every project is scoped to what you need. The best way to get a quote is the **free audit**: no cost, no obligation, and he replies within one business day.", cta: 'audit' },
-        { k: /how long|timeline|deadline|turnaround|weeks?|months?/, a: () => "There are no fixed timelines; each project is scoped first. You see a **small working draft early**, and nothing goes live until you approve it. The free audit is the best place to discuss your timing.", cta: 'audit' },
+        { k: /price|cost|rate|budget|quote|how much|fee|charge|expensive|cheap/, a: () => "Dan doesn't publish fixed prices, because every project is scoped to what you need. The best way to get a quote is the **free consultation**: no cost, no obligation, and he replies within one business day.", cta: 'audit' },
+        { k: /how long|timeline|deadline|turnaround|weeks?|months?/, a: () => "There are no fixed timelines; each project is scoped first. You see a **small working draft early**, and nothing goes live until you approve it. The free consultation is the best place to discuss your timing.", cta: 'audit' },
         { k: new RegExp(APPS.map(a => a.name.toLowerCase()).join('|')), a: q => { const hit = APPS.filter(a => q.includes(a.name.toLowerCase())); return hit.map(appLine).join('\n') + "\n\nYou can ask to join a beta with the **Join the beta** button in the apps section."; }, cta: 'beta' },
         { k: /app|ios|android|play store|app store|beta|download|venture|product/, a: () => "Dan built five apps solo, from scratch:\n" + APPS.map(appLine).join('\n') + "\n\nWant to try one? Open the beta sign-up and pick an app.", cta: 'beta' },
         { k: /clinic|doctor|patient|health|medical|chart|appointment|dentist/, a: () => "For **clinics and healthcare practitioners**, Dan builds slot-based appointment scheduling, patient intake forms, automatic no-show reminders, and AI clinical notes that the doctor reviews and signs before they enter the chart.", cta: 'audit' },
         { k: /hotel|resort|rental|airbnb|guest|booking|room|check.?in/, a: () => "For **hotels, resorts and short-term rentals**, Dan builds date-based booking tools: check-in/check-out calendars, room availability, double-booking prevention, deposit tracking, and a 24/7 guest FAQ helper with host approval.", cta: 'audit' },
         { k: /shop|store|retail|small business|sme|smb|pos|inventory|stock|sales/, a: () => "For **retail shops and small businesses**, Dan builds point-of-sale and stock tracking with customer credit ledgers, voice logging for sales and deliveries, daily dashboards, and product search or FAQ helpers.", cta: 'audit' },
         { k: /experience|background|before (going )?solo|previous|past job|history|years|career|data engineer|worked|cv|resume|qualif|certif|aws|degree|educat|university|study/, a: () => "Dan has **3 years of data engineering experience within enterprise teams**, which is where he learned to care about accurate numbers and clean reports. Since going solo he has run LlanesLab and built five apps end to end.\n- AWS Certified Cloud Practitioner\n- BS in Information Technology, Jose Rizal University" },
-        { k: /process|how (do|does|would) (we|it|you) work|steps|start|get started|onboard/, a: () => "It goes in four steps:\n- **Free audit**: where does your week go?\n- **Working draft**: a small version you can try early\n- **You approve**: nothing goes live until you're happy\n- **Launch & improve** with your team", cta: 'audit' },
+        { k: /process|how (do|does|would) (we|it|you) work|steps|start|get started|onboard/, a: () => "It goes in four steps:\n- **Free consultation**: where does your week go?\n- **Working draft**: a small version you can try early\n- **You approve**: nothing goes live until you're happy\n- **Launch & improve** with your team", cta: 'audit' },
         { k: /client|portfolio|project|work|case|example|built for/, a: () => "Selected client work:\n- Shop operations & inventory dashboards\n- A delivery & logistics mobile app\n- AI search helpers for real estate & interior design\n- AI clinical notes & digital charting tools for doctors\nTap any project in the LlanesLab section for details." },
         { k: /service|offer|do you do|help with|build|ai|assistant|chatbot|voice|search|faq|dashboard|offline/, a: () => "Dan leads with **AI building**:\n- Approval-first AI assistants\n- Voice-to-note logging\n- Document & catalog search\n- 24/7 FAQ helpers\nThen **app development**: offline-first mobile apps, web apps & dashboards, and booking & workflow tools. The AI always prepares, and you approve.", cta: 'audit' },
         { k: /where|location|based|country|timezone|remote|philippines|manila/, a: () => "Dan is based in **Taguig City, Metro Manila, Philippines**, and works with clients worldwide, fully remote." },
-        { k: /contact|email|phone|whatsapp|viber|call|reach|linkedin|github|hire/, a: () => "You can reach Dan at **dandigital1688@gmail.com** (audits and beta invites), or by phone, WhatsApp or Viber at **(+63) 965-817-4121**. He's also on LinkedIn and GitHub (links in the About section).", cta: 'audit' },
+        { k: /contact|email|phone|whatsapp|viber|call|reach|linkedin|github|hire/, a: () => "You can reach Dan at **dandigital1688@gmail.com** (consultations and beta invites), or by phone, WhatsApp or Viber at **(+63) 965-817-4121**. He's also on LinkedIn and GitHub (links in the About section).", cta: 'audit' },
         { k: /who|about|dan|yourself|solo|team|alone/, a: () => "Dan Marc Llanes is a **solopreneur AI builder and app developer** for small businesses, hotels & rentals, and clinics. He designs, builds and launches every project himself, so you always talk to the person writing the code." },
       ];
       const localAnswer = q => {
@@ -1462,9 +1547,9 @@
       };
       const ctaFor = (text, cta) => {
         const t = (text || '').toLowerCase();
-        const c = cta || (/beta|join|try (one|it)/.test(t) ? 'beta' : /audit|quote/.test(t) ? 'audit' : null);
+        const c = cta || (/beta|join|try (one|it)/.test(t) ? 'beta' : /audit|consult|quote/.test(t) ? 'audit' : null);
         if (c === 'beta') return '<button type="button" data-chat-cta="beta" class="press mt-2.5 rounded-full bg-sky2/15 px-3 py-1.5 text-xs font-semibold text-sky2 hover:bg-sky2/25">Join an app beta →</button>';
-        if (c === 'audit') return '<button type="button" data-chat-cta="audit" class="press mt-2.5 rounded-full bg-brand/15 px-3 py-1.5 text-xs font-semibold text-brand-soft hover:bg-brand/25">Request a free audit →</button>';
+        if (c === 'audit') return '<button type="button" data-chat-cta="audit" class="press mt-2.5 rounded-full bg-brand/15 px-3 py-1.5 text-xs font-semibold text-brand-soft hover:bg-brand/25">Request a free consultation →</button>';
         return '';
       };
       const bubble = (role, html) => {
@@ -1549,155 +1634,84 @@
     })();
 
     /* =====================================================
-       STARFIELD
-       #sky is painted once per width: Milky Way glow, dust, far stars.
-       #stars animates only ~150 near stars + shooting stars, using
-       pre-rendered sprites (drawImage) so each frame is cheap.
-       60fps (30 on low-power devices), paused when hidden, static
-       for reduced motion.
+       SCROLL & ACTION EFFECTS (all skipped for reduced motion)
+       - staggered reveal of section heads, cards, lists, quotes
+       - section rule lines draw in
+       - stats count up when they come into view
+       - reading progress bar, header shadow, gentle glow parallax
+       - tap/click ripple on buttons
        ===================================================== */
-    (() => {
-      const sky = $('#sky'), cv = $('#stars');
-      if (!sky || !cv || !cv.getContext) return;
-      const sctx = sky.getContext('2d'), ctx = cv.getContext('2d');
-      const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const lowPower = (navigator.hardwareConcurrency || 8) <= 4 || (navigator.connection && navigator.connection.saveData);
-      const FRAME = lowPower ? 33 : 0;
-      const TINTS = ['255,255,255', '210,225,255', '180,205,255', '255,236,214'];
-      const ANG = -24 * Math.PI / 180;
-      const rand = (a, b) => a + Math.random() * (b - a);
-      const gauss = () => (Math.random() + Math.random() + Math.random() - 1.5) / 1.5;   // ~normal, -1..1
+    const motionOK = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if ('IntersectionObserver' in window && motionOK) {
+      document.documentElement.classList.add('fx');
+      const io = new IntersectionObserver(es => es.forEach(en => {
+        if (!en.isIntersecting) return;
+        const el = en.target;
+        if (el.classList.contains('sec-head')) el.classList.add('drawn');
+        if (el.dataset.count) countUp(el);
+        else el.classList.add('in');
+        io.unobserve(el);
+      }), { rootMargin: '100000px 0px -8% 0px' });   // huge top margin: anything you've jumped past counts as seen
 
-      // Pre-rendered star sprites: soft glow (and a sparkle variant) per tint
-      const sprite = (tint, sparkle) => {
-        const c = document.createElement('canvas'), S = 64, h = S / 2; c.width = c.height = S;
-        const g = c.getContext('2d'), rg = g.createRadialGradient(h, h, 0, h, h, h);
-        rg.addColorStop(0, `rgba(${tint},1)`); rg.addColorStop(.12, `rgba(${tint},.9)`); rg.addColorStop(.3, `rgba(${tint},.18)`); rg.addColorStop(1, `rgba(${tint},0)`);
-        g.fillStyle = rg; g.fillRect(0, 0, S, S);
-        if (sparkle) {
-          for (const [w, hgt] of [[S, 1.4], [1.4, S]]) {
-            const lg = w > hgt ? g.createLinearGradient(0, 0, S, 0) : g.createLinearGradient(0, 0, 0, S);
-            lg.addColorStop(0, `rgba(${tint},0)`); lg.addColorStop(.5, `rgba(${tint},.75)`); lg.addColorStop(1, `rgba(${tint},0)`);
-            g.fillStyle = lg; g.fillRect(h - w / 2, h - hgt / 2, w, hgt);
-          }
-        }
-        return c;
-      };
-      const SPR = TINTS.map(t => [sprite(t, false), sprite(t, true)]);
-
-      let W = 0, H = 0, dpr = 1, near = [], shooters = [], last = 0, nextShot = 2000, raf = 0;
-
-      function paintSky() {
-        const d = Math.min(devicePixelRatio || 1, 2);
-        sky.width = W * d; sky.height = H * d; sctx.setTransform(d, 0, 0, d, 0, 0);
-        const cx = W / 2, cy = H / 2, span = Math.hypot(W, H), band = Math.max(W, H) * .16;
-        sctx.clearRect(0, 0, W, H);
-        // Milky Way: elongated glow + warm core + clumpy dust, all along one diagonal
-        sctx.save(); sctx.translate(cx, cy); sctx.rotate(ANG);
-        sctx.save(); sctx.scale(1, .2);
-        let g = sctx.createRadialGradient(0, 0, 0, 0, 0, span * .55);
-        g.addColorStop(0, 'rgba(225,230,255,.13)'); g.addColorStop(.35, 'rgba(160,180,255,.06)'); g.addColorStop(1, 'rgba(160,180,255,0)');
-        sctx.fillStyle = g; sctx.beginPath(); sctx.arc(0, 0, span * .55, 0, 6.283); sctx.fill();
-        sctx.restore();
-        for (let i = 0; i < 26; i++) {                       // soft clumps of light along the band
-          const x = rand(-.45, .45) * span, y = gauss() * band * .5, r = rand(40, 140);
-          g = sctx.createRadialGradient(x, y, 0, x, y, r);
-          const warm = Math.random() < .35 ? '255,225,205' : '190,205,255';
-          g.addColorStop(0, `rgba(${warm},${rand(.03, .07).toFixed(3)})`); g.addColorStop(1, `rgba(${warm},0)`);
-          sctx.fillStyle = g; sctx.fillRect(x - r, y - r, r * 2, r * 2);
-        }
-        const dust = Math.min(5200, Math.round(W * H / 220));   // fine star dust
-        for (let i = 0; i < dust; i++) {
-          const x = rand(-.5, .5) * span, y = gauss() * band * (Math.random() < .7 ? .45 : 1);
-          sctx.fillStyle = `rgba(220,228,255,${rand(.04, .3).toFixed(3)})`;
-          sctx.fillRect(x, y, rand(.4, 1.1), rand(.4, 1.1));
-        }
-        sctx.restore();
-        // Far stars, scattered everywhere (static: they are "infinitely" far away)
-        const far = Math.min(700, Math.round(W * H / 2400));
-        for (let i = 0; i < far; i++) {
-          sctx.fillStyle = `rgba(${TINTS[(Math.random() * TINTS.length) | 0]},${rand(.18, .7).toFixed(3)})`;
-          sctx.beginPath(); sctx.arc(Math.random() * W, Math.random() * H, rand(.3, .85), 0, 6.283); sctx.fill();
-        }
-      }
-
-      function build() {
-        W = cv.clientWidth; H = cv.clientHeight;
-        dpr = Math.min(devicePixelRatio || 1, lowPower ? 1.25 : 1.75);
-        cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        paintSky();
-        const n = Math.round(Math.min(lowPower ? 90 : 160, W * H / 8000));
-        near = Array.from({ length: n }, () => {
-          const depth = Math.random() < .7 ? 0 : 1;
-          const bright = depth === 1 && Math.random() < .35;
-          return { x: Math.random() * W, y: Math.random() * (H + 40), depth, size: (depth ? rand(5, 9) : rand(3, 5.5)) * (bright ? 1.6 : 1),
-            a: rand(.45, .95), tw: rand(.5, 1.8), ph: rand(0, 6.283), img: SPR[(Math.random() * SPR.length) | 0][bright ? 1 : 0] };
+      $$('.sec-head, main section .card, main section ol, main section blockquote, main section > p').forEach(el => {
+        if (el.closest('#simulator') || el.id === 'simulator') return;
+        // Stagger siblings in the same grid so cards cascade in
+        const sibs = [...el.parentElement.children].filter(c => c.matches('.card'));
+        const i = sibs.indexOf(el);
+        if (i > 0) el.style.transitionDelay = Math.min(i, 5) * 90 + 'ms';
+        el.classList.add('reveal'); io.observe(el);
+        el.addEventListener('transitionend', e => {
+          if (e.target !== el || e.propertyName !== 'opacity') return;
+          el.classList.remove('reveal', 'in'); el.style.transitionDelay = '';
         });
-      }
-
-      function draw(t) {
-        ctx.clearRect(0, 0, W, H);
-        const sy = scrollY, span = H + 40, ts = t / 1000;
-        for (const s of near) {
-          const y = ((s.y - sy * (s.depth ? .09 : .045)) % span + span) % span - 20;
-          ctx.globalAlpha = still ? s.a : s.a * (.6 + .4 * Math.sin(ts * s.tw + s.ph));
-          ctx.drawImage(s.img, s.x - s.size / 2, y - s.size / 2, s.size, s.size);
-        }
-        ctx.globalAlpha = 1;
-        for (const m of shooters) {
-          const p = (t - m.t0) / m.dur; if (p >= 1) continue;
-          const e = 1 - (1 - p) * (1 - p);                          // ease-out
-          const x = m.x + m.dx * e, y = m.y + m.dy * e, k = Math.sin(p * Math.PI);
-          const tx = x - m.ux * m.len * k, ty = y - m.uy * m.len * k;
-          const g = ctx.createLinearGradient(x, y, tx, ty);
-          g.addColorStop(0, `rgba(255,255,255,${(.95 * k).toFixed(3)})`); g.addColorStop(1, 'rgba(147,197,253,0)');
-          ctx.strokeStyle = g; ctx.lineWidth = 1.5; ctx.lineCap = 'round';
-          ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(tx, ty); ctx.stroke();
-        }
-        if (shooters.length) shooters = shooters.filter(m => t - m.t0 < m.dur);
-      }
-
-      function loop(t) {
-        raf = requestAnimationFrame(loop);
-        if (FRAME && t - last < FRAME) return;
-        last = t;
-        if (t > nextShot) {
-          const dist = rand(280, 520), angle = rand(18, 40) * Math.PI / 180, dir = Math.random() < .5 ? -1 : 1;
-          shooters.push({ x: rand(.15, .85) * W, y: rand(0, .4) * H, dx: Math.cos(angle) * dist * dir, dy: Math.sin(angle) * dist,
-            ux: Math.cos(angle) * dir, uy: Math.sin(angle), len: rand(80, 140), t0: t, dur: rand(1000, 1500) });
-          nextShot = t + rand(4000, 9000);
-        }
-        draw(t);
-      }
-
-      const start = () => { if (!raf && !still) raf = requestAnimationFrame(loop); };
-      const stop = () => { cancelAnimationFrame(raf); raf = 0; };
-      build();
-      if (still) { draw(0); addEventListener('scroll', () => requestAnimationFrame(() => draw(0)), { passive: true }); }
-      else start();
-      let rz;
-      addEventListener('resize', () => {
-        clearTimeout(rz);
-        rz = setTimeout(() => {
-          if (cv.clientWidth === W) {                    // mobile URL bar: only stretch, keep the same sky
-            H = cv.clientHeight;
-            cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-          } else build();
-          if (still) draw(0);
-        }, 150);
       });
-      document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
+
+      // Stats: count up from 0
+      function countUp(dd) {
+        const node = dd.firstChild, end = +dd.dataset.count, t0 = performance.now(), dur = 1100;
+        const tick = t => {
+          const p = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+          node.nodeValue = Math.round(end * e);
+          if (p < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+        setTimeout(() => { node.nodeValue = end; }, dur + 300);   // always land on the real number
+      }
+      $$('dl dd').forEach(dd => {
+        const n = dd.firstChild;
+        if (!n || n.nodeType !== 3 || !/^\d+$/.test(n.nodeValue.trim())) return;
+        dd.dataset.count = n.nodeValue.trim(); n.nodeValue = '0'; io.observe(dd);
+      });
+    }
+
+    // Progress bar, header state and glow parallax: one rAF-throttled scroll handler
+    (() => {
+      const bar = $('#progress'), head = $('header.sticky'), glow = $('.neb-wrap');
+      let ticking = false;
+      const update = () => {
+        ticking = false;
+        const y = scrollY, max = document.documentElement.scrollHeight - innerHeight;
+        if (bar) bar.style.transform = `scaleX(${max > 0 ? y / max : 0})`;
+        if (head) head.classList.toggle('scrolled', y > 8);
+        if (glow && motionOK) glow.style.transform = `translate3d(0, ${-Math.min(y * 0.04, 110)}px, 0)`;   // clouds drift up a little as you scroll
+      };
+      addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+      update();
     })();
 
-    /* =====================================================
-       SCROLL REVEAL (skipped for reduced motion)
-       ===================================================== */
-    if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } }), { rootMargin: '0px 0px -8% 0px' });
-      $$('.sec-head, main section .card, main section ol, main section blockquote').forEach(el => {
-        if (el.closest('#simulator') || el.id === 'simulator') return;
-        el.classList.add('reveal'); io.observe(el);
-        el.addEventListener('transitionend', () => el.classList.remove('reveal', 'in'), { once: true });
+    // Ripple on tap/click for buttons and button-like links
+    if (motionOK) {
+      document.addEventListener('pointerdown', e => {
+        const el = e.target.closest('a.press, button.press, button[class*="bg-brand"], a[class*="bg-brand"]');
+        if (!el || el.id === 'chat-launch') return;
+        if (getComputedStyle(el).position === 'static') el.style.position = 'relative';
+        let host = el.querySelector(':scope > .rip-host');
+        if (!host) { host = document.createElement('span'); host.className = 'rip-host'; host.setAttribute('aria-hidden', 'true'); el.appendChild(host); }
+        const r = el.getBoundingClientRect(), size = Math.max(r.width, r.height) * 2.2;
+        const dot = document.createElement('span'); dot.className = 'rip';
+        dot.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX - r.left - size / 2}px;top:${e.clientY - r.top - size / 2}px`;
+        host.appendChild(dot);
+        dot.addEventListener('animationend', () => dot.remove());
       });
     }
 

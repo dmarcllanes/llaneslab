@@ -1,7 +1,7 @@
 """FastHTML server for the Dan Marc Llanes portfolio.
 
 - `/`           serves the single-file portfolio (index.html stays portable / zero-build).
-- `/api/audit`  stores Free Audit requests.
+- `/api/audit`  stores free consultation requests.
 - `/api/beta`   stores app beta invite requests.
 - `/api/chat`   "Ask about Dan" chatbot, powered by Claude and grounded in chat_knowledge.py.
                 Needs ANTHROPIC_API_KEY. Without it the endpoint answers 503 + fallback, and the
