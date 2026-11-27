@@ -90,6 +90,25 @@ def get():
     return FileResponse(INDEX, media_type="text/html")
 
 
+# Digital business card. Kept in card/ (not public/) so the server sets the vCard type:
+# iPhone Safari shows "Add to Contacts" only for text/vcard; Android downloads it and opens Contacts.
+CARD = ROOT / "card"
+
+
+@rt("/card")
+def card():
+    return FileResponse(CARD / "index.html", media_type="text/html")
+
+
+@rt("/dan-marc-llanes.vcf")
+def card_vcf():
+    return FileResponse(
+        CARD / "dan-marc-llanes.vcf",
+        media_type="text/vcard; charset=utf-8",
+        headers={"Content-Disposition": 'inline; filename="Dan Marc Llanes.vcf"', "Cache-Control": "public, max-age=3600"},
+    )
+
+
 @rt("/api/audit", methods=["post"])
 async def audit(req: Request):
     data = await _json(req)

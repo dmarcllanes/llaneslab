@@ -53,6 +53,7 @@ Do **not** invent unverified user counts, download numbers, or revenue claims. M
 * **Secondary Email:** `llanesdanmarc@gmail.com`[cite: 1]
 * **Phone / WhatsApp / Viber:** `(+63) 965-817-4121`[cite: 1]
 * **Website:** `https://danmarcllanes.vercel.app` (canonical URL and share tags in `<head>`; link-preview image `public/og.jpg`, 1200×630, regenerate if the headline changes)
+* **Digital business card:** `/card` (`card/index.html`) with a save-to-contacts file at `/dan-marc-llanes.vcf` (`card/dan-marc-llanes.vcf`), both served by routes in `main.py` so the vCard gets the `text/vcard` type iPhone needs. No phone number is shown or saved; WhatsApp, Viber, emails, website, Facebook (`https://www.facebook.com/llaneslab/`) and LinkedIn are. Keep both files in sync when contact details change.
 * **LinkedIn:** `https://linkedin.com/in/dan-marc-llanes-729416243`[cite: 1]
 * **GitHub:** `https://github.com/dmarcllanes`[cite: 1]
 * **Credentials:** AWS Certified Cloud Practitioner | BS in Information Technology (Jose Rizal University)[cite: 2]
