@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>LlanesLab · client work offer ad</title>
+<!--
+  One page, two layouts and two cuts:
+    ad.html?layout=vertical&cut=short     1080x1920, 60s (Reels / Stories)
+    ad.html?layout=landscape&cut=full     1920x1080, full version
+  Scene order and timing come from timeline-<cut>.js, written by build.py from story.json (timed to the voiceover).
+  Inside a scene, data-a="<fx> <at>" animates an element in: fx = up|left|right|pop|fade, at = seconds ("0.4")
+  or a fraction of the scene ("0.35f") so it lines up with the voice in either cut.
+  Every frame is a pure function of time: seek(t). Add &render=1 for frame-by-frame rendering.
+  Facts here must match CLAUDE.md (services, audience order with clinics last, client work, contacts).
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<script>
+  const Q = new URLSearchParams(location.search);
+  const LAYOUT = Q.get('layout') || 'vertical', CUT = Q.get('cut') || (LAYOUT === 'vertical' ? 'short' : 'full');
+  const VARIANT = Q.get('variant') || '';
+  if (VARIANT) document.documentElement.classList.add('var-' + VARIANT);
+  document.write(`<script src="timeline-${CUT}${VARIANT ? '-' + VARIANT : ''}.js"><\/script>`);
+</script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #04060F; overflow: hidden; }
+  .v { --W: 1080px; --H: 1920px; --pad: 250px 70px 430px; --gap: 34px; --h1: 96px; --h2: 74px; --sub: 36px; }
+  .h { --W: 1920px; --H: 1080px; --pad: 150px 110px 90px; --gap: 28px; --h1: 92px; --h2: 68px; --sub: 32px; }
+  html, body, #stage { width: var(--W); height: var(--H); }
+  #stage { position: relative; overflow: hidden; font-family: Inter, sans-serif; color: #E5ECF8;
+    background:
+      radial-gradient(ellipse 70% 40% at 10% 8%, rgba(37,99,235,.50), rgba(37,99,235,.14) 50%, transparent 75%),
+      radial-gradient(ellipse 65% 38% at 95% 34%, rgba(124,58,237,.42), rgba(124,58,237,.12) 50%, transparent 76%),
+      radial-gradient(ellipse 55% 30% at 80% 78%, rgba(219,39,119,.26), transparent 72%),
+      radial-gradient(ellipse 60% 32% at 0% 96%, rgba(20,184,166,.30), transparent 72%),
+      radial-gradient(ellipse 50% 28% at 100% 100%, rgba(219,39,119,.30), transparent 72%),
+      #04060F; }
+  .abs { position: absolute; }
+  .stars { position: absolute; inset: 0; background-repeat: repeat; }
+  .s1 { opacity: .55; background-size: 320px 320px; background-image:
+    radial-gradient(1.2px 1.2px at 22px 34px, #fff, transparent), radial-gradient(1px 1px at 148px 86px, #C8D7FF, transparent),
+    radial-gradient(1.6px 1.6px at 266px 172px, #fff, transparent), radial-gradient(1px 1px at 94px 226px, #FFECD6, transparent),
+    radial-gradient(1.2px 1.2px at 206px 288px, #fff, transparent), radial-gradient(1px 1px at 300px 20px, #C8D7FF, transparent); }
+  .s2 { background-size: 510px 510px; background-image:
+    radial-gradient(2px 2px at 60px 140px, #fff, transparent), radial-gradient(1.4px 1.4px at 330px 60px, #BFD4FF, transparent),
+    radial-gradient(2.2px 2.2px at 420px 360px, #fff, transparent), radial-gradient(1.4px 1.4px at 180px 450px, #FFE9D0, transparent); }
+
+  .display { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; letter-spacing: -.035em; line-height: 1.05; color: #fff; }
+  .h1 { font-size: var(--h1); } .h2 { font-size: var(--h2); }
+  .sub { font: 600 var(--sub)/1.35 Inter; color: #C3CBD9; }
+  .kick { font: 700 24px/1 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: .2em; color: #93C5FD; }
+  .grad { background: linear-gradient(90deg, #60A5FA, #38BDF8 50%, #A78BFA); -webkit-background-clip: text; color: transparent; padding-bottom: .08em; }
+  .outline { color: rgba(96,165,250,.14); -webkit-text-stroke: 2.5px #60A5FA; }
+  .card { background: rgba(12,19,34,.94); border: 1.5px solid #1E2B45; border-radius: 28px; box-shadow: 0 26px 60px -24px rgba(0,0,0,.85); }
+
+  /* Brand bar */
+  #brand { left: 60px; top: 110px; display: flex; align-items: center; gap: 16px; z-index: 5; }
+  .h #brand { top: 46px; }
+  #brand img { width: 60px; height: 60px; filter: drop-shadow(0 0 12px rgba(56,189,248,.5)); }
+  #brand b { font: 800 32px/1 'Plus Jakarta Sans'; color: #fff; letter-spacing: -.02em; }
+  #pill { right: 150px; top: 122px; display: flex; align-items: center; gap: 10px; padding: 10px 18px; border-radius: 999px; z-index: 5;
+    background: linear-gradient(#0B1024,#0B1024) padding-box, linear-gradient(90deg,#3B82F6,#38BDF8,#A78BFA,#F472B6) border-box; border: 1.5px solid transparent;
+    font: 700 16px/1 'JetBrains Mono', monospace; letter-spacing: .18em; text-transform: uppercase; color: #93C5FD; box-shadow: 0 0 24px rgba(139,92,246,.35); }
+  .h #pill { right: 60px; top: 58px; }
+  #pill i { width: 9px; height: 9px; border-radius: 50%; background: #38BDF8; box-shadow: 0 0 12px #38BDF8; }
+
+  /* Scenes */
+  .scene { position: absolute; inset: 0; display: none; flex-direction: column; align-items: center; justify-content: center; gap: var(--gap); text-align: center; padding: var(--pad); }
+  .h .split { flex-direction: row; text-align: left; gap: 90px; }
+  .h .split > .col { flex: 1; display: flex; flex-direction: column; gap: 26px; align-items: flex-start; }
+  .v .split > .col { display: flex; flex-direction: column; gap: var(--gap); align-items: center; }
+  .h .split > .col.fixed { flex: none; }
+
+  .chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; max-width: 940px; }
+  .chip { padding: 14px 22px; border-radius: 999px; background: rgba(12,19,34,.88); border: 1px solid #2A3A5E; font: 600 26px/1 Inter; color: #DCE6F7; }
+  .chip b { color: #F87171; margin-right: 8px; }
+
+  .portrait { border-radius: 50%; overflow: hidden; flex: none; background: radial-gradient(circle at 50% 30%, #60A5FA, #2563EB 45%, #4C1D95 100%);
+    border: 4px solid rgba(147,197,253,.55); box-shadow: 0 0 80px rgba(59,130,246,.45), 0 40px 90px -30px rgba(0,0,0,.9); }
+  .portrait img { width: 100%; margin-top: 7%; display: block; }
+  .v .portrait { width: 300px; height: 300px; } .h .portrait { width: 440px; height: 440px; }
+  .logo-row { display: flex; align-items: center; gap: 16px; font: 800 44px/1 'Plus Jakarta Sans'; color: #fff; letter-spacing: -.02em; }
+  .logo-row img { width: 64px; height: 64px; }
+
+  /* Demo card */
+  .demo { width: 900px; padding: 30px; text-align: left; }
+  .h .demo { width: 860px; }
+  .demo .top { display: flex; justify-content: space-between; font: 700 18px/1 'JetBrains Mono'; letter-spacing: .14em; text-transform: uppercase; color: #8C9BB8; }
+  .voice { margin-top: 22px; display: flex; align-items: center; gap: 18px; padding: 20px 24px; border-radius: 22px; background: #F1F5F9; color: #0F172A; font: 600 28px/1.3 Inter; }
+  .voice .mic { width: 56px; height: 56px; border-radius: 50%; background: #2563EB; display: grid; place-items: center; font-size: 28px; flex: none; }
+  .wave { display: flex; gap: 5px; align-items: center; height: 30px; margin-left: auto; }
+  .wave i { width: 5px; border-radius: 3px; background: #2563EB; }
+  .pipe { margin-top: 24px; display: flex; align-items: center; gap: 10px; }
+  .pipe span { flex: 1; text-align: center; padding: 16px 0; border-radius: 14px; font: 700 22px/1 Inter; background: #121B2E; color: #64748B; border: 1.5px solid #1E2B45; }
+  .pipe span.on { background: rgba(56,189,248,.14); color: #7DD3FC; border-color: rgba(56,189,248,.5); }
+  .pipe span.cur { background: #2563EB; color: #fff; border-color: #60A5FA; box-shadow: 0 0 24px rgba(59,130,246,.6); }
+  .pipe em { color: #334155; font-style: normal; font-size: 22px; }
+  .cap { margin-top: 14px; font: 500 22px/1.3 'JetBrains Mono'; color: #7DD3FC; min-height: 30px; }
+  .draft { margin-top: 18px; padding: 24px; border-radius: 22px; background: #0A1020; border: 1.5px dashed rgba(251,191,36,.55); }
+  .draft .k { display: flex; justify-content: space-between; font: 700 18px/1 'JetBrains Mono'; letter-spacing: .14em; text-transform: uppercase; color: #8C9BB8; }
+  .draft .k .ns { color: #FCD34D; }
+  .draft .ln { display: flex; justify-content: space-between; font: 600 27px/1.2 Inter; color: #E5ECF8; margin-top: 16px; }
+  .draft .ln span:last-child { font-family: 'JetBrains Mono'; color: #93C5FD; }
+  .btns { display: flex; gap: 14px; margin-top: 22px; }
+  .btn { display: inline-flex; align-items: center; gap: 10px; padding: 16px 28px; border-radius: 16px; font: 700 26px/1 Inter; }
+  .btn-green { background: #10B981; color: #03150E; } .btn-ghost { border: 1.5px solid #2A3A5E; color: #C3CBD9; }
+  .saved { margin-top: 16px; font: 700 26px/1.3 Inter; color: #34D399; }
+
+  /* Service list */
+  .glabel { font: 700 22px/1 'JetBrains Mono'; letter-spacing: .2em; text-transform: uppercase; display: flex; align-items: center; gap: 12px; }
+  .glabel i { width: 10px; height: 10px; border-radius: 50%; }
+  .grid { display: grid; gap: 14px; width: 100%; }
+  .v .grid { grid-template-columns: 1fr; width: 920px; }
+  .h .grid.g4 { grid-template-columns: repeat(4, 1fr); } .h .grid.g3 { grid-template-columns: repeat(3, 1fr); width: 75%; }
+  .svc { display: flex; align-items: center; gap: 22px; padding: 18px 24px; text-align: left; border-radius: 24px; }
+  .h .svc { flex-direction: column; align-items: flex-start; gap: 12px; padding: 24px; }
+  .svc .ic { width: 66px; height: 66px; border-radius: 18px; display: grid; place-items: center; font-size: 34px; flex: none; }
+  .svc h4 { font: 800 31px/1.1 'Plus Jakarta Sans'; color: #fff; letter-spacing: -.02em; }
+  .svc p { font: 500 22px/1.3 Inter; color: #9FADC6; margin-top: 4px; }
+
+  /* Industry cards */
+  .inds { display: flex; gap: 22px; width: 100%; }
+  .v .inds { flex-direction: column; width: 920px; }
+  .ind { flex: 1; padding: 28px 30px; text-align: left; border-radius: 30px; border-top: 5px solid var(--c); }
+  .ind .row1 { display: flex; align-items: center; gap: 18px; }
+  .ind .ic { width: 72px; height: 72px; border-radius: 20px; display: grid; place-items: center; font-size: 38px; background: color-mix(in srgb, var(--c) 18%, transparent); flex: none; }
+  .ind small { display: block; font: 700 18px/1 'JetBrains Mono'; letter-spacing: .16em; color: var(--c); }
+  .ind h3 { font: 800 36px/1.1 'Plus Jakarta Sans'; color: #fff; letter-spacing: -.02em; margin-top: 6px; }
+  .ind ul { list-style: none; margin-top: 16px; display: flex; flex-wrap: wrap; gap: 10px; }
+  .h .ind ul { flex-direction: column; }
+  .ind li { font: 600 23px/1 Inter; color: #DCE6F7; padding: 11px 16px; border-radius: 999px; background: #121B2E; border: 1px solid #22304D; }
+  .ind li b { color: var(--c); margin-right: 6px; }
+
+  /* Client work */
+  .works { display: grid; gap: 20px; width: 100%; }
+  .v .works { grid-template-columns: 1fr 1fr; width: 940px; }
+  .h .works { grid-template-columns: repeat(4, 1fr); }
+  .work { padding: 18px; text-align: left; border-radius: 28px; }
+  .work .mock { height: 210px; border-radius: 18px; background: #070C18; border: 1px solid #1E2B45; padding: 16px; overflow: hidden; position: relative; }
+  .work small { display: block; margin-top: 16px; font: 700 16px/1 'JetBrains Mono'; letter-spacing: .14em; text-transform: uppercase; color: var(--c); }
+  .work h4 { font: 800 28px/1.15 'Plus Jakarta Sans'; color: #fff; letter-spacing: -.02em; margin-top: 8px; }
+  .work p { font: 500 20px/1.3 Inter; color: #9FADC6; margin-top: 8px; }
+  .kpis { display: flex; gap: 8px; } .kpis div { flex: 1; border-radius: 10px; background: #111A2E; padding: 8px; font: 700 18px/1 'JetBrains Mono'; color: #93C5FD; }
+  .kpis div span { display: block; font: 600 11px/1 Inter; color: #64748B; margin-bottom: 6px; }
+  .bars { position: absolute; left: 16px; right: 16px; bottom: 16px; height: 96px; display: flex; align-items: flex-end; gap: 8px; }
+  .bars i { flex: 1; border-radius: 6px 6px 2px 2px; background: linear-gradient(#60A5FA, #2563EB); transform-origin: bottom; }
+  .alert { position: absolute; right: 16px; top: 76px; font: 700 13px/1 Inter; color: #FCD34D; background: rgba(251,191,36,.14); border: 1px solid rgba(251,191,36,.5); padding: 6px 9px; border-radius: 8px; }
+  .stop { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 10px; background: #111A2E; margin-bottom: 8px; font: 600 16px/1 Inter; color: #C3CBD9; }
+  .stop i { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #334155; display: grid; place-items: center; font: 800 13px/1 Inter; font-style: normal; color: #03150E; flex: none; }
+  .stop i.ok { background: #10B981; border-color: #10B981; }
+  .stop em { margin-left: auto; font: 700 12px/1 'JetBrains Mono'; font-style: normal; color: #34D399; }
+  .sbar { border-radius: 12px; background: #111A2E; border: 1.5px solid rgba(56,189,248,.5); padding: 11px 12px; font: 600 15px/1.1 Inter; color: #E5ECF8; white-space: nowrap; overflow: hidden; }
+  .res { margin-top: 10px; display: flex; gap: 10px; align-items: center; padding: 8px; border-radius: 10px; background: #111A2E; font: 600 15px/1.2 Inter; color: #C3CBD9; }
+  .res .th { width: 44px; height: 36px; border-radius: 8px; flex: none; }
+  .res em { display: block; font: 700 11px/1 'JetBrains Mono'; font-style: normal; color: #38BDF8; margin-top: 4px; }
+  .soap { display: flex; gap: 10px; align-items: center; margin-bottom: 9px; }
+  .soap b { width: 28px; height: 28px; border-radius: 8px; background: rgba(16,185,129,.18); color: #34D399; display: grid; place-items: center; font: 800 15px/1 'JetBrains Mono'; flex: none; }
+  .soap i { height: 10px; border-radius: 5px; background: #22304D; display: block; }
+  .sign { position: absolute; right: 14px; bottom: 14px; font: 700 13px/1 'JetBrains Mono'; color: #FCD34D; background: rgba(251,191,36,.14); border: 1px solid rgba(251,191,36,.5); padding: 7px 9px; border-radius: 8px; }
+
+  /* Why + steps */
+  .stats { display: grid; gap: 18px; width: 100%; grid-template-columns: repeat(4, 1fr); }
+  .stat { padding: 30px 26px; text-align: left; border-radius: 28px; }
+  .stat b { display: block; font: 800 64px/1 'Plus Jakarta Sans'; letter-spacing: -.04em; }
+  .stat p { font: 600 23px/1.3 Inter; color: #C3CBD9; margin-top: 14px; }
+  .steps { display: grid; gap: 20px; width: 100%; grid-template-columns: repeat(3, 1fr); }
+  .stepc { padding: 30px; text-align: left; border-radius: 28px; }
+  .stepc .n { width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; font: 800 30px/1 'Plus Jakarta Sans'; color: #fff;
+    background: linear-gradient(135deg, #2563EB, #7C3AED); box-shadow: 0 0 22px rgba(124,58,237,.5); }
+  .stepc h4 { font: 800 34px/1.15 'Plus Jakarta Sans'; color: #fff; margin-top: 20px; letter-spacing: -.02em; }
+  .stepc p { font: 500 23px/1.35 Inter; color: #9FADC6; margin-top: 10px; }
+
+  /* CTA */
+  #cta-btn { display: inline-flex; align-items: center; gap: 16px; padding: 28px 50px; border-radius: 999px; background: #2563EB; color: #fff;
+    font: 800 44px/1 'Plus Jakarta Sans'; letter-spacing: -.02em; box-shadow: 0 20px 60px -10px rgba(37,99,235,.7), 0 0 0 1px rgba(255,255,255,.15) inset; }
+  .contact { display: flex; align-items: center; gap: 18px; font: 600 34px/1 Inter; color: #E5ECF8; }
+  .contact b { color: #93C5FD; font-weight: 700; }
+  .contact .cic { width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; color: #fff; font: 800 28px/1 'Plus Jakarta Sans'; flex: none; }
+  .only-builder { display: none !important; } .var-builder .only-builder, .var-female .only-builder { display: flex !important; }
+  .loc { font: 700 22px/1.3 'JetBrains Mono'; letter-spacing: .14em; text-transform: uppercase; color: #7D8FB3; }
+
+  #ship { left: 0; top: 0; width: 300px; filter: drop-shadow(0 0 18px rgba(56,189,248,.55)); z-index: 1; }
+  #planet { right: -120px; width: 440px; opacity: .9; }
+  #flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; z-index: 9; }
+  .tap { position: absolute; width: 70px; height: 70px; border-radius: 50%; border: 3px solid rgba(255,255,255,.9); background: rgba(255,255,255,.18); pointer-events: none; z-index: 8; display: none; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="stars s1"></div><div class="stars s2" id="tw"></div>
+
+  <svg id="planet" class="abs" viewBox="0 0 260 260"><defs>
+    <radialGradient id="pb" cx="38%" cy="32%" r="70%"><stop offset="0" stop-color="#F5D0FE"/><stop offset=".35" stop-color="#C026D3"/><stop offset=".75" stop-color="#6D28D9"/><stop offset="1" stop-color="#1E1048"/></radialGradient>
+    <radialGradient id="ps" cx="80%" cy="80%" r="75%"><stop offset=".35" stop-color="#04060F" stop-opacity="0"/><stop offset="1" stop-color="#04060F" stop-opacity=".85"/></radialGradient>
+    <linearGradient id="pr" x1="0" x2="1"><stop offset="0" stop-color="#38BDF8" stop-opacity=".1"/><stop offset=".5" stop-color="#E9D5FF" stop-opacity=".85"/><stop offset="1" stop-color="#F472B6" stop-opacity=".15"/></linearGradient>
+    <clipPath id="pf"><rect x="0" y="130" width="260" height="130"/></clipPath></defs>
+    <g transform="rotate(-18 130 130)"><ellipse cx="130" cy="130" rx="124" ry="30" fill="none" stroke="url(#pr)" stroke-width="7"/><circle cx="130" cy="130" r="74" fill="url(#pb)"/><circle cx="130" cy="130" r="74" fill="url(#ps)"/><ellipse cx="130" cy="130" rx="124" ry="30" fill="none" stroke="url(#pr)" stroke-width="7" clip-path="url(#pf)"/></g></svg>
+
+  <svg id="ship" class="abs" viewBox="0 0 130 50"><defs>
+    <linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E2E8F0"/><stop offset=".55" stop-color="#94A3B8"/><stop offset="1" stop-color="#475569"/></linearGradient>
+    <linearGradient id="sf" x1="1" x2="0"><stop offset="0" stop-color="#E0F2FE"/><stop offset=".3" stop-color="#38BDF8"/><stop offset=".7" stop-color="#8B5CF6" stop-opacity=".5"/><stop offset="1" stop-color="#8B5CF6" stop-opacity="0"/></linearGradient></defs>
+    <path id="flame" d="M0 25 Q14 19 32 21 L32 29 Q14 31 0 25Z" fill="url(#sf)" style="transform-origin:32px 25px"/>
+    <path d="M56 18 L44 3 L72 16Z" fill="#64748B"/><path d="M54 32 L38 47 L74 34Z" fill="#475569"/><rect x="29" y="19.5" width="8" height="11" rx="2.5" fill="#334155"/>
+    <path d="M34 25 C46 14 86 12 120 22 Q127 25 120 28 C86 38 46 36 34 25Z" fill="url(#sh)"/><path d="M44 27 C66 31 92 30 114 26" stroke="#3B82F6" stroke-width="2" fill="none"/>
+    <ellipse cx="96" cy="22.5" rx="12" ry="4.2" fill="#38BDF8" opacity=".9"/><circle id="navl" cx="45" cy="5" r="1.6" fill="#F87171"/><circle id="navr" cx="40" cy="45" r="1.6" fill="#34D399"/></svg>
+
+  <div id="brand" class="abs"><img src="../../assets/logo/llaneslab-logo-mono-white.svg" alt=""><b>LlanesLab</b></div>
+  <div id="pill" class="abs"><i></i>Free consultation</div>
+
+  <!-- hook -->
+  <div class="scene" id="sc-hook">
+    <div class="kick" data-a="fade 0.1">For shops · hotels &amp; rentals · clinics</div>
+    <div class="display h1">
+      <div data-a="up 0.2">Still doing the same</div>
+      <div data-a="up 0.45"><span class="outline">admin work</span></div>
+      <div data-a="up 0.7">every single day?</div>
+    </div>
+    <div class="chips">
+      <span class="chip" data-a="pop .3f"><b>✕</b>Same messages, again and again</span>
+      <span class="chip" data-a="pop .45f"><b>✕</b>Stock counted by hand</span>
+      <span class="chip" data-a="pop .58f"><b>✕</b>Bookings in a notebook</span>
+      <span class="chip" data-a="pop .7f"><b>✕</b>Notes written after hours</span>
+    </div>
+  </div>
+
+  <!-- intro -->
+  <div class="scene split" id="sc-intro">
+    <div class="col fixed"><div class="portrait" data-a="pop 0.1"><img src="dan.webp" alt=""></div></div>
+    <div class="col">
+      <div class="logo-row" data-a="up 0.4"><img src="../../assets/logo/llaneslab-logo-mono-white.svg" alt="">LlanesLab <span style="font:600 28px/1 Inter;color:#8FA3C7">by Dan Marc Llanes</span></div>
+      <div class="display h1"><div data-a="up 0.6">Custom AI assistants</div><div class="grad" data-a="up 0.85">&amp; apps for your business.</div></div>
+      <div class="sub" data-a="up .55f">Built solo, end to end. They fit the way<br>you already work.</div>
+    </div>
+  </div>
+
+  <!-- demo -->
+  <div class="scene split" id="sc-demo">
+    <div class="col">
+      <div class="kick" data-a="fade 0.1">How it works · approval first</div>
+      <div class="display h2"><div data-a="up 0.2">The AI prepares.</div><div class="grad" data-a="up 0.45">You approve.</div></div>
+      <div class="sub h-only" data-a="up .3f">Nothing important is saved<br>or sent without you.</div>
+    </div>
+    <div class="col fixed">
+      <div class="card demo" data-a="up 0.5">
+        <div class="top"><span>Shop · owner's phone</span><span id="dm-agent">AI agent</span></div>
+        <div class="voice" data-a="pop .08f"><span class="mic">🎙</span>“Sold three boxes of soap, paid by card.”<span class="wave" id="wave"></span></div>
+        <div class="pipe" id="pipe"><span>Voice</span><em>→</em><span>Catalog</span><em>→</em><span>Stock</span><em>→</em><span>Ledger</span></div>
+        <div class="cap" id="cap"></div>
+        <div class="draft" data-a="pop .5f">
+          <div class="k"><span>Draft · sale</span><span class="ns" id="ns">● Not saved yet</span></div>
+          <div class="ln"><span>Soap × 3 boxes</span><span>Card</span></div>
+          <div class="ln"><span>Stock</span><span>24 → 21</span></div>
+          <div class="btns"><span class="btn btn-green" id="approve">✓ Approve</span><span class="btn btn-ghost">Edit</span><span class="btn btn-ghost">Reject</span></div>
+          <div class="saved" id="saved">✓ Saved · approved by the owner</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- what I build -->
+  <div class="scene" id="sc-build">
+    <div class="kick" data-a="fade 0.1">(01) What I build</div>
+    <div class="display h2" data-a="up 0.2">AI first. <span class="grad">Apps that keep working.</span></div>
+    <div class="glabel" style="color:#60A5FA" data-a="fade 0.4"><i style="background:#3B82F6;box-shadow:0 0 10px #3B82F6"></i>AI building</div>
+    <div class="grid g4">
+      <div class="card svc" data-a="left .04f"><div class="ic" style="background:rgba(59,130,246,.16)">✅</div><div><h4>Approval-first AI assistants</h4><p>Drafts the work. You approve.</p></div></div>
+      <div class="card svc" data-a="left .13f"><div class="ic" style="background:rgba(59,130,246,.16)">🎙️</div><div><h4>Voice-to-note logging</h4><p>Speak. Get a clean record.</p></div></div>
+      <div class="card svc" data-a="left .22f"><div class="ic" style="background:rgba(59,130,246,.16)">🔎</div><div><h4>Document &amp; catalog search</h4><p>Answers from your own files.</p></div></div>
+      <div class="card svc" data-a="left .31f"><div class="ic" style="background:rgba(59,130,246,.16)">💬</div><div><h4>24/7 FAQ helpers</h4><p>Routine questions, any hour.</p></div></div>
+    </div>
+    <div class="glabel" style="color:#38BDF8" data-a="fade .5f"><i style="background:#38BDF8;box-shadow:0 0 10px #38BDF8"></i>App development</div>
+    <div class="grid g3">
+      <div class="card svc" data-a="right .55f"><div class="ic" style="background:rgba(56,189,248,.14)">📶</div><div><h4>Offline-first mobile apps</h4><p>Works with weak or no signal.</p></div></div>
+      <div class="card svc" data-a="right .63f"><div class="ic" style="background:rgba(56,189,248,.14)">📊</div><div><h4>Web apps &amp; dashboards</h4><p>Your numbers at a glance.</p></div></div>
+      <div class="card svc" data-a="right .71f"><div class="ic" style="background:rgba(56,189,248,.14)">📅</div><div><h4>Booking &amp; workflow tools</h4><p>One clear flow, no scattered chats.</p></div></div>
+    </div>
+  </div>
+
+  <!-- who I help (clinics always last) -->
+  <div class="scene" id="sc-who">
+    <div class="kick" data-a="fade 0.1">(02) Who I help</div>
+    <div class="display h2" data-a="up 0.2">Built for how <span class="grad">you</span> work.</div>
+    <div class="inds">
+      <div class="card ind" style="--c:#3B82F6" data-a="up .04f"><div class="row1"><div class="ic">🛍️</div><div><small>01</small><h3>Shops &amp; small businesses</h3></div></div>
+        <ul><li><b>✓</b>Offline POS &amp; credit ledger</li><li><b>✓</b>Low-stock alerts</li><li><b>✓</b>Voice sales logging</li></ul></div>
+      <div class="card ind" style="--c:#38BDF8" data-a="up .26f"><div class="row1"><div class="ic">🏨</div><div><small>02</small><h3>Hotels, resorts &amp; rentals</h3></div></div>
+        <ul><li><b>✓</b>Check-in / check-out calendar</li><li><b>✓</b>No double bookings</li><li><b>✓</b>Deposits &amp; confirmations</li></ul></div>
+      <div class="card ind" style="--c:#10B981" data-a="up .6f"><div class="row1"><div class="ic">🩺</div><div><small>03</small><h3>Clinics &amp; practitioners</h3></div></div>
+        <ul><li><b>✓</b>Appointment time slots</li><li><b>✓</b>Patient intake forms</li><li><b>✓</b>No-show reminders</li></ul></div>
+    </div>
+  </div>
+
+  <!-- client work (clinical notes always last) -->
+  <div class="scene" id="sc-work">
+    <div class="kick" data-a="fade 0.1">(03) Selected client work</div>
+    <div class="display h2" data-a="up 0.2">Real tools, <span class="grad">built solo.</span></div>
+    <div class="works">
+      <div class="card work" style="--c:#60A5FA" data-a="pop .06f">
+        <div class="mock"><div class="kpis"><div><span>Sales today</span>4,820</div><div><span>Orders</span>37</div></div>
+          <div class="alert">⚠ Low stock: 3</div><div class="bars" id="bars"><i style="height:45%"></i><i style="height:70%"></i><i style="height:55%"></i><i style="height:85%"></i><i style="height:62%"></i><i style="height:95%"></i></div></div>
+        <small>Retail &amp; SMB</small><h4>Shop operations &amp; inventory dashboards</h4><p>One screen for the day's numbers.</p></div>
+      <div class="card work" style="--c:#60A5FA" data-a="pop .24f">
+        <div class="mock" id="stops"><div class="stop"><i class="ok">✓</i>Stop 1 · Market St<em>PHOTO ✓</em></div><div class="stop"><i class="ok">✓</i>Stop 2 · Oak Ave<em>PHOTO ✓</em></div><div class="stop"><i>3</i>Stop 3 · Bay Rd</div><div class="stop"><i>4</i>Stop 4 · Hill Lane</div></div>
+        <small>Retail &amp; SMB</small><h4>Delivery &amp; logistics mobile app</h4><p>Photo proof, even offline.</p></div>
+      <div class="card work" style="--c:#38BDF8" data-a="pop .44f">
+        <div class="mock"><div class="sbar" id="sq">🔎 </div>
+          <div class="res"><span class="th" style="background:linear-gradient(135deg,#FDE68A,#F59E0B)"></span><span>Bright 2-bedroom, park view<em>SOURCE · listing #12</em></span></div>
+          <div class="res"><span class="th" style="background:linear-gradient(135deg,#A7F3D0,#10B981)"></span><span>Sunny corner unit near a park<em>SOURCE · listing #31</em></span></div></div>
+        <small>AI search</small><h4>AI search for real estate &amp; interior design</h4><p>Plain words in, sourced answers out.</p></div>
+      <div class="card work" style="--c:#10B981" data-a="pop .66f">
+        <div class="mock"><div class="soap"><b>S</b><i style="width:78%"></i></div><div class="soap"><b>O</b><i style="width:62%"></i></div><div class="soap"><b>A</b><i style="width:70%"></i></div><div class="soap"><b>P</b><i style="width:52%"></i></div><div class="sign">DRAFT · DOCTOR SIGNS</div></div>
+        <small>Clinics</small><h4>AI clinical notes &amp; digital charting</h4><p>The doctor reviews and signs.</p></div>
+    </div>
+  </div>
+
+  <!-- why me (full cut) -->
+  <div class="scene" id="sc-why">
+    <div class="kick" data-a="fade 0.1">(04) Why work with me</div>
+    <div class="display h2" data-a="up 0.2">One builder. <span class="grad">Numbers that add up.</span></div>
+    <div class="stats">
+      <div class="card stat" data-a="up .05f"><b class="grad">Solo</b><p>I build everything myself, start to finish.</p></div>
+      <div class="card stat" data-a="up .3f"><b class="grad">3 yrs</b><p>Data engineering in enterprise teams.</p></div>
+      <div class="card stat" data-a="up .55f"><b class="grad">5 apps</b><p>Built and shipped myself, from scratch.</p></div>
+      <div class="card stat" data-a="up .75f"><b class="grad">AWS</b><p>Certified Cloud Practitioner.</p></div>
+    </div>
+  </div>
+
+  <!-- how it starts (full cut) -->
+  <div class="scene" id="sc-steps">
+    <div class="kick" data-a="fade 0.1">(05) How we start</div>
+    <div class="display h2" data-a="up 0.2">Simple, <span class="grad">from day one.</span></div>
+    <div class="steps">
+      <div class="card stepc" data-a="up .04f"><div class="n">1</div><h4>Free consultation</h4><p>Tell me what slows you down.</p></div>
+      <div class="card stepc" data-a="up .4f"><div class="n">2</div><h4>I build &amp; set it up</h4><p>Fitted to the way you already work.</p></div>
+      <div class="card stepc" data-a="up .62f"><div class="n">3</div><h4>You stay in control</h4><p>The AI prepares. You approve.</p></div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="scene split" id="sc-cta">
+    <div class="col fixed"><div class="portrait" data-a="pop 0.1"><img src="dan.webp" alt=""></div></div>
+    <div class="col">
+      <div class="logo-row only-builder" data-a="up 0.15"><img src="../../assets/logo/llaneslab-logo-mono-white.svg" alt="">LlanesLab <span style="font:600 28px/1 Inter;color:#8FA3C7">by Dan Marc Llanes</span></div>
+      <div class="sub only-builder" data-a="up 0.35">Built by me, start to finish.</div>
+      <div class="display h1" data-a="up 0.3">Let's make your<br><span class="grad">work lighter.</span></div>
+      <div data-a="pop 0.9"><span id="cta-btn">Book a free consultation →</span></div>
+      <div class="contact" data-a="up .35f"><span class="cic" style="background:#2563EB">✉</span><span><b>dandigital1688@gmail.com</b></span></div>
+      <div class="contact" data-a="up .5f"><span class="cic" style="background:#10B981">✆</span><span>WhatsApp / Viber <b>+63 965 817 4121</b></span></div>
+      <div class="loc" data-a="fade .62f">danmarcllanes.vercel.app<br>Taguig City, Philippines · Worldwide &amp; remote</div>
+    </div>
+  </div>
+
+  <div class="tap" id="tap"></div>
+  <div id="flash"></div>
+</div>
+
+<script>
+document.body.className = LAYOUT === 'landscape' ? 'h' : 'v';
+const W = LAYOUT === 'landscape' ? 1920 : 1080, H = LAYOUT === 'landscape' ? 1080 : 1920;
+if (LAYOUT !== 'landscape') document.querySelectorAll('.h-only').forEach(e => e.remove());
+
+const $ = s => document.querySelector(s);
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const easeOut = x => 1 - Math.pow(1 - x, 3);
+const easeIO = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+const back = x => { const c = 1.6; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };
+
+const TL = window.TIMELINE;            // { dur, scenes: [{id, start, dur}] }
+const DUR = TL.dur;
+const FX = { up: [0, 50], left: [-140, 0], right: [140, 0], pop: [0, 30], fade: [0, 0] };
+
+// Pre-parse animated elements per scene
+const SC = TL.scenes.map(s => {
+  const el = $('#sc-' + s.id);
+  const items = [...el.querySelectorAll('[data-a]')].map(e => { const [fx, at] = e.dataset.a.split(' ');
+    return { e, fx, at: at.endsWith('f') ? parseFloat(at) * s.dur : parseFloat(at) }; });
+  return { ...s, el, items };
+});
+$('#wave').innerHTML = Array.from({ length: 12 }, () => '<i></i>').join('');
+
+function sceneFx(s, u) {
+  const out = 1 - easeIO(prog(u, s.dur - .45, s.dur));
+  for (const { e, fx, at } of s.items) {
+    const raw = prog(u, at, at + (fx === 'pop' ? .5 : .6));
+    const v = fx === 'pop' ? back(raw) : easeOut(raw);
+    const o = clamp(fx === 'pop' ? raw * 2 : v) * out;
+    const [dx, dy] = FX[fx] || FX.up;
+    e.style.opacity = o; e.style.visibility = o < .002 ? 'hidden' : 'visible';
+    e.style.transform = `translate(${(1 - v) * dx}px, ${(1 - v) * dy}px)` + (fx === 'pop' ? ` scale(${.85 + .15 * v})` : '');
+  }
+}
+
+let tapAt = null;
+function demo(s, u) {
+  const f = x => x * s.dur;
+  // voice wave while the note "plays"
+  $('#wave').querySelectorAll('i').forEach((w, i) => { const on = u > f(.08) && u < f(.24);
+    w.style.height = (on ? 6 + 24 * Math.abs(Math.sin(u * 9 + i * 1.7)) : 6) + 'px'; });
+  // pipeline steps
+  const caps = ['Transcribing the voice note…', 'Matching “soap” in your catalog…', 'Checking stock: 24 boxes…', 'Preparing the ledger entry…'];
+  const spans = $('#pipe').querySelectorAll('span'); let cur = -1;
+  spans.forEach((sp, i) => { const a = f(.22 + i * .07), b = a + f(.07);
+    sp.className = u >= b ? 'on' : (u >= a ? 'cur' : ''); if (u >= a && u < b) cur = i; });
+  $('#cap').textContent = cur >= 0 ? caps[cur] : (u >= f(.5) ? 'Draft ready · waiting for your approval' : '');
+  // approve
+  const pAt = f(.76), press = prog(u, pAt, pAt + .15) * (1 - prog(u, pAt + .3, pAt + .5));
+  const ap = $('#approve'); ap.style.transform = `scale(${1 - press * .08})`; ap.style.boxShadow = `0 0 ${34 * prog(u, pAt - .6, pAt)}px rgba(16,185,129,.8)`;
+  const done = easeOut(prog(u, pAt + .35, pAt + .8));
+  const sv = $('#saved'); sv.style.opacity = done; sv.style.transform = `translateY(${(1 - done) * 10}px)`;
+  const ns = $('#ns'); ns.textContent = done > .5 ? '● Saved' : '● Not saved yet'; ns.style.color = done > .5 ? '#34D399' : '#FCD34D';
+  $('.draft').style.borderColor = done > .5 ? 'rgba(52,211,153,.7)' : 'rgba(251,191,36,.55)';
+  $('.draft').style.borderStyle = done > .5 ? 'solid' : 'dashed';
+  if (u > pAt - .4 && u < pAt + .4) { const b = ap.getBoundingClientRect(); tapAt = [b.left + b.width / 2, b.top + b.height / 2, prog(u, pAt - .4, pAt + .4)]; }
+}
+
+function work(s, u) {
+  $('#bars').querySelectorAll('i').forEach((b, i) => { b.style.transform = `scaleY(${easeOut(prog(u, s.dur * .1 + i * .08, s.dur * .1 + i * .08 + .5))})`; });
+  const q = 'bright two-bedroom near a park', n = Math.floor(clamp((u - s.dur * .5) / 1.2) * q.length);
+  $('#sq').textContent = '🔎 ' + q.slice(0, n) + (n < q.length && Math.floor(u * 3) % 2 ? '|' : '');
+}
+
+function seek(t) {
+  $('#tw').style.opacity = .35 + .35 * Math.sin(t * .9);
+  const pl = $('#planet'); pl.style.top = (H - 460 + Math.sin(t * .4) * 14) + 'px'; pl.style.transform = `rotate(${Math.sin(t * .3) * 3}deg)`;
+  // ship crosses on the first and last scene changes
+  const ship = $('#ship'), starts = TL.scenes.map(s => s.start);
+  const passes = [[.3, 4.6, -1], [starts[starts.length - 1] + .4, starts[starts.length - 1] + 4.2, 1]];
+  let shown = false;
+  for (const [a, b, dir] of passes) if (t >= a && t <= b) {
+    const k = easeIO(prog(t, a, b)), y0 = H - 380, y1 = H - 520;
+    ship.style.transform = `translate(${-380 + (W + 760) * k}px, ${y0 + (y1 - y0) * k}px) rotate(-6deg)`; shown = true; }
+  ship.style.opacity = shown ? 1 : 0;
+  $('#flame').style.transform = `scaleX(${.85 + .25 * Math.abs(Math.sin(t * 40))})`;
+  $('#navl').style.opacity = Math.floor(t * 1.4) % 2 ? .2 : 1; $('#navr').style.opacity = Math.floor(t * 1.4 + .5) % 2 ? .2 : 1;
+  const bi = easeOut(prog(t, 0, .6)); $('#brand').style.opacity = bi; $('#pill').style.opacity = bi;
+
+  tapAt = null;
+  for (const s of SC) {
+    const u = t - s.start, vis = u >= -.05 && u <= s.dur + .05;
+    s.el.style.display = vis ? 'flex' : 'none';
+    if (!vis) continue;
+    sceneFx(s, u);
+    if (s.id === 'demo') demo(s, u);
+    if (s.id === 'work') work(s, u);
+    if (s.id === 'cta') $('#cta-btn').style.boxShadow = `0 20px 60px -10px rgba(37,99,235,.7), 0 0 ${20 + 30 * Math.abs(Math.sin(t * 2.2))}px rgba(56,189,248,.55)`;
+  }
+  const tap = $('#tap');
+  if (tapAt) { tap.style.display = 'block'; tap.style.left = (tapAt[0] - 35) + 'px'; tap.style.top = (tapAt[1] - 35) + 'px';
+    tap.style.opacity = Math.sin(tapAt[2] * Math.PI); tap.style.transform = `scale(${.6 + tapAt[2] * .8})`; } else tap.style.display = 'none';
+  let fl = 0; starts.slice(1).forEach(c => { fl = Math.max(fl, .12 * (1 - Math.abs(t - c) / .18)); });
+  $('#flash').style.opacity = Math.max(0, fl);
+}
+window.seek = seek; window.DUR = DUR; window.SIZE = [W, H];
+
+if (!Q.has('render')) {
+  const start = performance.now();
+  (function loop() { seek(((performance.now() - start) / 1000) % DUR); requestAnimationFrame(loop); })();
+} else seek(0);
+</script>
+</body>
+</html>

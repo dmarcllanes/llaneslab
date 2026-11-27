@@ -1,0 +1,51 @@
+{
+  "_note": "Female-narrator version of story-builder.json (build with VARIANT=female VOICE=af_heart): lines are in the third person. Problem -> solution -> builder version of story.json (build with VARIANT=builder): no intro scene; Dan appears at the end with the contact details. One entry per scene in ad.html (id = sc-<id>). 'full' / 'short' are the spoken lines for each cut, spelled the way they should be said. A scene with no line for a cut is left out of that cut. 'min' = shortest scene length in seconds.",
+  "scenes": [
+    {
+      "id": "hook",
+      "min": 5.5,
+      "full": "Still doing the same admin work, every single day? Answering the same messages, counting stock by hand, and keeping bookings in a notebook?",
+      "short": "Still doing the same admin work, every single day?"
+    },
+    {
+      "id": "demo",
+      "min": 10.0,
+      "full": "Here's how it works. You say: sold three boxes of soap, paid by card. The AI checks your catalog and your stock, and prepares the record. Nothing is saved, until you approve it.",
+      "short": "You say: sold three boxes of soap, paid by card. The AI checks your stock and prepares the record. Nothing is saved until you approve it."
+    },
+    {
+      "id": "build",
+      "min": 8.0,
+      "full": "He builds approval-first AI assistants, voice-to-note logging, document and catalog search, and twenty-four seven F A Q helpers. Plus offline-first mobile apps, web dashboards, and booking tools.",
+      "short": "AI assistants, voice logging, smart search, and twenty-four seven F A Q helpers. Plus offline-first apps, dashboards, and booking tools."
+    },
+    {
+      "id": "who",
+      "min": 7.0,
+      "full": "For shops and small businesses. For hotels, resorts, and short-term rentals, with no double bookings. And for clinics, with appointment slots, intake forms, and reminders.",
+      "short": "For shops and small businesses. For hotels and rentals, with no double bookings. And for clinics."
+    },
+    {
+      "id": "work",
+      "min": 8.0,
+      "full": "His client work includes shop inventory dashboards, a delivery app with photo proof, AI search for real estate and interior design, and AI clinical notes for doctors.",
+      "short": "From inventory dashboards and delivery apps, to AI search, and clinical notes for doctors."
+    },
+    {
+      "id": "why",
+      "min": 7.0,
+      "full": "He builds everything himself, from start to finish. Three years of data engineering in enterprise teams means your numbers add up, and every change is tracked."
+    },
+    {
+      "id": "steps",
+      "min": 7.0,
+      "full": "It starts with a free consultation. Tell him what slows you down. He'll build it, set it up, and you stay in control."
+    },
+    {
+      "id": "cta",
+      "min": 12.0,
+      "full": "Meet Dan Marc Yah-ness, founder of Yah-ness Lab. He builds every project himself. Book your free consultation today. Email dan digital one six eight eight at gmail dot com, or message him on WhatsApp. Available worldwide.",
+      "short": "Meet Dan Marc Yah-ness. He builds every project himself. Book your free consultation today. Email dan digital one six eight eight at gmail dot com."
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+# start_seconds | max_seconds | spoken line (spelled the way it should be said)
+0.3  | 5.1 | Five apps, built solo, from scratch. And all five are live on the App Store.
+6.0  | 5.4 | Kala-moo, Folin-goo, Roo-start, Oh-wo-lot, and Otta-roo.
+11.6 | 3.5 | Ready to download on iPhone today.
+15.6 | 4.2 | On Google Play, Kala-moo is live right now.
+20.0 | 5.8 | The other four are in open beta, and I'm looking for Android testers.
+26.5 | 8.3 | Got an Android phone? Email me the app you want to try. I'll send your free invite, and your feedback shapes the app.
+35.6 | 6.0 | Email dan digital one six eight eight at gmail dot com.

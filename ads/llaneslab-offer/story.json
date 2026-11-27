@@ -1,0 +1,57 @@
+{
+  "_note": "One entry per scene in ad.html (id = sc-<id>). 'full' / 'short' are the spoken lines for each cut, spelled the way they should be said. A scene with no line for a cut is left out of that cut. 'min' = shortest scene length in seconds.",
+  "scenes": [
+    {
+      "id": "hook",
+      "min": 5.5,
+      "full": "Still doing the same admin work, every single day? Answering the same messages, counting stock by hand, and keeping bookings in a notebook?",
+      "short": "Still doing the same admin work, every single day?"
+    },
+    {
+      "id": "intro",
+      "min": 6.0,
+      "full": "I'm Dan Marc Yah-ness. At Yah-ness Lab, I build custom AI assistants and apps, that fit the way your business already works.",
+      "short": "I'm Dan Marc Yah-ness. At Yah-ness Lab, I build custom AI assistants and apps for your business."
+    },
+    {
+      "id": "demo",
+      "min": 10.0,
+      "full": "Here's how it works. You say: sold three boxes of soap, paid by card. The AI checks your catalog and your stock, and prepares the record. Nothing is saved, until you approve it.",
+      "short": "You say: sold three boxes of soap, paid by card. The AI checks your stock and prepares the record. Nothing is saved until you approve it."
+    },
+    {
+      "id": "build",
+      "min": 8.0,
+      "full": "I build approval-first AI assistants, voice-to-note logging, document and catalog search, and twenty-four seven F A Q helpers. Plus offline-first mobile apps, web dashboards, and booking tools.",
+      "short": "AI assistants, voice logging, smart search, and twenty-four seven F A Q helpers. Plus offline-first apps, dashboards, and booking tools."
+    },
+    {
+      "id": "who",
+      "min": 7.0,
+      "full": "For shops and small businesses. For hotels, resorts, and short-term rentals, with no double bookings. And for clinics, with appointment slots, intake forms, and reminders.",
+      "short": "For shops and small businesses. For hotels and rentals, with no double bookings. And for clinics."
+    },
+    {
+      "id": "work",
+      "min": 8.0,
+      "full": "My client work includes shop inventory dashboards, a delivery app with photo proof, AI search for real estate and interior design, and AI clinical notes for doctors.",
+      "short": "From inventory dashboards and delivery apps, to AI search, and clinical notes for doctors."
+    },
+    {
+      "id": "why",
+      "min": 7.0,
+      "full": "I build everything myself, from start to finish. Three years of data engineering in enterprise teams means your numbers add up, and every change is tracked."
+    },
+    {
+      "id": "steps",
+      "min": 7.0,
+      "full": "We start with a free consultation. Tell me what slows you down. I'll build it, set it up, and you stay in control."
+    },
+    {
+      "id": "cta",
+      "min": 9.0,
+      "full": "Book your free consultation today. Email dan digital one six eight eight at gmail dot com, or message me on WhatsApp. Available worldwide.",
+      "short": "Book your free consultation today. Email dan digital one six eight eight at gmail dot com. Available worldwide."
+    }
+  ]
+}

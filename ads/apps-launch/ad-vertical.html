@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Dan Marc Llanes · 5 apps launch · vertical ad</title>
+<!--
+  1080x1920 ad, 42s. Every frame is a pure function of time: seek(t) sets all styles.
+  Render with render.py (Playwright steps t at 30fps, ffmpeg encodes). Open in a browser to preview in real time.
+  Story: all 5 apps live on the App Store -> on Google Play, Kalamooo is live and 4 are in open beta -> join the Android beta.
+  Store statuses live in APPS below. Keep them true.
+  Reels/Stories safe zone: key copy between y=250 and y=1450, away from the right 140px.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; background: #04060F; }
+  #stage { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: Inter, sans-serif; color: #E5ECF8;
+    background:
+      radial-gradient(ellipse 70% 40% at 10% 8%, rgba(37,99,235,.50), rgba(37,99,235,.14) 50%, transparent 75%),
+      radial-gradient(ellipse 65% 38% at 95% 34%, rgba(124,58,237,.42), rgba(124,58,237,.12) 50%, transparent 76%),
+      radial-gradient(ellipse 55% 30% at 80% 78%, rgba(219,39,119,.26), transparent 72%),
+      radial-gradient(ellipse 60% 32% at 0% 96%, rgba(20,184,166,.30), transparent 72%),
+      radial-gradient(ellipse 50% 28% at 100% 100%, rgba(219,39,119,.30), transparent 72%),
+      #04060F; }
+  .abs { position: absolute; }
+  .stars { position: absolute; inset: 0; background-repeat: repeat; }
+  .s1 { opacity: .55; background-size: 320px 320px; background-image:
+    radial-gradient(1.2px 1.2px at 22px 34px, #fff, transparent), radial-gradient(1px 1px at 148px 86px, #C8D7FF, transparent),
+    radial-gradient(1.6px 1.6px at 266px 172px, #fff, transparent), radial-gradient(1px 1px at 94px 226px, #FFECD6, transparent),
+    radial-gradient(1.2px 1.2px at 206px 288px, #fff, transparent), radial-gradient(1px 1px at 300px 20px, #C8D7FF, transparent); }
+  .s2 { background-size: 510px 510px; background-image:
+    radial-gradient(2px 2px at 60px 140px, #fff, transparent), radial-gradient(1.4px 1.4px at 330px 60px, #BFD4FF, transparent),
+    radial-gradient(2.2px 2.2px at 420px 360px, #fff, transparent), radial-gradient(1.4px 1.4px at 180px 450px, #FFE9D0, transparent); }
+
+  .display { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; letter-spacing: -.035em; line-height: 1.04; color: #fff; }
+  .mono { font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: .18em; }
+  .grad { background: linear-gradient(90deg, #60A5FA, #38BDF8 50%, #A78BFA); -webkit-background-clip: text; color: transparent; }
+  .grad-amber { background: linear-gradient(90deg, #FBBF24, #FB923C 55%, #F472B6); -webkit-background-clip: text; color: transparent; }
+  .outline { color: rgba(96,165,250,.14); -webkit-text-stroke: 2.5px #60A5FA; }
+  .scene { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+  .center { left: 70px; right: 70px; text-align: center; }
+
+  /* Brand bar */
+  #brand { left: 60px; top: 110px; display: flex; align-items: center; gap: 16px; }
+  #brand .av { width: 68px; height: 68px; border-radius: 50%; overflow: hidden; background: linear-gradient(160deg,#3B82F6,#7C3AED); border: 2px solid rgba(147,197,253,.6); box-shadow: 0 0 18px rgba(56,189,248,.45); }
+  #brand .av img { width: 100%; margin-top: 4px; }
+  #brand b { font-family: 'Plus Jakarta Sans'; font-weight: 800; font-size: 32px; color: #fff; letter-spacing: -.02em; display: block; }
+  #brand small { font: 600 18px/1 'JetBrains Mono'; letter-spacing: .14em; text-transform: uppercase; color: #8FA3C7; }
+  #pill { right: 150px; top: 124px; display: flex; align-items: center; gap: 10px; padding: 10px 18px; border-radius: 999px;
+    background: linear-gradient(#0B1024,#0B1024) padding-box, linear-gradient(90deg,#3B82F6,#38BDF8,#A78BFA,#F472B6) border-box; border: 1.5px solid transparent;
+    font: 700 16px/1 'JetBrains Mono', monospace; letter-spacing: .18em; text-transform: uppercase; color: #93C5FD; box-shadow: 0 0 24px rgba(139,92,246,.35); }
+  #pill i { width: 9px; height: 9px; border-radius: 50%; background: #38BDF8; box-shadow: 0 0 12px #38BDF8; }
+
+  /* App icons */
+  .ico { border-radius: 23%; box-shadow: 0 18px 40px -12px rgba(0,0,0,.8), 0 0 0 1px rgba(255,255,255,.08); display: block; }
+  #iconrow { left: 0; right: 0; top: 1150px; display: flex; justify-content: center; gap: 26px; }
+  #iconrow .ico { width: 150px; height: 150px; }
+
+  /* Store toggle */
+  #toggle { left: 50%; top: 520px; width: 760px; height: 96px; margin-left: -380px; border-radius: 999px; background: rgba(12,19,34,.92); border: 1.5px solid #2A3A5E; }
+  #toggle .knob { position: absolute; top: 7px; left: 7px; width: 371px; height: 79px; border-radius: 999px; background: #fff; box-shadow: 0 10px 30px -8px rgba(0,0,0,.6); }
+  #toggle .seg { position: absolute; top: 0; height: 96px; width: 380px; display: flex; align-items: center; justify-content: center; gap: 14px; font: 800 34px/1 'Plus Jakarta Sans'; letter-spacing: -.02em; }
+  #toggle .seg svg { width: 36px; height: 36px; }
+
+  /* App rows */
+  .row { position: absolute; left: 70px; width: 870px; height: 136px; border-radius: 30px; background: rgba(12,19,34,.94); border: 1.5px solid #1E2B45;
+    display: flex; align-items: center; gap: 26px; padding: 0 26px; box-shadow: 0 24px 60px -24px rgba(0,0,0,.85); }
+  .row .ico { width: 96px; height: 96px; flex: none; }
+  .row .nm { flex: 1; min-width: 0; }
+  .row h3 { font: 800 42px/1 'Plus Jakarta Sans'; color: #fff; letter-spacing: -.03em; }
+  .row p { font: 500 23px/1.25 Inter; color: #9FADC6; margin-top: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .st { position: relative; width: 210px; height: 58px; flex: none; perspective: 600px; }
+  .st span { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 10px; border-radius: 999px; backface-visibility: hidden;
+    font: 700 21px/1 'JetBrains Mono'; letter-spacing: .14em; text-transform: uppercase; }
+  .st i { width: 11px; height: 11px; border-radius: 50%; }
+  .live { background: rgba(16,185,129,.16); color: #34D399; border: 1.5px solid rgba(52,211,153,.55); }
+  .live i { background: #10B981; box-shadow: 0 0 10px #10B981; }
+  .beta { background: rgba(251,191,36,.14); color: #FCD34D; border: 1.5px solid rgba(251,191,36,.55); }
+  .beta i { background: #FBBF24; box-shadow: 0 0 10px #FBBF24; }
+  .pend { background: #121B2E; color: #475569; border: 1.5px dashed #2A3A5E; }
+
+  #wanted { left: 70px; width: 870px; top: 1390px; height: 76px; border-radius: 22px; display: flex; align-items: center; justify-content: center; gap: 16px;
+    background: linear-gradient(90deg, rgba(251,191,36,.18), rgba(244,114,182,.18)); border: 1.5px solid rgba(251,191,36,.6);
+    font: 700 30px/1 Inter; color: #FDE68A; }
+  #wanted b { font-family: 'JetBrains Mono'; letter-spacing: .16em; font-size: 22px; background: #FBBF24; color: #1A1203; padding: 8px 12px; border-radius: 10px; }
+
+  /* Beta scene */
+  .bicons { left: 0; right: 0; top: 700px; display: flex; justify-content: center; gap: 34px; }
+  .bic { position: relative; }
+  .bic .ico { width: 170px; height: 170px; }
+  .bic em { position: absolute; left: 50%; top: 154px; transform: translateX(-50%); font: 700 17px/1 'JetBrains Mono'; font-style: normal; letter-spacing: .14em;
+    background: #FBBF24; color: #1A1203; padding: 7px 12px; border-radius: 9px; white-space: nowrap; }
+  .bic small { display: block; text-align: center; margin-top: 34px; font: 700 26px/1 'Plus Jakarta Sans'; color: #E5ECF8; }
+  .stepc { position: absolute; left: 110px; width: 830px; height: 118px; border-radius: 26px; background: rgba(12,19,34,.94); border: 1.5px solid #2A3A5E;
+    display: flex; align-items: center; gap: 26px; padding: 0 30px; font: 600 33px/1.25 Inter; color: #E5ECF8; }
+  .stepc b { width: 66px; height: 66px; border-radius: 50%; flex: none; display: grid; place-items: center; font: 800 32px/1 'Plus Jakarta Sans'; color: #fff;
+    background: linear-gradient(135deg, #2563EB, #7C3AED); box-shadow: 0 0 22px rgba(124,58,237,.5); }
+  .stepc .hl { color: #FCD34D; }
+
+  /* End card */
+  #portrait { left: 50%; top: 280px; width: 380px; height: 380px; margin-left: -190px; border-radius: 50%; overflow: hidden;
+    background: radial-gradient(circle at 50% 30%, #60A5FA, #2563EB 45%, #4C1D95 100%); border: 4px solid rgba(147,197,253,.55);
+    box-shadow: 0 0 80px rgba(59,130,246,.45), 0 40px 90px -30px rgba(0,0,0,.9); }
+  #portrait img { width: 100%; margin-top: 20px; }
+  .storebtn { display: inline-flex; align-items: center; gap: 16px; padding: 18px 30px; border-radius: 22px; background: #000; border: 1.5px solid rgba(255,255,255,.22); }
+  .storebtn svg { width: 46px; height: 46px; }
+  .storebtn .tx { text-align: left; }
+  .storebtn .tx small { display: block; font: 700 17px/1 'JetBrains Mono'; letter-spacing: .12em; text-transform: uppercase; }
+  .storebtn .tx b { display: block; font: 700 36px/1.1 'Plus Jakarta Sans'; color: #fff; margin-top: 6px; letter-spacing: -.02em; }
+  #mail { display: inline-flex; align-items: center; gap: 18px; padding: 26px 40px; border-radius: 999px; background: #2563EB; color: #fff;
+    font: 800 42px/1 'Plus Jakarta Sans'; letter-spacing: -.02em; box-shadow: 0 20px 60px -10px rgba(37,99,235,.7), 0 0 0 1px rgba(255,255,255,.15) inset; }
+
+  #ship { left: 0; top: 0; width: 300px; filter: drop-shadow(0 0 18px rgba(56,189,248,.55)); }
+  #planet { right: -120px; width: 440px; opacity: .9; }
+  #flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
+  .tap { position: absolute; width: 70px; height: 70px; border-radius: 50%; border: 3px solid rgba(255,255,255,.9); background: rgba(255,255,255,.18); pointer-events: none; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="stars s1"></div><div class="stars s2" id="tw"></div>
+
+  <!-- ringed planet -->
+  <svg id="planet" class="abs" viewBox="0 0 260 260"><defs>
+    <radialGradient id="pb" cx="38%" cy="32%" r="70%"><stop offset="0" stop-color="#F5D0FE"/><stop offset=".35" stop-color="#C026D3"/><stop offset=".75" stop-color="#6D28D9"/><stop offset="1" stop-color="#1E1048"/></radialGradient>
+    <radialGradient id="ps" cx="80%" cy="80%" r="75%"><stop offset=".35" stop-color="#04060F" stop-opacity="0"/><stop offset="1" stop-color="#04060F" stop-opacity=".85"/></radialGradient>
+    <linearGradient id="pr" x1="0" x2="1"><stop offset="0" stop-color="#38BDF8" stop-opacity=".1"/><stop offset=".5" stop-color="#E9D5FF" stop-opacity=".85"/><stop offset="1" stop-color="#F472B6" stop-opacity=".15"/></linearGradient>
+    <clipPath id="pf"><rect x="0" y="130" width="260" height="130"/></clipPath></defs>
+    <g transform="rotate(-18 130 130)"><ellipse cx="130" cy="130" rx="124" ry="30" fill="none" stroke="url(#pr)" stroke-width="7"/><circle cx="130" cy="130" r="74" fill="url(#pb)"/><circle cx="130" cy="130" r="74" fill="url(#ps)"/><ellipse cx="130" cy="130" rx="124" ry="30" fill="none" stroke="url(#pr)" stroke-width="7" clip-path="url(#pf)"/></g></svg>
+
+  <!-- starship (original design) -->
+  <svg id="ship" class="abs" viewBox="0 0 130 50"><defs>
+    <linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E2E8F0"/><stop offset=".55" stop-color="#94A3B8"/><stop offset="1" stop-color="#475569"/></linearGradient>
+    <linearGradient id="sf" x1="1" x2="0"><stop offset="0" stop-color="#E0F2FE"/><stop offset=".3" stop-color="#38BDF8"/><stop offset=".7" stop-color="#8B5CF6" stop-opacity=".5"/><stop offset="1" stop-color="#8B5CF6" stop-opacity="0"/></linearGradient></defs>
+    <path id="flame" d="M0 25 Q14 19 32 21 L32 29 Q14 31 0 25Z" fill="url(#sf)" style="transform-origin:32px 25px"/>
+    <path d="M56 18 L44 3 L72 16Z" fill="#64748B"/><path d="M54 32 L38 47 L74 34Z" fill="#475569"/><rect x="29" y="19.5" width="8" height="11" rx="2.5" fill="#334155"/>
+    <path d="M34 25 C46 14 86 12 120 22 Q127 25 120 28 C86 38 46 36 34 25Z" fill="url(#sh)"/><path d="M44 27 C66 31 92 30 114 26" stroke="#3B82F6" stroke-width="2" fill="none"/>
+    <ellipse cx="96" cy="22.5" rx="12" ry="4.2" fill="#38BDF8" opacity=".9"/><circle id="navl" cx="45" cy="5" r="1.6" fill="#F87171"/><circle id="navr" cx="40" cy="45" r="1.6" fill="#34D399"/></svg>
+
+  <div id="brand" class="abs"><div class="av"><img src="icons/dan.webp" alt=""></div><div><b>Dan Marc Llanes</b><small>Built solo</small></div></div>
+  <div id="pill" class="abs"><i></i>App launch</div>
+
+  <!-- S1: hook -->
+  <div id="s1" class="scene">
+    <div id="h1k" class="abs center mono" style="top:470px;font-size:28px;color:#93C5FD">5 apps · built solo, from scratch</div>
+    <div id="h1a" class="abs center display" style="top:560px;font-size:150px"><span class="outline">5 apps.</span></div>
+    <div id="h1b" class="abs center display" style="top:740px;font-size:96px">All live on the</div>
+    <div id="h1c" class="abs center display grad" style="top:850px;font-size:110px;padding-bottom:12px">App Store.</div>
+    <div id="iconrow" class="abs"></div>
+  </div>
+
+  <!-- S2+S3: store board (App Store, then Google Play) -->
+  <div id="s2" class="scene">
+    <div id="t-ios" class="abs center display" style="top:270px;font-size:80px">All 5 are <span class="grad">live on iPhone</span></div>
+    <div id="t-and" class="abs center display" style="top:270px;font-size:80px">On Android: <span style="color:#34D399">1 live,</span><br><span class="grad-amber">4 in open beta</span></div>
+    <div id="toggle" class="abs">
+      <div class="knob" id="knob"></div>
+      <div class="seg" id="seg-ios" style="left:0"><svg viewBox="0 0 384 512"><path fill="currentColor" d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>App Store</div>
+      <div class="seg" id="seg-and" style="left:380px"><svg viewBox="0 0 512 512"><path fill="#00D7FE" d="M48 59.5v393c0 7.6 4.4 14.2 10.8 17.3L267.4 256 58.8 42.2C52.4 45.3 48 51.9 48 59.5z"/><path fill="#00F076" d="M342.6 180.7 99.4 41.6c-13.1-7.5-29.3-6.4-40.6 .6L267.4 256z"/><path fill="#FFC900" d="M440.6 236.9 342.6 180.7 267.4 256l75.2 75.3 98-56.2c14.6-8.4 14.6-29.8 0-38.2z"/><path fill="#FF3A44" d="M58.8 469.8c11.3 7 27.5 8.1 40.6 .6l243.2-139.1L267.4 256z"/></svg>Google Play</div>
+    </div>
+    <div id="rows"></div>
+    <div id="wanted" class="abs"><b>WANTED</b>Android beta testers</div>
+  </div>
+
+  <!-- S4: beta call -->
+  <div id="s4" class="scene">
+    <div id="h4a" class="abs center display" style="top:280px;font-size:88px">Got an Android phone?</div>
+    <div id="h4b" class="abs center display grad-amber" style="top:390px;font-size:96px;padding-bottom:12px">Be a beta tester.</div>
+    <div id="h4c" class="abs center" style="top:530px;font:600 36px/1.3 Inter;color:#C3CBD9">Free to join. Your feedback shapes the app.</div>
+    <div id="bicons" class="abs bicons"></div>
+    <div class="stepc" id="st1" style="top:1060px"><b>1</b><span>Email me the app <span class="hl">you want to try</span></span></div>
+    <div class="stepc" id="st2" style="top:1196px"><b>2</b><span>Get your <span class="hl">free invite</span> to test</span></div>
+    <div class="stepc" id="st3" style="top:1332px"><b>3</b><span>Use it &amp; <span class="hl">tell me what to improve</span></span></div>
+  </div>
+
+  <!-- S5: end card -->
+  <div id="s5" class="scene">
+    <div id="portrait" class="abs"><img src="icons/dan.webp" alt=""></div>
+    <div id="h5a" class="abs center display" style="top:710px;font-size:80px">Join the Android beta</div>
+    <div id="h5b" class="abs center" style="top:820px;font:600 36px/1.3 Inter;color:#C3CBD9">or download all 5 on iPhone today.</div>
+    <div id="h5c" class="abs center" style="top:930px"><span id="mail">✉ dandigital1688@gmail.com</span></div>
+    <div id="h5d" class="abs center" style="top:1080px;font:600 30px/1.3 Inter;color:#AEB9CC">Subject: <b style="color:#FCD34D">“Beta: &lt;app name&gt;”</b></div>
+    <div id="h5e" class="abs" style="left:0;right:0;top:1180px;display:flex;justify-content:center;gap:22px">
+      <span class="storebtn" id="sb1"><svg viewBox="0 0 384 512"><path fill="#fff" d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg><span class="tx"><small style="color:#34D399">5 apps live on</small><b>App Store</b></span></span>
+      <span class="storebtn" id="sb2"><svg viewBox="0 0 512 512"><path fill="#00D7FE" d="M48 59.5v393c0 7.6 4.4 14.2 10.8 17.3L267.4 256 58.8 42.2C52.4 45.3 48 51.9 48 59.5z"/><path fill="#00F076" d="M342.6 180.7 99.4 41.6c-13.1-7.5-29.3-6.4-40.6 .6L267.4 256z"/><path fill="#FFC900" d="M440.6 236.9 342.6 180.7 267.4 256l75.2 75.3 98-56.2c14.6-8.4 14.6-29.8 0-38.2z"/><path fill="#FF3A44" d="M58.8 469.8c11.3 7 27.5 8.1 40.6 .6l243.2-139.1L267.4 256z"/></svg><span class="tx"><small style="color:#FCD34D">1 live · 4 open beta</small><b>Google Play</b></span></span>
+    </div>
+    <div id="h5f" class="abs center mono" style="top:1360px;font-size:24px;color:#7D8FB3">danmarcllanes.vercel.app</div>
+  </div>
+
+  <div class="tap" id="tap"></div>
+  <div id="flash"></div>
+</div>
+
+<script>
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const easeOut = x => 1 - Math.pow(1 - x, 3);
+const easeIO = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+const back = x => { const c = 1.6; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };
+function inout(t, a, b, d = .5) { return Math.min(easeOut(prog(t, a, a + d)), 1 - easeIO(prog(t, b, b + d))); }
+function show(el, o, dy = 0, sc = 1) { el.style.opacity = o; el.style.transform = `translateY(${(1 - o) * dy}px) scale(${sc})`; el.style.visibility = o <= 0.001 ? 'hidden' : 'visible'; }
+
+const DUR = 42;
+const SCENES = { s1: [0, 5.6], s2: [5.6, 26.2], s4: [26.2, 35.2], s5: [35.2, 42] };
+const FLIP = 15.4;            // App Store -> Google Play
+// Store statuses (must match CLAUDE.md section 3). ios/android: 'Live' | 'Open Beta'
+const APPS = [
+  { name: 'Kalamooo', icon: 'kalamooo', cat: 'Offline-first POS, stock & credit ledger', ios: 'Live', android: 'Live' },
+  { name: 'Folingoo', icon: 'folingoo', cat: 'AI English speaking coach', ios: 'Live', android: 'Open Beta' },
+  { name: 'Roostart', icon: 'roostart', cat: 'Stress-free habit tracker', ios: 'Live', android: 'Open Beta' },
+  { name: 'Owolot', icon: 'owolot', cat: 'AI-assisted budget & bill planner', ios: 'Live', android: 'Open Beta' },
+  { name: 'Otaroo', icon: 'otaroo', cat: '3-second food journal & AI meal guide', ios: 'Live', android: 'Open Beta' },
+];
+const IOS_AT = [6.3, 6.95, 7.6, 8.25, 8.9];   // badge pops as each name is spoken
+const pill = s => s === 'Live' ? `<span class="live"><i></i>Live</span>` : `<span class="beta"><i></i>Open beta</span>`;
+
+/* build */
+$('#iconrow').innerHTML = APPS.map(a => `<img class="ico" src="icons/${a.icon}.webp" alt="">`).join('');
+$('#rows').innerHTML = APPS.map((a, i) => `
+  <div class="row" data-i="${i}" style="top:${660 + i * 146}px">
+    <img class="ico" src="icons/${a.icon}.webp" alt="">
+    <div class="nm"><h3>${a.name}</h3><p>${a.cat}</p></div>
+    <div class="st"><span class="pend">· · ·</span><span data-f="ios">${pill(a.ios)}</span><span data-f="and">${pill(a.android)}</span></div>
+  </div>`).join('');
+document.querySelectorAll('.st > span[data-f] > span').forEach(s => { const p = s.parentElement; p.replaceWith(s); s.dataset.f = p.dataset.f; });
+const BETA = APPS.filter(a => a.android !== 'Live');
+$('#bicons').innerHTML = BETA.map(a => `<div class="bic"><img class="ico" src="icons/${a.icon}.webp" alt=""><em>BETA</em><small>${a.name}</small></div>`).join('');
+
+/* ---------- master timeline ---------- */
+function seek(t) {
+  $('#tw').style.opacity = .35 + .35 * Math.sin(t * .9);
+  const pl = $('#planet'); pl.style.top = (1460 + Math.sin(t * .4) * 14) + 'px'; pl.style.transform = `rotate(${Math.sin(t * .3) * 3}deg)`;
+  const ship = $('#ship');
+  const passes = [[0.3, 4.8, -380, 1560, 1180, 1340, -6], [FLIP - 1.2, FLIP + 1.0, 1200, 1620, -420, 1520, 6], [35.6, 39.4, -380, 1760, 1180, 1660, -4]];
+  let shown = false;
+  for (const [a, b, x0, y0, x1, y1, rot] of passes) {
+    if (t >= a && t <= b) { const k = easeIO(prog(t, a, b)); const flip = x1 < x0 ? -1 : 1;
+      ship.style.transform = `translate(${x0 + (x1 - x0) * k}px, ${y0 + (y1 - y0) * k}px) rotate(${rot}deg) scaleX(${flip})`; shown = true; }
+  }
+  ship.style.opacity = shown ? 1 : 0;
+  $('#flame').style.transform = `scaleX(${.85 + .25 * Math.abs(Math.sin(t * 40))})`;
+  $('#navl').style.opacity = Math.floor(t * 1.4) % 2 ? .2 : 1; $('#navr').style.opacity = Math.floor(t * 1.4 + .5) % 2 ? .2 : 1;
+
+  const bi = easeOut(prog(t, 0, .6)) * (1 - easeIO(prog(t, SCENES.s5[0] - .4, SCENES.s5[0])));
+  show($('#brand'), bi, -20); show($('#pill'), bi, -20);
+
+  /* S1 */
+  const [, b1] = SCENES.s1; $('#s1').style.display = t < b1 + .1 ? 'block' : 'none';
+  show($('#h1k'), inout(t, .1, b1 - .6), 30);
+  const big = back(prog(t, .2, .8)); show($('#h1a'), inout(t, .2, b1 - .6), 60, .8 + .2 * clamp(big));
+  show($('#h1b'), inout(t, 1.6, b1 - .6), 40);
+  show($('#h1c'), inout(t, 2.0, b1 - .6), 40);
+  $('#iconrow').querySelectorAll('.ico').forEach((im, i) => { const v = back(prog(t, 2.6 + i * .16, 3.1 + i * .16)), o = 1 - easeIO(prog(t, b1 - .6, b1 - .1));
+    im.style.opacity = clamp(v) * o; im.style.transform = `translateY(${(1 - clamp(v)) * 80 + Math.sin(t * 2 + i) * 6}px) scale(${.6 + .4 * v}) rotate(${(1 - clamp(v)) * (i - 2) * 8}deg)`; });
+
+  /* S2/S3: store board */
+  const [a2, b2] = SCENES.s2; $('#s2').style.display = t > a2 - .1 && t < b2 + .1 ? 'block' : 'none';
+  const out2 = 1 - easeIO(prog(t, b2 - .5, b2));
+  show($('#t-ios'), Math.min(easeOut(prog(t, a2, a2 + .6)), 1 - easeIO(prog(t, FLIP - .3, FLIP + .1))), 40);
+  show($('#t-and'), easeOut(prog(t, FLIP + .2, FLIP + .8)) * out2, 40);
+  show($('#toggle'), easeOut(prog(t, a2 + .2, a2 + .8)) * out2, 30);
+  const k = easeIO(prog(t, FLIP - .2, FLIP + .4));
+  $('#knob').style.transform = `translateX(${k * 380}px)`;
+  $('#seg-ios').style.color = k < .5 ? '#0B1024' : '#8FA3C7';
+  $('#seg-and').style.color = k < .5 ? '#8FA3C7' : '#0B1024';
+  document.querySelectorAll('.row').forEach(row => {
+    const i = +row.dataset.i, a = APPS[i];
+    const v = easeOut(prog(t, a2 + .5 + i * .12, a2 + 1.1 + i * .12)) * out2;
+    row.style.opacity = v; row.style.transform = `translateX(${(1 - v) * (i % 2 ? 140 : -140)}px)`;
+    // iOS badge pops, then flips to the Android status (Kalamooo first, the four betas later)
+    const iosIn = back(prog(t, IOS_AT[i], IOS_AT[i] + .45));
+    const andAt = a.android === 'Live' ? FLIP + .9 : 20.0 + (i - 1) * .35;
+    const f = easeIO(prog(t, andAt, andAt + .5));              // 0 = iOS face, 1 = Android face
+    const [pend, ios, and] = row.querySelectorAll('.st > span');
+    pend.style.opacity = 1 - clamp(iosIn);
+    ios.style.opacity = clamp(iosIn) * (f < .5 ? 1 : 0); ios.style.transform = `scale(${.7 + .3 * iosIn}) rotateX(${f * 180}deg)`;
+    const andPend = t >= FLIP && f === 0;                     // Android status not revealed yet
+    and.style.opacity = f >= .5 ? 1 : 0; and.style.transform = `rotateX(${(f - 1) * 180}deg)`;
+    if (andPend) { ios.style.opacity = 0; pend.style.opacity = 1; }
+    // highlight: green glow while iOS ticks, Kalamooo glows green on Android, betas glow amber
+    let glow = 'none', border = '#1E2B45';
+    if (t < FLIP && t > IOS_AT[i]) { const g = 1 - prog(t, IOS_AT[i], IOS_AT[i] + 1.2); glow = `0 0 ${50 * g}px rgba(16,185,129,${.6 * g})`; border = g > .1 ? 'rgba(52,211,153,.6)' : '#1E2B45'; }
+    if (t > andAt) {
+      const isLive = a.android === 'Live', g = isLive ? .5 + .5 * Math.abs(Math.sin(t * 2)) : .35 + .25 * Math.abs(Math.sin(t * 2.4 + i));
+      glow = `0 0 ${46 * g}px ${isLive ? `rgba(16,185,129,${.55 * g})` : `rgba(251,191,36,${.45 * g})`}`;
+      border = isLive ? 'rgba(52,211,153,.65)' : 'rgba(251,191,36,.5)';
+    }
+    row.style.boxShadow = `0 24px 60px -24px rgba(0,0,0,.85), ${glow}`; row.style.borderColor = border;
+  });
+  const w = back(prog(t, 22.2, 22.8)); show($('#wanted'), clamp(w) * out2, 30, .85 + .15 * clamp(w) + .015 * Math.sin(t * 5));
+
+  /* S4: beta call */
+  const [a4, b4] = SCENES.s4; $('#s4').style.display = t > a4 - .1 && t < b4 + .1 ? 'block' : 'none';
+  show($('#h4a'), inout(t, a4, b4 - .5), 40);
+  show($('#h4b'), inout(t, a4 + .5, b4 - .5), 40);
+  show($('#h4c'), inout(t, a4 + 1.0, b4 - .5), 30);
+  $('#bicons').querySelectorAll('.bic').forEach((el, i) => { const v = back(prog(t, a4 + 1.3 + i * .15, a4 + 1.8 + i * .15)), o = 1 - easeIO(prog(t, b4 - .5, b4));
+    el.style.opacity = clamp(v) * o; el.style.transform = `translateY(${(1 - clamp(v)) * 60 + Math.sin(t * 1.8 + i * 1.3) * 7}px) scale(${.7 + .3 * v})`; });
+  [['#st1', a4 + 3.0], ['#st2', a4 + 4.6], ['#st3', a4 + 6.0]].forEach(([id, at], i) => { const v = inout(t, at, b4 - .5); const el = $(id);
+    el.style.opacity = v; el.style.transform = `translateX(${(1 - v) * (i % 2 ? 160 : -160)}px)`; });
+
+  /* S5: end card */
+  const [a5] = SCENES.s5; $('#s5').style.display = t > a5 - .1 ? 'block' : 'none';
+  const pv = back(prog(t, a5, a5 + .6)); show($('#portrait'), clamp(pv), 40, .8 + .2 * clamp(pv));
+  show($('#h5a'), easeOut(prog(t, a5 + .4, a5 + 1)), 40);
+  show($('#h5b'), easeOut(prog(t, a5 + .7, a5 + 1.3)), 30);
+  const mv = back(prog(t, a5 + 1.2, a5 + 1.8)); show($('#h5c'), clamp(mv), 30, .85 + .15 * clamp(mv));
+  $('#mail').style.boxShadow = `0 20px 60px -10px rgba(37,99,235,.7), 0 0 ${20 + 30 * Math.abs(Math.sin(t * 2.2))}px rgba(56,189,248,.55)`;
+  show($('#h5d'), easeOut(prog(t, a5 + 2.0, a5 + 2.5)), 20);
+  [['#sb1', a5 + 2.6], ['#sb2', a5 + 2.85]].forEach(([id, at]) => { const v = back(prog(t, at, at + .5)); show($(id), clamp(v), 30, .85 + .15 * clamp(v)); });
+  show($('#h5e'), t > a5 + 2.5 ? 1 : 0);
+  show($('#h5f'), easeOut(prog(t, a5 + 3.3, a5 + 3.9)), 20);
+
+  // tap on the toggle as it flips to Google Play
+  const tap = $('#tap'), tp = prog(t, FLIP - .7, FLIP);
+  if (tp > 0 && tp < 1) { tap.style.display = 'block'; tap.style.left = (540 + 190 - 35) + 'px'; tap.style.top = (520 + 48 - 35) + 'px';
+    tap.style.opacity = Math.sin(tp * Math.PI); tap.style.transform = `scale(${.6 + tp * .8})`; } else tap.style.display = 'none';
+
+  const cuts = [SCENES.s2[0], SCENES.s4[0], SCENES.s5[0]];
+  let fl = 0; cuts.forEach(c => { fl = Math.max(fl, .14 * (1 - Math.abs(t - c) / .18)); });
+  $('#flash').style.opacity = Math.max(0, fl);
+}
+window.seek = seek; window.DUR = DUR;
+
+if (!location.search.includes('render')) {
+  const start = performance.now();
+  (function loop() { seek(((performance.now() - start) / 1000) % DUR); requestAnimationFrame(loop); })();
+} else seek(0);
+</script>
+</body>
+</html>
