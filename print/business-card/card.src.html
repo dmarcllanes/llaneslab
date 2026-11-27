@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>LlanesLab business card</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+/* Portfolio nebula theme. Trim 3.5 x 2 in, bleed 0.125 in -> 3.75 x 2.25 in.
+   Safe zone: everything important >= 0.25 in from the bleed edge. Clouds sit at the edges, centre stays dark. */
+@page { size: 3.75in 2.25in; margin: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #04060F; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.card { width: 3.75in; height: 2.25in; position: relative; overflow: hidden; background: #04060F; color: #fff; break-after: page; }
+.card:last-child { break-after: auto; }
+.sky { position: absolute; inset: 0; width: 100%; height: 100%; }
+.guides .card::after { content: ""; position: absolute; inset: 0.125in; outline: 0.5pt dashed rgba(255,0,128,.8); z-index: 9; }
+.guides .card::before { content: ""; position: absolute; inset: 0.25in; outline: 0.5pt dotted rgba(0,200,255,.9); z-index: 9; }
+
+/* front */
+.lockup { position: absolute; left: 0.42in; top: 50%; transform: translateY(-50%); display: flex; align-items: center; gap: 0.16in; }
+.mark { width: 0.62in; height: 0.62in; }
+.word { font: 800 21pt/1 "Plus Jakarta Sans", sans-serif; letter-spacing: -0.025em; }
+.tag { margin-top: 0.07in; font: 500 6.6pt/1.35 Inter, sans-serif; color: #A9BCDD; }
+.url { position: absolute; left: 0.42in; bottom: 0.3in; font: 500 6pt/1 "JetBrains Mono", monospace; color: #60A5FA; letter-spacing: 0.02em; }
+
+/* back */
+.info { position: absolute; left: 0.4in; top: 0.34in; right: 1.45in; }
+h1 { font: 800 13.5pt/1.05 "Plus Jakarta Sans", sans-serif; letter-spacing: -0.02em; white-space: nowrap; }
+.role { margin-top: 0.05in; font: 600 6.6pt/1.3 Inter, sans-serif; color: #60A5FA; }
+.aud { margin-top: 0.015in; font: 400 6.3pt/1.3 Inter, sans-serif; color: #9AABC8; }
+dl { position: absolute; left: 0.4in; bottom: 0.32in; display: grid; grid-template-columns: 0.48in auto; row-gap: 0.045in; align-items: baseline; }
+dt { font: 500 4.9pt/1 "JetBrains Mono", monospace; letter-spacing: .08em; text-transform: uppercase; color: #7C8DB0; }
+dd { font: 500 6.6pt/1.2 Inter, sans-serif; color: #EAF0FA; white-space: nowrap; }
+.qr { position: absolute; right: 0.36in; top: 0.32in; width: 0.98in; text-align: center; }
+.qr .tile { background: #fff; border-radius: 0.08in; padding: 0.06in; box-shadow: 0 0 0 0.6pt rgba(96,165,250,.7); }
+.qr svg { display: block; width: 100%; height: auto; }
+.qr p { margin-top: 0.07in; font: 600 6pt/1.25 Inter, sans-serif; color: #EAF0FA; }
+.qr p span { display: block; font-weight: 400; color: #9AABC8; }
+.free { position: absolute; right: 0.36in; bottom: 0.3in; width: 0.98in; display: flex; justify-content: center; align-items: center; gap: 0.04in; font: 500 5.6pt/1 Inter, sans-serif; color: #EAF0FA; }
+.free b { font: 700 4.8pt/1 "JetBrains Mono", monospace; letter-spacing: .08em; color: #04060F; background: #10B981; padding: 0.025in 0.04in; border-radius: 0.03in; }
+</style>
+</head>
+<body class="__GUIDES__">
+
+<section class="card front">
+  <svg class="sky" viewBox="0 0 375 225" preserveAspectRatio="none" aria-hidden="true">
+    <defs>
+      <radialGradient id="fBlue" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(10 0) scale(150 105)"><stop offset="0" stop-color="#2563EB" stop-opacity=".55"/><stop offset="1" stop-color="#2563EB" stop-opacity="0"/></radialGradient>
+      <radialGradient id="fViolet" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(385 70) scale(150 120)"><stop offset="0" stop-color="#8B5CF6" stop-opacity=".6"/><stop offset=".5" stop-color="#C026D3" stop-opacity=".22"/><stop offset="1" stop-color="#C026D3" stop-opacity="0"/></radialGradient>
+      <radialGradient id="fTeal" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(0 235) scale(150 90)"><stop offset="0" stop-color="#14B8A6" stop-opacity=".45"/><stop offset="1" stop-color="#14B8A6" stop-opacity="0"/></radialGradient>
+      <radialGradient id="fMag" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(330 240) scale(140 95)"><stop offset="0" stop-color="#DB2777" stop-opacity=".5"/><stop offset="1" stop-color="#DB2777" stop-opacity="0"/></radialGradient>
+      <radialGradient id="fIndigo" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(190 110) scale(170 90)"><stop offset="0" stop-color="#4F46E5" stop-opacity=".12"/><stop offset="1" stop-color="#4F46E5" stop-opacity="0"/></radialGradient>
+      <linearGradient id="planet" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#C084FC"/><stop offset=".55" stop-color="#9333EA"/><stop offset="1" stop-color="#4C1D95"/></linearGradient>
+      <linearGradient id="orange" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FDBA74"/><stop offset="1" stop-color="#C2410C"/></linearGradient>
+    </defs>
+    <rect width="375" height="225" fill="#04060F"/>
+    <rect width="375" height="225" fill="url(#fIndigo)"/>
+    <rect width="375" height="225" fill="url(#fBlue)"/>
+    <rect width="375" height="225" fill="url(#fTeal)"/>
+    <rect width="375" height="225" fill="url(#fViolet)"/>
+    <rect width="375" height="225" fill="url(#fMag)"/>
+    __STARS_FRONT__
+    <!-- ringed planet, half off the bottom-right edge: back half of ring, planet, front half of ring -->
+    <g transform="translate(334 216) rotate(-16)">
+      <path d="M-62 0 A62 13 0 0 1 62 0" fill="none" stroke="#F0ABFC" stroke-opacity=".45" stroke-width="2"/>
+      <circle r="34" fill="url(#planet)"/>
+      <path d="M-30 -12 Q0 -18 30 -10" fill="none" stroke="#E9D5FF" stroke-opacity=".25" stroke-width="3"/>
+      <path d="M-33 4 Q0 -2 33 6" fill="none" stroke="#3B0764" stroke-opacity=".35" stroke-width="3"/>
+      <path d="M-62 0 A62 13 0 0 0 62 0" fill="none" stroke="#F0ABFC" stroke-opacity=".85" stroke-width="2.2"/>
+    </g>
+    <!-- tiny orange planet, top right -->
+    <circle cx="318" cy="40" r="5" fill="url(#orange)"/>
+    <circle cx="316.5" cy="38.5" r="1.6" fill="#FFEDD5" opacity=".6"/>
+  </svg>
+  <div class="lockup">
+    <svg class="mark" viewBox="200 200 624 624" aria-hidden="true"><g fill="#fff" stroke="#fff" stroke-width="3" stroke-linejoin="round"><polygon points="216,312 312,216 312,712 216,808"/><polygon points="216,808 312,712 808,712 712,808"/><polygon points="368,312 464,216 464,560 368,656"/><polygon points="368,656 464,560 808,560 712,656"/></g></svg>
+    <div>
+      <div class="word">LlanesLab</div>
+      <div class="tag">AI assistants &amp; apps for shops,<br>hotels &amp; rentals, and clinics</div>
+    </div>
+  </div>
+  <div class="url">danmarcllanes.vercel.app</div>
+</section>
+
+<section class="card back">
+  <svg class="sky" viewBox="0 0 375 225" preserveAspectRatio="none" aria-hidden="true">
+    <defs>
+      <radialGradient id="bTeal" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(0 0) scale(120 80)"><stop offset="0" stop-color="#14B8A6" stop-opacity=".32"/><stop offset="1" stop-color="#14B8A6" stop-opacity="0"/></radialGradient>
+      <radialGradient id="bViolet" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(375 225) scale(170 120)"><stop offset="0" stop-color="#8B5CF6" stop-opacity=".45"/><stop offset=".55" stop-color="#C026D3" stop-opacity=".15"/><stop offset="1" stop-color="#C026D3" stop-opacity="0"/></radialGradient>
+      <radialGradient id="bBlue" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(375 0) scale(150 90)"><stop offset="0" stop-color="#2563EB" stop-opacity=".35"/><stop offset="1" stop-color="#2563EB" stop-opacity="0"/></radialGradient>
+      <radialGradient id="moon" cx=".35" cy=".35" r=".75"><stop offset="0" stop-color="#99F6E4"/><stop offset="1" stop-color="#0F766E"/></radialGradient>
+    </defs>
+    <rect width="375" height="225" fill="#060A14"/>
+    <rect width="375" height="225" fill="url(#bTeal)"/>
+    <rect width="375" height="225" fill="url(#bBlue)"/>
+    <rect width="375" height="225" fill="url(#bViolet)"/>
+    __STARS_BACK__
+    <!-- glowing divider between name and contacts -->
+    <line x1="38" y1="118" x2="228" y2="118" stroke="#3B82F6" stroke-opacity=".5" stroke-width=".6"/>
+    <line x1="38" y1="118" x2="110" y2="118" stroke="#38BDF8" stroke-width=".9"/>
+    <!-- teal moon peeking in at the top-left corner -->
+    <circle cx="12" cy="12" r="17" fill="url(#moon)"/>
+    <circle cx="19" cy="20" r="2.6" fill="#0F766E" opacity=".55"/><circle cx="9" cy="24" r="1.5" fill="#0F766E" opacity=".5"/><circle cx="23" cy="11" r="1.2" fill="#0F766E" opacity=".45"/>
+  </svg>
+  <div class="info">
+    <h1>Dan Marc Llanes</h1>
+    <div class="role">AI Builder &amp; App Developer</div>
+    <div class="aud">Shops · Hotels &amp; rentals · Clinics</div>
+  </div>
+  <dl>
+    <dt>Chat</dt><dd>WhatsApp &amp; Viber via QR</dd>
+    <dt>Email</dt><dd>dandigital1688@gmail.com</dd>
+    <dt>Web</dt><dd>danmarcllanes.vercel.app</dd>
+    <dt>Facebook</dt><dd>facebook.com/llaneslab</dd>
+  </dl>
+  <div class="qr">
+    <div class="tile"><svg viewBox="__QRVB__" shape-rendering="crispEdges" aria-label="QR code to Dan's digital card"><path d="__QRPATH__" fill="#060A14"/></svg></div>
+    <p>Scan to save<span>my contact</span></p>
+  </div>
+  <div class="free"><b>FREE</b>consultation</div>
+</section>
+
+</body>
+</html>
