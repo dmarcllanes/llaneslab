@@ -55,8 +55,8 @@ Hotel/rental bookings (dates, rooms, deposits) and clinic scheduling (time slots
 | Folingoo | AI English speaking coach | Live | Open Beta |
 | Roostart | Stress-free habit tracker | Live | Open Beta |
 | Owolot | AI-assisted budget & bill planner (AI suggestions you approve) | Live | Open Beta |
-| Otaroo | 3-second food journal & AI meal guide (guidance only, not medical advice) | Open Beta | Open Beta |
-- So: 4 apps are live on the Apple App Store (Kalamooo, Folingoo, Roostart, Owolot); Kalamooo is live on both stores; Otaroo is in open beta on both.
+| Otaroo | 3-second food journal & AI meal guide (guidance only, not medical advice) | Live | Open Beta |
+- So: all 5 apps are live on the Apple App Store; Kalamooo is also live on Google Play; Folingoo, Roostart, Owolot and Otaroo are in open beta on Google Play.
 - Anyone can ask to join a beta: use the "Join the beta" button in the apps section of this site, or email dandigital1688@gmail.com.
 - There are no published user counts, download numbers or revenue figures.
 

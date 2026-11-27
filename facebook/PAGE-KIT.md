@@ -194,7 +194,7 @@ These posts show what's *possible*. They don't claim past clients, so don't say 
 ### Ongoing content ideas
 - **Rotate industries**: shops, cafés & restaurants, salons & services, hotels & rentals, then clinics, so every type of owner sees themselves on the Page.
 - **"One task, automated"**: a short before/after of one admin task (closing sales, guest FAQs, appointment reminders).
-- **Behind the build**: short clips or screenshots of the 5 apps. Use the exact statuses: Kalamooo live on both stores; Folingoo, Roostart & Owolot live on the App Store (open beta on Google Play); Otaroo in open beta on both. Invite beta testers via dandigital1688@gmail.com.
+- **Behind the build**: short clips or screenshots of the 5 apps. Use the exact statuses: Kalamooo live on both stores; Folingoo, Roostart, Owolot & Otaroo live on the App Store (open beta on Google Play). Invite beta testers via dandigital1688@gmail.com.
 - **AI myths for small business**: "AI will replace my staff", "AI is too expensive to start", "I need a tech team".
 - **Weekly question**: "What task would you hand off first?"
 
