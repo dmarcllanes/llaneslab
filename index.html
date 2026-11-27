@@ -299,7 +299,7 @@
     <div class="marquee tb-ticker">
       <div class="marquee-track whitespace-nowrap">
         <div class="flex shrink-0 items-center gap-5 pr-5">
-          <a href="#contact" class="tb-item"><span class="tb-kick k-free">Free</span><span class="tb-text">AI consultation for local businesses — book yours →</span></a>
+          <a href="#contact" class="tb-item"><span class="tb-kick k-free">Free</span><span class="tb-text">Consultation for shops, stays &amp; clinics, worldwide — book yours →</span></a>
           <span class="tb-sep" aria-hidden="true">//</span>
           <a href="#apps" class="tb-item"><span class="tb-kick k-live">Live</span><img data-icon="Kalamooo" alt="" class="tb-ic" /><span class="tb-text">Kalamooo is live on the App Store &amp; Google Play</span></a>
           <span class="tb-sep" aria-hidden="true">//</span>
@@ -313,7 +313,7 @@
           <span class="tb-sep" aria-hidden="true">//</span>
         </div>
         <div class="flex shrink-0 items-center gap-5 pr-5" aria-hidden="true" inert>
-          <a href="#contact" class="tb-item"><span class="tb-kick k-free">Free</span><span class="tb-text">AI consultation for local businesses — book yours →</span></a>
+          <a href="#contact" class="tb-item"><span class="tb-kick k-free">Free</span><span class="tb-text">Consultation for shops, stays &amp; clinics, worldwide — book yours →</span></a>
           <span class="tb-sep" aria-hidden="true">//</span>
           <a href="#apps" class="tb-item"><span class="tb-kick k-live">Live</span><img data-icon="Kalamooo" alt="" class="tb-ic" /><span class="tb-text">Kalamooo is live on the App Store &amp; Google Play</span></a>
           <span class="tb-sep" aria-hidden="true">//</span>
@@ -909,6 +909,19 @@
     const $$ = (s, r = document) => [...r.querySelectorAll(s)];
     const PRIMARY_EMAIL = 'dandigital1688@gmail.com';
     const esc = (s) => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+    // Where the visitor came from: ?ref=fb|li|ig|tt|email|group from the marketing links,
+    // else the referring site, else "direct". First touch is kept for the session.
+    const SOURCE = (() => {
+      let saved = null;
+      try { saved = sessionStorage.getItem('dml-src'); } catch (_) {}
+      const ref = (new URLSearchParams(location.search).get('ref') || '').toLowerCase().replace(/[^a-z0-9_-]/g, '').slice(0, 30);
+      let src = saved || ref;
+      if (!src) { try { const h = new URL(document.referrer).hostname.replace(/^www\./, ''); if (h && h !== location.hostname) src = h.slice(0, 40); } catch (_) {} }
+      src = src || 'direct';
+      try { if (!saved) sessionStorage.setItem('dml-src', src); } catch (_) {}
+      return src;
+    })();
     $('#year').textContent = new Date().getFullYear();
 
     // Send to the FastHTML backend when it is running; otherwise fall back to mailto.
@@ -1143,9 +1156,10 @@
       }
       const body = [
         `Name: ${f.name.value}`, `Email: ${f.email.value}`, `Business type: ${f.industry.value}`,
-        `Main problem: ${f.problem.value || '-'}`, '', f.message.value,
+        `Main problem: ${f.problem.value || '-'}`, '', f.message.value, '', `Found via: ${SOURCE}`,
       ].join('\n');
       const payload = Object.fromEntries(['name', 'email', 'industry', 'problem', 'message', 'website'].map(k => [k, f[k].value]));
+      payload.source = SOURCE;
       note.textContent = 'Sending…'; note.className = 'text-xs text-zinc-500 sm:col-span-2';
       try {
         if (await postJSON('/api/audit', payload)) {

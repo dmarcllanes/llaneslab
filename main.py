@@ -103,6 +103,7 @@ async def audit(req: Request):
         "industry": _clean(data, "industry", 80),
         "problem": _clean(data, "problem", 200),
         "message": _clean(data, "message", 4000),
+        "source": re.sub(r"[^a-z0-9_.-]", "", _clean(data, "source", 40).lower()) or "direct",
     }
     if not rec["name"] or not EMAIL_RE.match(rec["email"]):
         return _bad("Please add your name and a valid email.")
